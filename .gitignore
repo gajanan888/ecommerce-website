@@ -1,0 +1,154 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+/.pnp
+.pnp.js
+
+# Backend
+backend/node_modules/
+backend/dist/
+backend/build/
+
+# Frontend
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.cache/
+frontend/.parcel-cache/
+
+# Admin
+admin/node_modules/
+admin/build/
+admin/dist/
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.DS_Store
+*.iml
+*.sublime-workspace
+.sublime-project
+
+# Testing
+coverage/
+.nyc_output/
+.jest_cache/
+
+# Build outputs
+dist/
+build/
+/out/
+*.bundle.js
+*.bundle.css
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Cache
+.cache/
+.next/
+.turbo/
+*.cache
+
+# OS files
+.DS_Store
+Thumbs.db
+*.pem
+*.mov
+*.mp4
+*.zip
+*.tar.gz
+
+# Optional npm cache
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+mongodb.pem
+
+# Uploads (if using local storage)
+uploads/
+public/uploads/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+~*
+
+# Testing
+.mocha
+test-results.xml
+
+# VS Code
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+
+# Production
+.next
+out
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+.sublime-workspace
+
+# OS
+Thumbs.db
+.env.*.example
+
+# Cache
+.cache/
+temp/
+tmp/
+.eslintcache
+.parcel-cache/
+
+# Testing
+.nyc_output/
+.jest_cache/

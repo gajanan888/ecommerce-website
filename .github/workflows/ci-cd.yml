@@ -1,0 +1,78 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install root dependencies
+        run: npm install
+
+      - name: Install backend dependencies
+        run: cd backend && npm install && cd ..
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm install && cd ..
+
+      - name: Install admin dependencies
+        run: cd admin && npm install && cd ..
+
+      - name: Run backend tests
+        run: cd backend && npm test && cd ..
+
+      - name: Run frontend tests
+        run: cd frontend && npm test -- --watchAll=false && cd ..
+
+      - name: Run linting (optional)
+        run: npm run lint || true
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd backend && npm install && cd ..
+          cd frontend && npm install && cd ..
+          cd admin && npm install && cd ..
+
+      - name: Build frontend
+        run: cd frontend && npm run build && cd ..
+
+      - name: Build admin
+        run: cd admin && npm run build && cd ..
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: builds
+          path: |
+            frontend/build
+            admin/build
+          retention-days: 5
