@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x, 20.x, 22.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -31,17 +31,14 @@ jobs:
       - name: Install frontend dependencies
         run: cd frontend && npm install && cd ..
 
-      - name: Install admin dependencies
-        run: cd admin && npm install && cd ..
-
       - name: Run backend tests
         run: cd backend && npm test && cd ..
 
       - name: Run frontend tests
         run: cd frontend && npm test -- --watchAll=false && cd ..
 
-      - name: Run linting (optional)
-        run: npm run lint || true
+      - name: Run backend linting
+        run: cd backend && npm run lint || true
 
   build:
     needs: test
@@ -50,23 +47,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js 18.x
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 20.x
 
       - name: Install dependencies
         run: |
           npm install
           cd backend && npm install && cd ..
           cd frontend && npm install && cd ..
-          cd admin && npm install && cd ..
 
       - name: Build frontend
         run: cd frontend && npm run build && cd ..
-
-      - name: Build admin
-        run: cd admin && npm run build && cd ..
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
@@ -74,5 +67,4 @@ jobs:
           name: builds
           path: |
             frontend/build
-            admin/build
           retention-days: 5
