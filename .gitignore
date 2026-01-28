@@ -18,6 +18,9 @@ backend/node_modules/
 backend/dist/
 backend/build/
 
+# Temp folders
+backend/temp/
+
 # Frontend
 frontend/node_modules/
 frontend/build/

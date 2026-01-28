@@ -37,29 +37,3 @@ The application is experiencing performance issues primarily due to **scalabilit
 - **Recommendation**: Add `loading="lazy"` to images below the fold. Use Cloudinary's resizing features if available.
 
 ## Implementation Plan
-
-### Phase 1: Backend Optimization
-
-1.  Modify `productController.js`:
-    - Add `.skip()` and `.limit()` to the Mongoose query.
-    - Implement filtering for `minPrice`, `maxPrice`, `rating`, etc. directly in the database query.
-
-### Phase 2: Frontend Data Fetching
-
-2.  Update `ProductsPage.js`:
-    - Replace `fetchProducts` to accept query params (page, category, search).
-    - Implement "Load More" or "Pagination" UI to fetch subsequent pages.
-    - Remove complex client-side filter logic (`filteredProducts`).
-
-### Phase 3: UI/UX Performance
-
-3.  Optimize `ProductCard.js`:
-    - Remove 3D tilt physics from the main listing.
-    - Add `loading="lazy"` to product images.
-4.  Optimize `Hero.js`:
-    - Ensure Aurora background animations are using `will-change: transform`.
-
-## Verification
-
-- **Before**: Measure load time of `/products` with 50 items. (Likely ~1-2s + lag)
-- **After**: Load time should be <200ms for first 12 items. Scrolling should be smooth (60fps).

@@ -3,9 +3,10 @@
 This guide explains how to deploy your E-Commerce application to the web so anyone can access it.
 
 We will use **free/popular services**:
-*   **Frontend**: [Vercel](https://vercel.com/)
-*   **Backend**: [Render](https://render.com/) or [Railway](https://railway.app/)
-*   **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas) (Cloud Database)
+
+- **Frontend**: [Vercel](https://vercel.com/)
+- **Backend**: [Render](https://render.com/) or [Railway](https://railway.app/)
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas) (Cloud Database)
 
 ---
 
@@ -18,8 +19,8 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
 3.  In **Database Access**, create a user (e.g., `admin`) and password.
 4.  In **Network Access**, allow access from **Anywhere (0.0.0.0/0)**.
 5.  Click **Connect** -> **Drivers** and copy the **Connection String**.
-    *   It looks like: `mongodb+srv://admin:<password>@cluster0.abcde.mongodb.net/ecommerce?retryWrites=true&w=majority`
-    *   **Save this URL**, you will need it for the Backend.
+    - It looks like: `mongodb+srv://admin:<password>@cluster0.abcde.mongodb.net/ecommerce?retryWrites=true&w=majority`
+    - **Save this URL**, you will need it for the Backend.
 
 ---
 
@@ -30,18 +31,18 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
 3.  Click **New +** -> **Web Service**.
 4.  Connect your GitHub repository.
 5.  **Settings**:
-    *   **Root Directory**: `backend` (Important! Your server is in this subfolder)
-    *   **Build Command**: `npm install`
-    *   **Start Command**: `node src/index.js`
+    - **Root Directory**: `backend` (Important! Your server is in this subfolder)
+    - **Build Command**: `npm install`
+    - **Start Command**: `node src/index.js`
 6.  **Environment Variables** (Add these):
-    *   `MONGODB_URI`: *Paste your MongoDB Atlas URL from Step 1*
-    *   `JWT_SECRET`: *SomeRandomSecretKey123*
-    *   `PORT`: `10000` (Render default)
-    *   `NODE_ENV`: `production`
-    *   `JEST_WORKER_ID`: `1` (Optional, helps memory)
+    - `MONGODB_URI`: _Paste your MongoDB Atlas URL from Step 1_
+    - `JWT_SECRET`: _SomeRandomSecretKey123_
+    - `PORT`: `10000` (Render default)
+    - `NODE_ENV`: `production`
+    - `JEST_WORKER_ID`: `1` (Optional, helps memory)
 7.  Click **Deploy**.
-    *   Once done, Render will give you a URL like: `https://elitewear-backend.onrender.com`.
-    *   **Copy this URL**.
+    - Once done, Render will give you a URL like: `https://elitewear-backend.onrender.com`.
+    - **Copy this URL**.
 
 ---
 
@@ -51,19 +52,19 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
 2.  Click **Add New Project**.
 3.  Import your GitHub repository.
 4.  **Configure Project**:
-    *   **Framework Preset**: Create React App
-    *   **Root Directory**: Click `Edit` and select `frontend`.
+    - **Framework Preset**: Create React App
+    - **Root Directory**: Click `Edit` and select `frontend`.
 5.  **Environment Variables**:
-    *   **Name**: `REACT_APP_API_URL`
-    *   **Value**: `https://elitewear-backend.onrender.com` (Your Backend URL from Step 2, **WITHOUT** the trailing slash `/`)
+    - **Name**: `REACT_APP_API_URL`
+    - **Value**: `https://elitewear-backend.onrender.com` (Your Backend URL from Step 2, **WITHOUT** the trailing slash `/`)
 6.  Click **Deploy**.
-    *   Vercel will give you your live website URL (e.g., `https://elitewear.vercel.app`).
+    - Vercel will give you your live website URL (e.g., `https://elitewear.vercel.app`).
 
 ---
 
 ## 4. 👑 Step 4: Making Yourself Admin in Production
 
-Since this is a *new* database, your user accounts don't exist yet.
+Since this is a _new_ database, your user accounts don't exist yet.
 
 1.  **Register** a new account on your live website (`https://elitewear.vercel.app/register`).
 2.  Now you need to promote this user to Admin. You have two options:

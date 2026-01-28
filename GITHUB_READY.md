@@ -9,7 +9,6 @@ Your e-commerce platform has been successfully restructured and is now **GitHub-
 ### ✅ Cleaned Up Files (Deleted)
 
 - 12 unnecessary markdown documentation files:
-
   - COMPLETE_README.md
   - FILES_CHECKLIST.md
   - FILES_MODIFIED.md
