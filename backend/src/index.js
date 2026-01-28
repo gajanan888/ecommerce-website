@@ -1,90 +1,81 @@
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 
 // Load environment variables
 dotenv.config();
 
+// Import configuration
+const corsConfig = require('./config/cors');
+const { connectDB } = require('./config/database');
+
+// Register models
+require('./models/Review');
 // Import routes
 const authRoutes = require('./routes/auth');
+
+// Security packages
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 const productRoutes = require('./routes/products');
 const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
+const paymentRoutes = require('./routes/payments');
+
+// Import middleware
+const requestLogger = require('./middleware/logger');
+const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 // Initialize Express app
 const app = express();
 
 // ============================================
-// Database Connection
+// Middleware Setup
 // ============================================
-const connectDB = async () => {
-  try {
-    const mongoURI =
-      process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce';
+app.use(corsConfig);
+app.options('*', corsConfig);
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(requestLogger);
 
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    console.log('✅ MongoDB Connected');
-    return true;
-  } catch (error) {
-    console.error('❌ MongoDB Connection Error:', error.message);
-    process.exit(1);
-  }
-};
-
-// ============================================
-// Middleware
-// ============================================
-
-// CORS Configuration - Allow multiple ports for development
+// Security Middleware
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow localhost on any port during development
-      if (
-        !origin ||
-        origin.includes('localhost') ||
-        origin.includes('127.0.0.1')
-      ) {
-        callback(null, true);
-      } else if (process.env.FRONTEND_URL === origin) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+  helmet({
+    crossOriginResourcePolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
+app.use(mongoSanitize());
+
+// Serve static files (uploaded images)
+const path = require('path');
+const fs = require('fs');
+const publicDir = path.join(__dirname, '..', 'public');
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+}
+app.use(
+  '/images',
+  express.static(path.join(publicDir, 'images'), {
+    setHeaders: (res) => {
+      res.set('Cross-Origin-Resource-Policy', 'cross-origin');
     },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    optionsSuccessStatus: 200,
   })
 );
 
-// Handle preflight requests explicitly
-app.options('*', cors());
-
-// JSON Parsing Middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
-
-// Request logging middleware (optional)
-if (process.env.NODE_ENV === 'development') {
-  app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path}`);
-    next();
-  });
-}
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Increased for development
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api', limiter);
 
 // ============================================
-// Routes
+// API Health & Info Routes
 // ============================================
-
-// Health Check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -92,7 +83,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Root API endpoint
 app.get('/api', (req, res) => {
   res.json({
     message: 'StyleHub eCommerce API',
@@ -102,68 +92,54 @@ app.get('/api', (req, res) => {
       auth: '/api/auth',
       products: '/api/products',
       cart: '/api/cart',
+      admin: '/api/admin',
     },
   });
 });
 
-// Auth routes
+// ============================================
+// API Routes
+// ============================================
 app.use('/api/auth', authRoutes);
-
-// Product routes
 app.use('/api/products', productRoutes);
-
-// Cart routes
 app.use('/api/cart', cartRoutes);
-
-// Order routes
 app.use('/api/orders', orderRoutes);
-
-// Admin routes (protected)
 app.use('/api/admin', adminRoutes);
+app.use('/api/payments', paymentRoutes);
 
 // ============================================
 // Error Handling
 // ============================================
-
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'Route not found',
-  });
-});
-
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error('Error:', err.message);
-  res.status(err.status || 500).json({
-    status: 'error',
-    message: err.message || 'Internal Server Error',
-  });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 // ============================================
 // Server Start
 // ============================================
-
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  // Connect to MongoDB
-  await connectDB();
+  try {
+    // Connect to MongoDB
+    await connectDB();
 
-  // Start listening
-  app.listen(PORT, () => {
-    console.log(`\n🚀 Server running on http://localhost:${PORT}`);
-    console.log(`📊 API: http://localhost:${PORT}/api`);
-    console.log(`📦 Products: http://localhost:${PORT}/api/products`);
-    console.log(`🏥 Health Check: http://localhost:${PORT}/api/health\n`);
-  });
+    // Start listening
+    app.listen(PORT, () => {
+      console.log(`\n🚀 Server running on http://localhost:${PORT}`);
+      console.log(`📊 API: http://localhost:${PORT}/api`);
+      console.log(`📦 Products: http://localhost:${PORT}/api/products`);
+      console.log(`🏥 Health Check: http://localhost:${PORT}/api/health\n`);
+    });
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
 };
 
-startServer().catch((err) => {
-  console.error('Failed to start server:', err);
-  process.exit(1);
-});
+
+// Only start server if run directly
+if (require.main === module) {
+  startServer();
+}
 
 module.exports = app;

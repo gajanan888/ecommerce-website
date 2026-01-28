@@ -90,21 +90,20 @@ const Toast = ({ toast, onClose }) => {
   };
 
   const getStyles = () => {
-    const baseClasses = `flex items-center gap-3 px-5 py-4 rounded-xl shadow-lg backdrop-blur-sm pointer-events-auto transition-all duration-300 ${
-      isExiting ? 'toast-exit' : 'toast-enter'
-    }`;
+    const baseClasses = `flex items-center gap-4 px-6 py-4 rounded-[1.5rem] shadow-2xl backdrop-blur-xl pointer-events-auto transition-all duration-500 border border-white/10 ${isExiting ? 'toast-exit' : 'toast-enter'
+      }`;
 
     switch (toast.type) {
       case 'success':
-        return `${baseClasses} bg-gradient-to-r from-green-500 to-green-600 text-white border border-green-400 border-opacity-30 toast-success`;
+        return `${baseClasses} bg-white text-black shadow-white/5`;
       case 'error':
-        return `${baseClasses} bg-gradient-to-r from-red-500 to-red-600 text-white border border-red-400 border-opacity-30`;
+        return `${baseClasses} bg-red-500 text-white`;
       case 'warning':
-        return `${baseClasses} bg-gradient-to-r from-yellow-500 to-orange-500 text-white border border-yellow-400 border-opacity-30`;
+        return `${baseClasses} bg-orange-500 text-white`;
       case 'info':
-        return `${baseClasses} bg-gradient-to-r from-blue-500 to-indigo-600 text-white border border-blue-400 border-opacity-30`;
+        return `${baseClasses} bg-[#111] text-white`;
       default:
-        return `${baseClasses} bg-gradient-to-r from-gray-800 to-gray-900 text-white border border-gray-700`;
+        return `${baseClasses} bg-[#111] text-white`;
     }
   };
 

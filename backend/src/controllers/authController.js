@@ -30,29 +30,7 @@ const generateRefreshToken = (user) => {
  */
 exports.signup = async (req, res, next) => {
   try {
-    const { name, email, password, passwordConfirm } = req.body;
-
-    // Validation
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Please provide name, email, and password',
-      });
-    }
-
-    if (password !== passwordConfirm) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Passwords do not match',
-      });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Password must be at least 6 characters',
-      });
-    }
+    const { name, email, password } = req.body;
 
     // Check if email already exists
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -94,6 +72,7 @@ exports.signup = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error('❌ Signup Error:', error); // Debug log
     next(error);
   }
 };
@@ -106,14 +85,7 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
-    // Validation
-    if (!email || !password) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Please provide email and password',
-      });
-    }
+    console.log(`🔐 Login Attempt: ${email}`);
 
     // Find user and select password field
     const user = await User.findOne({ email: email.toLowerCase() }).select(
@@ -121,6 +93,7 @@ exports.login = async (req, res, next) => {
     );
 
     if (!user) {
+      console.log('❌ Login Failed: User not found in DB');
       return res.status(401).json({
         status: 'error',
         message: 'Invalid email or password',
@@ -129,6 +102,7 @@ exports.login = async (req, res, next) => {
 
     // Check if account is active
     if (!user.isActive) {
+      console.log('❌ Login Failed: User is inactive');
       return res.status(403).json({
         status: 'error',
         message: 'Your account has been deactivated',
@@ -138,11 +112,14 @@ exports.login = async (req, res, next) => {
     // Compare passwords
     const isPasswordCorrect = await user.matchPassword(password);
     if (!isPasswordCorrect) {
+      console.log('❌ Login Failed: Password Mismatch');
       return res.status(401).json({
         status: 'error',
         message: 'Invalid email or password',
       });
     }
+
+    console.log('✅ Login Successful!');
 
     // Generate tokens
     const accessToken = generateAccessToken(user);
@@ -247,6 +224,46 @@ exports.getMe = async (req, res, next) => {
           isActive: user.isActive,
           createdAt: user.createdAt,
         },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Update password
+ * @route   PUT /api/auth/update-password
+ * @access  Private
+ */
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(req.userId).select('+password');
+
+    // Check current password
+    if (!(await user.matchPassword(currentPassword))) {
+      return res.status(401).json({
+        status: 'error',
+        message: 'Incorrect current password',
+      });
+    }
+
+    // Update password
+    user.password = newPassword;
+    await user.save();
+
+    // Generate new tokens
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Password updated successfully',
+      data: {
+        accessToken,
+        refreshToken,
       },
     });
   } catch (error) {

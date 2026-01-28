@@ -1,7 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useTitle } from '../hooks/useTitle';
+import { motion } from 'framer-motion';
 import {
   FiMail,
   FiLock,
@@ -10,10 +11,12 @@ import {
   FiArrowRight,
   FiCheck,
   FiX,
+  FiAlertCircle,
+  FiFeather
 } from 'react-icons/fi';
 
 const LoginPage = () => {
-  useTitle('Login | StyleHub - Sign in to Your Account');
+  useTitle('Login | EliteWear - Sign in to Your Account');
   const { login, loading, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,16 +67,9 @@ const LoginPage = () => {
 
     try {
       await login(formData);
-      // Check if there's a redirect destination from location state
       const redirectPath = location.state?.from || location.state?.returnTo;
-      // Fallback to localStorage for backward compatibility
-      const redirectPathLegacy = localStorage.getItem('redirectAfterLogin');
-
       if (redirectPath) {
         navigate(redirectPath);
-      } else if (redirectPathLegacy) {
-        localStorage.removeItem('redirectAfterLogin');
-        navigate(redirectPathLegacy);
       } else {
         navigate('/');
       }
@@ -83,207 +79,194 @@ const LoginPage = () => {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen p-4"
-      style={{
-        background: 'linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%)',
-      }}
-    >
-      {/* Decorative accent */}
-      <div className="absolute top-0 right-0 bg-orange-100 rounded-full w-96 h-96 opacity-5 blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 bg-orange-100 rounded-full w-96 h-96 opacity-3 blur-3xl"></div>
+    <div className="flex min-h-screen bg-[#0A0A0A] overflow-hidden">
+      {/* Left Side - Image & Brand (Desktop) */}
+      <motion.div
+        initial={{ x: -50, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gray-900"
+      >
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop"
+            alt="Fashion Editorial"
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-tr from-gray-900 via-gray-900/40 to-transparent" />
+        </div>
 
-      {/* Main Card */}
-      <div className="relative z-10 w-full max-w-md">
-        <div className="p-8 bg-white shadow-2xl rounded-3xl md:p-10">
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <div
-              className="flex items-center justify-center w-16 h-16 mx-auto mb-4 text-2xl text-white rounded-full shadow-lg"
-              style={{
-                background: 'linear-gradient(135deg, #FF8C00 0%, #FF6B35 100%)',
-              }}
-            >
-              🔐
+        <div className="relative z-10 flex flex-col justify-between w-full p-16 text-white">
+          <div>
+            <div className="flex items-center gap-2 mb-8">
+              <FiFeather className="text-4xl text-orange-500" />
+              <span className="text-3xl font-bold tracking-tight">EliteWear</span>
             </div>
-            <h1
-              className="mb-2 text-3xl font-bold md:text-4xl"
-              style={{ color: '#1a1a1a' }}
-            >
-              Welcome Back
-            </h1>
-            <p className="font-medium text-gray-600">Sign in to your account</p>
           </div>
 
-          {/* Error Alert */}
-          {errors.submit && (
-            <div className="p-4 mb-6 border-l-4 border-red-500 rounded-lg bg-red-50">
-              <p className="flex items-center gap-2 text-sm font-semibold text-red-700">
-                <FiX size={18} /> {errors.submit}
-              </p>
+          <div className="max-w-md space-y-6">
+            <h2 className="text-5xl font-bold leading-tight">
+              Redefine Your <br />
+              <span className="text-orange-500">Digital Style.</span>
+            </h2>
+            <p className="text-lg text-gray-300 font-light leading-relaxed">
+              Join our community of trendsetters. Access exclusive collections, track your orders, and personalize your shopping experience.
+            </p>
+            <div className="flex gap-4 pt-4">
+              <div className="flex -space-x-3">
+                {[1, 2, 3, 4].map(i => (
+                  <div key={i} className="w-10 h-10 rounded-full border-2 border-gray-900 bg-gray-700 overflow-hidden">
+                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-col justify-center">
+                <div className="flex text-yellow-500 text-sm">★★★★★</div>
+                <span className="text-xs text-gray-400">Trusted by 50k+ fashionistas</span>
+              </div>
             </div>
+          </div>
+
+          <div className="text-sm text-gray-500">
+            © 2024 EliteWear Inc. All rights reserved.
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Right Side - Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+        {/* Background blobs for mobile/tablet */}
+        <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none lg:hidden">
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-orange-200 rounded-full blur-3xl opacity-20"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-pink-200 rounded-full blur-3xl opacity-20"></div>
+        </div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="w-full max-w-md space-y-8 bg-white/5 backdrop-blur-3xl p-10 rounded-[3rem] shadow-2xl border border-white/5 relative z-10"
+        >
+          <div className="text-center space-y-4">
+            <div className="lg:hidden flex justify-center mb-4">
+              <div className="text-4xl text-orange-500"><FiFeather /></div>
+            </div>
+            <h2 className="text-5xl font-black tracking-tighter text-white">
+              LOGIN
+            </h2>
+            <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px]">
+              Access your digital vault
+            </p>
+          </div>
+
+          {errors.submit && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3"
+            >
+              <FiAlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={18} />
+              <div>
+                <h4 className="text-sm font-semibold text-red-800">Login Failed</h4>
+                <p className="text-sm text-red-600 mt-1">{errors.submit}</p>
+              </div>
+            </motion.div>
           )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="mb-6 space-y-4">
-            {/* Email Field */}
-            <div className="relative">
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
-                Email Address
-              </label>
-              <div className="relative">
-                <FiMail
-                  className="absolute transition-colors transform -translate-y-1/2 left-4 top-1/2"
-                  style={{
-                    color: isEmailValid ? '#10B981' : '#9CA3AF',
-                  }}
-                  size={20}
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className="w-full py-3 pl-12 pr-12 font-medium transition-all duration-300 border-2 rounded-xl"
-                  style={{
-                    borderColor: errors.email
-                      ? '#EF4444'
-                      : formData.email && !isEmailValid
-                      ? '#F59E0B'
-                      : '#E5E7EB',
-                    backgroundColor: '#F9FAFB',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#FF8C00';
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = errors.email
-                      ? '#EF4444'
-                      : '#E5E7EB';
-                    e.currentTarget.style.backgroundColor = '#F9FAFB';
-                  }}
-                />
-                {isEmailValid && (
-                  <FiCheck
-                    className="absolute text-green-500 transform -translate-y-1/2 right-4 top-1/2"
-                    size={20}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-4">
+              {/* Email Input */}
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Email Address</label>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <FiMail className={`h-5 w-5 transition-colors ${isEmailValid ? 'text-green-500' : 'text-white/20 group-focus-within:text-orange-500'}`} />
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`block w-full pl-14 pr-10 py-5 bg-white/5 border-transparent border rounded-2xl text-white placeholder-white/20 focus:outline-none focus:border-white/10 focus:ring-4 focus:ring-white/5 transition-all duration-300 ${errors.email ? 'border-red-500/50 bg-red-500/5' : ''}`}
+                    placeholder="name@company.com"
                   />
-                )}
+                </div>
+                {errors.email && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.email}</p>}
               </div>
-              {errors.email && (
-                <p className="mt-2 text-xs font-semibold text-red-500">
-                  {errors.email}
-                </p>
-              )}
-            </div>
 
-            {/* Password Field */}
-            <div className="relative">
-              <label className="block mb-2 text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <div className="relative">
-                <FiLock
-                  className="absolute transform -translate-y-1/2 left-4 top-1/2"
-                  style={{ color: '#9CA3AF' }}
-                  size={20}
-                />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full py-3 pl-12 pr-12 font-medium transition-all duration-300 border-2 rounded-xl"
-                  style={{
-                    borderColor: errors.password ? '#EF4444' : '#E5E7EB',
-                    backgroundColor: '#F9FAFB',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#FF8C00';
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = errors.password
-                      ? '#EF4444'
-                      : '#E5E7EB';
-                    e.currentTarget.style.backgroundColor = '#F9FAFB';
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute text-gray-400 transition transform -translate-y-1/2 right-4 top-1/2 hover:text-gray-600"
-                >
-                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
-                </button>
+              {/* Password Input */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between ml-2">
+                  <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Password</label>
+                  <button type="button" className="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors">
+                    Forgot?
+                  </button>
+                </div>
+                <div className="relative group">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <FiLock className="h-5 w-5 text-white/20 transition-colors group-focus-within:text-orange-500" />
+                  </div>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`block w-full pl-14 pr-14 py-5 bg-white/5 border-transparent border rounded-2xl text-white placeholder-white/20 focus:outline-none focus:border-white/10 focus:ring-4 focus:ring-white/5 transition-all duration-300 ${errors.password ? 'border-red-500/50 bg-red-500/5' : ''}`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-6 flex items-center text-white/20 hover:text-white cursor-pointer"
+                  >
+                    {showPassword ? <FiEyeOff className="h-5 w-5" /> : <FiEye className="h-5 w-5" />}
+                  </button>
+                </div>
+                {errors.password && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.password}</p>}
               </div>
-              {errors.password && (
-                <p className="mt-2 text-xs font-semibold text-red-500">
-                  {errors.password}
-                </p>
-              )}
             </div>
 
-            {/* Forgot Password Link */}
-            <div className="text-right">
-              <button
-                type="button"
-                className="text-sm font-semibold text-gray-900 hover:text-gray-700 transition-colors"
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-              >
-                Forgot password?
-              </button>
-            </div>
-
-            {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading || !isEmailValid || !formData.password}
-              className="flex items-center justify-center w-full gap-2 px-8 py-3 font-semibold text-white transition-all duration-300 rounded-sm bg-gray-900 hover:bg-gray-800 hover:shadow-lg disabled:opacity-50 hover:-translate-y-0.5"
-              onMouseEnter={(e) => {
-                if (!loading)
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
+              disabled={loading}
+              className="w-full flex items-center justify-center py-5 px-4 rounded-2xl shadow-2xl text-[10px] tracking-[0.3em] uppercase font-black text-black bg-white hover:bg-orange-500 hover:text-white transition-all duration-500 transform hover:-translate-y-1 disabled:opacity-30 disabled:cursor-not-allowed group relative overflow-hidden"
             >
-              {loading ? (
-                <>
-                  <span className="inline-block w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></span>
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <>
-                  <span>Sign In</span>
-                  <FiArrowRight size={18} />
-                </>
-              )}
+              <span className="relative z-10 flex items-center gap-2">
+                {loading ? 'Authenticating...' : 'Sign In'}
+                {!loading && <FiArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />}
+              </span>
             </button>
           </form>
 
-          {/* Footer */}
-          <p className="font-medium text-center text-gray-600">
-            Don't have an account?{' '}
-            <button
-              onClick={() => navigate('/register')}
-              className="font-bold text-gray-900 hover:text-gray-700 transition-colors"
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.8')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
-            >
-              Sign up
-            </button>
-          </p>
-        </div>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-white/5" />
+            </div>
+            <div className="relative flex justify-center text-[8px] font-black uppercase tracking-widest">
+              <span className="bg-[#0A0A0A] px-4 text-white/20">
+                Alternative Identity
+              </span>
+            </div>
+          </div>
 
-        {/* Bottom Info */}
-        <div className="mt-6 text-sm font-medium text-center text-white">
-          <p>By signing in, you agree to our Terms & Conditions</p>
-        </div>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Google</span>
+            </button>
+            <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
+              <img src="https://www.svgrepo.com/show/448234/apple.svg" alt="Apple" className="w-4 h-4 invert" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Apple</span>
+            </button>
+          </div>
+
+          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+            No account?{' '}
+            <Link to="/register" className="text-white hover:text-orange-500 transition-colors">
+              Initialize here
+            </Link>
+          </p>
+        </motion.div>
       </div>
     </div>
   );

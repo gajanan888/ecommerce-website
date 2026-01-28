@@ -9,7 +9,6 @@
 
 # Dependencies
 node_modules/
-package-lock.json
 yarn.lock
 /.pnp
 .pnp.js
@@ -140,7 +139,6 @@ lerna-debug.log*
 
 # OS
 Thumbs.db
-.env.*.example
 
 # Cache
 .cache/

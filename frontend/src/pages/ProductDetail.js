@@ -3,8 +3,13 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FiHeart, FiArrowLeft, FiMinus, FiPlus } from 'react-icons/fi';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
+import { WishlistContext } from '../context/WishlistContext';
+import { useToast } from '../context/ToastContext';
 import { useTitle } from '../hooks/useTitle';
-import { products } from '../data/products';
+import { productAPI } from '../services/api';
+import { getImageUrl, FALLBACK_IMAGE } from '../utils/imageUtils';
+import SizeGuideModal from '../components/SizeGuideModal';
+import RelatedProducts from '../components/RelatedProducts';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -12,22 +17,33 @@ export default function ProductDetail() {
   const location = useLocation();
   const { addToCart } = useContext(CartContext);
   const { token, isAuthenticated } = useContext(AuthContext);
+  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
+  const { showSuccess, showError } = useToast();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
-
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [notFound, setNotFound] = useState(false);
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
-  // Convert id to correct type and validate
-  const productId = id ? parseInt(id, 10) : null;
-  const product =
-    productId && !isNaN(productId)
-      ? products.find((p) => p && p.id === productId)
-      : null;
+  useEffect(() => {
+    setIsLoading(true);
+    setNotFound(false);
+    productAPI
+      .getById(id)
+      .then((res) => {
+        setProduct(res.data.data);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setNotFound(true);
+        setIsLoading(false);
+      });
+  }, [id]);
 
-  // Validate product data
   const isValidProduct =
     product &&
     product.image &&
@@ -38,17 +54,14 @@ export default function ProductDetail() {
 
   // Scroll to top when component mounts or product changes
   useEffect(() => {
-    setIsLoading(true);
     window.scrollTo(0, 0);
-    const timer = setTimeout(() => setIsLoading(false), 300);
-    return () => clearTimeout(timer);
-  }, [productId]);
+  }, [product]);
 
   // Set page title based on product
   useTitle(
     isValidProduct
-      ? `${product.name} | StyleHub - Premium Fashion Store`
-      : 'Product Not Found | StyleHub'
+      ? `${product.name} | EliteWear - Premium Fashion Store`
+      : 'Product Not Found | EliteWear'
   );
 
   // Handle Add to Cart - validate size selection and authentication
@@ -91,7 +104,7 @@ export default function ProductDetail() {
   // Loading skeleton
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-white pt-16 md:pt-20">
+      <main className="min-h-screen bg-[#0A0A0A] pt-16 md:pt-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <div className="h-6 w-32 bg-gray-200 rounded animate-pulse mb-12"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
@@ -113,24 +126,24 @@ export default function ProductDetail() {
   }
 
   // Product not found
-  if (!isValidProduct) {
+  if (notFound || !isValidProduct) {
     return (
-      <main className="min-h-screen bg-white flex items-center justify-center pt-16 md:pt-20">
+      <main className="min-h-screen bg-[#0A0A0A] flex items-center justify-center pt-16 md:pt-20">
         <div className="text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Product Not Found
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase tracking-tighter">
+            Specimen Not Found
           </h1>
-          <p className="text-gray-600 mb-8">
-            {!productId || isNaN(productId)
-              ? 'Invalid product ID. Please check the URL.'
-              : "Sorry, we couldn't find the product you're looking for."}
+          <p className="text-white/40 mb-12 uppercase tracking-widest text-xs font-bold leading-relaxed">
+            {notFound
+              ? "We could not locate the requested architectural specimen in our digital archive."
+              : 'Invalid specimen identifier. Please verify the protocol/URL.'}
           </p>
           <button
             onClick={() => navigate('/products')}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white hover:bg-gray-800 transition-colors duration-300"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-white text-black hover:bg-orange-500 hover:text-white transition-all duration-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em]"
           >
-            <FiArrowLeft size={20} />
-            Back to Collections
+            <FiArrowLeft size={16} />
+            Collections Archive
           </button>
         </div>
       </main>
@@ -138,84 +151,115 @@ export default function ProductDetail() {
   }
 
   return (
-    <main className="min-h-screen bg-white pt-16 md:pt-20">
+    <main className="min-h-screen bg-[#0A0A0A] pt-24 md:pt-32">
       {/* Back Navigation */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-4 border-b border-gray-200">
+      <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 py-2 md:py-2 border-b border-white/10">
         <button
           onClick={() => navigate('/products')}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
+          className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
         >
           <FiArrowLeft size={20} />
-          <span className="text-sm font-medium">Back to Collections</span>
+          <span className="text-sm font-black uppercase tracking-widest">Back to Collections</span>
         </button>
       </div>
 
       {/* Product Container */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16">
+      <section className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 py-4 md:py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
           {/* Left: Product Image */}
-          <div className="flex items-center justify-center bg-gray-100 rounded-lg overflow-hidden">
+          <div className="flex items-center justify-center bg-white/5 rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
             <img
-              src={product.image}
+              src={getImageUrl(product.image)}
               alt={product.name}
               className="w-full h-full object-cover aspect-[3/4]"
+              onError={(e) => (e.target.src = FALLBACK_IMAGE)}
             />
           </div>
 
           {/* Right: Product Info */}
-          <div className="flex flex-col py-4">
+          <div className="flex flex-col py-2">
             {/* Category */}
-            <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-4">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-orange-500 font-black mb-4">
               {product.category}
             </p>
 
-            {/* Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tighter">
               {product.name}
             </h1>
 
-            {/* Price */}
-            <p className="text-2xl md:text-3xl font-bold text-gray-900 mb-8">
-              ${product.price.toFixed(2)}
+            <p className="text-2xl md:text-3xl font-bold text-white mb-6">
+              ₹{product.price.toFixed(0)}
             </p>
 
-            {/* Description */}
-            <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-8">
+            <p className="text-base text-white/60 leading-relaxed mb-8 max-w-xl">
               {product.description}
             </p>
 
-            {/* Details Grid */}
-            <div className="grid grid-cols-2 gap-8 py-8 border-y border-gray-200 mb-8">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
-                  Material
-                </p>
-                <p className="text-gray-900 font-medium">
-                  Premium Cotton Blend
-                </p>
+            {/* Designer Architecture - Specs */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-12 border-y border-white/5 mb-12">
+              <div className="space-y-4">
+                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                  <span className="text-orange-500 font-black text-xs">01</span>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Architecture</p>
+                  <p className="text-[11px] text-white font-black uppercase">Pure Cotton</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
-                  Shipping
-                </p>
-                <p className="text-gray-900 font-medium">
-                  Free on Orders $100+
-                </p>
+              <div className="space-y-4">
+                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                  <span className="text-orange-500 font-black text-xs">02</span>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Transit</p>
+                  <p className="text-[11px] text-white font-black uppercase">Express Air</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                  <span className="text-orange-500 font-black text-xs">03</span>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Ethical</p>
+                  <p className="text-[11px] text-white font-black uppercase">Sustainable</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                  <span className="text-orange-500 font-black text-xs">04</span>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Origin</p>
+                  <p className="text-[11px] text-white font-black uppercase">Elite Craft</p>
+                </div>
               </div>
             </div>
 
             {/* Size Selection */}
-            <div className="mb-10">
-              <div className="flex items-center justify-between mb-4">
-                <label className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                  Size
-                </label>
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-4">
+                  <label className="text-[10px] font-black text-white uppercase tracking-[0.2em]">
+                    Select Size
+                  </label>
+                  <button
+                    onClick={() => setIsSizeGuideOpen(true)}
+                    className="text-[10px] text-white/40 font-black uppercase tracking-widest hover:text-white transition-colors"
+                  >
+                    Size Guide
+                  </button>
+                </div>
                 {sizeError && (
-                  <span className="text-xs text-red-500 font-medium animate-pulse">
+                  <span className="text-[10px] text-orange-500 font-black uppercase tracking-widest animate-pulse">
                     Please select a size
                   </span>
                 )}
               </div>
+
+              <SizeGuideModal
+                isOpen={isSizeGuideOpen}
+                onClose={() => setIsSizeGuideOpen(false)}
+              />
 
               <div className="grid grid-cols-6 gap-2">
                 {sizes.map((size) => (
@@ -225,11 +269,10 @@ export default function ProductDetail() {
                       setSelectedSize(size);
                       setSizeError(false);
                     }}
-                    className={`py-3 px-2 text-sm font-semibold transition-all duration-200 border-2 ${
-                      selectedSize === size
-                        ? 'bg-black text-white border-black'
-                        : 'bg-white text-gray-900 border-gray-300 hover:border-gray-900'
-                    }`}
+                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${selectedSize === size
+                      ? 'bg-white text-black'
+                      : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'
+                      }`}
                   >
                     {size}
                   </button>
@@ -238,11 +281,11 @@ export default function ProductDetail() {
             </div>
 
             {/* Quantity Selector */}
-            <div className="mb-10">
-              <label className="text-sm font-semibold text-gray-900 uppercase tracking-wider block mb-4">
+            <div className="mb-4">
+              <label className="text-sm font-semibold text-gray-900 uppercase tracking-wider block mb-2">
                 Quantity
               </label>
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={decrementQuantity}
                   className="p-2 border-2 border-gray-300 hover:border-gray-900 transition-colors duration-300"
@@ -264,49 +307,79 @@ export default function ProductDetail() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-3 mb-8">
+            <div className="flex gap-2 mb-4">
               {/* Add to Cart - Primary */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-4 px-6 font-bold transition-all duration-300 active:scale-95 ${
-                  addedToCart
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-black text-white hover:bg-gray-800'
-                }`}
+                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${addedToCart
+                  ? 'bg-green-500 text-white'
+                  : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                  }`}
                 aria-label={`Add ${product?.name} to cart`}
               >
-                {addedToCart ? '✓ Added to Cart' : 'Add to Cart'}
+                {addedToCart ? '✓ Added' : 'Add to Cart'}
               </button>
 
               {/* Wishlist - Secondary */}
               <button
-                disabled
-                title="Wishlist feature coming soon"
-                className="py-4 px-6 bg-white border-2 border-gray-300 text-gray-400 cursor-not-allowed opacity-50 hover:border-gray-300 transition-colors duration-300"
-                aria-label="Add to wishlist (feature coming soon)"
+                onClick={() => {
+                  try {
+                    toggleWishlist(product._id);
+                    showSuccess(
+                      isInWishlist(product._id)
+                        ? 'Removed from wishlist'
+                        : 'Added to wishlist'
+                    );
+                  } catch (error) {
+                    showError('Error updating wishlist');
+                  }
+                }}
+                title={
+                  isInWishlist(product._id)
+                    ? 'Remove from wishlist'
+                    : 'Add to wishlist'
+                }
+                className={`py-4 px-6 border-2 transition-colors duration-300 ${isInWishlist(product._id)
+                  ? 'bg-red-50 border-red-200 text-red-500'
+                  : 'bg-white border-gray-300 text-gray-400 hover:border-black hover:text-black'
+                  }`}
+                aria-label={
+                  isInWishlist(product._id)
+                    ? 'Remove from wishlist'
+                    : 'Add to wishlist'
+                }
               >
-                <FiHeart size={24} />
+                <FiHeart
+                  size={24}
+                  className={
+                    isInWishlist(product._id) ? 'fill-current text-red-500' : ''
+                  }
+                />
               </button>
             </div>
 
-            {/* Trust Badges */}
-            <div className="space-y-3 pt-8 border-t border-gray-200 text-sm text-gray-600">
-              <div className="flex items-center gap-3">
-                <span className="text-gray-400">✓</span>
-                <span>100% Authentic Product</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-gray-400">✓</span>
-                <span>30-Day Easy Returns</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-gray-400">✓</span>
-                <span>Secure Checkout</span>
-              </div>
+            {/* Premium Trust Architecture */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-12 border-t border-white/5 mt-12">
+              {[
+                { label: 'AUTHENTICITY', detail: 'VERIFIED GRADE' },
+                { label: 'RETURNS', detail: '30 DAY WINDOW' },
+                { label: 'SECURITY', detail: 'ENCRYPTED' }
+              ].map((badge, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-500 group">
+                  <p className="text-[10px] font-black tracking-[0.3em] text-orange-500 mb-2 group-hover:translate-x-1 transition-transform">{badge.label}</p>
+                  <p className="text-[11px] font-black text-white/40 uppercase tracking-widest">{badge.detail}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
+
+        {/* Related Products */}
+        <RelatedProducts
+          currentProductId={product._id}
+          category={product.category}
+        />
       </section>
-    </main>
+    </main >
   );
 }

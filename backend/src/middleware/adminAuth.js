@@ -8,7 +8,7 @@ const User = require('../models/User');
 const adminAuth = async (req, res, next) => {
   try {
     // Get user ID from request (set by protect middleware)
-    const userId = req.user._id;
+    const userId = req.userId;
 
     // Fetch user from database
     const user = await User.findById(userId);

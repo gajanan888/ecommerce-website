@@ -39,7 +39,15 @@ const productSchema = new mongoose.Schema(
         'Beauty',
         'Books',
         'Clothing',
+        'Dresses',
+        'Tops',
+        'Overalls',
       ],
+    },
+    gender: {
+      type: String,
+      enum: ['Men', 'Women', 'Children', 'Unisex'],
+      required: false,
     },
     image: {
       type: String,
@@ -76,7 +84,7 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isNew: {
+    isNewArrival: {
       type: Boolean,
       default: false,
     },

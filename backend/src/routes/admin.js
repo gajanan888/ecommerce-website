@@ -3,6 +3,7 @@ const router = express.Router();
 const adminController = require('../controllers/adminController');
 const { protect } = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
+const upload = require('../middleware/upload');
 const {
   createProduct,
   getAllProducts,
@@ -28,9 +29,9 @@ router.get('/dashboard/stats', adminController.getDashboardStats);
 
 // ========== PRODUCT MANAGEMENT ==========
 router.get('/products', getAllProducts);
-router.post('/products', createProduct);
+router.post('/products', upload.single('image'), createProduct);
 router.get('/products/:id', getProductById);
-router.put('/products/:id', updateProduct);
+router.put('/products/:id', upload.single('image'), updateProduct);
 router.delete('/products/:id', deleteProduct);
 router.put('/products/bulk/update', bulkUpdateProducts);
 

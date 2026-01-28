@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const { uploadToCloudinary } = require('../utils/cloudinary');
 
 /**
  * @desc    Get all products with optional filtering
@@ -8,6 +9,7 @@ const Product = require('../models/Product');
 exports.getAllProducts = async (req, res, next) => {
   try {
     const { category, search, sort } = req.query;
+    console.log('📦 GetAllProducts - Request Received', req.query);
 
     // Build filter object
     let filter = {};
@@ -88,18 +90,28 @@ exports.createProduct = async (req, res, next) => {
       description,
       price,
       category,
-      image,
-      images,
       stock,
       sizes,
       material,
     } = req.body;
 
+    let image = req.body.image;
+    let images = req.body.images;
+
+    // Handle Image Upload
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.path, 'products');
+      if (result) {
+        image = result.url;
+        images = [result.url]; // Default single image to array
+      }
+    }
+
     // Validate required fields
     if (!name || !description || !price || !category || !image) {
       return res.status(400).json({
         status: 'error',
-        message: 'Please provide all required fields',
+        message: 'Please provide all required fields (including image)',
       });
     }
 
@@ -111,7 +123,7 @@ exports.createProduct = async (req, res, next) => {
       image,
       images: images || [image],
       stock: stock || 10,
-      sizes: sizes || ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+      sizes: sizes ? (typeof sizes === 'string' ? JSON.parse(sizes) : sizes) : ['XS', 'S', 'M', 'L', 'XL', 'XXL'], // Handle form-data array parsing
       material: material || 'Premium Cotton Blend',
     });
 
@@ -131,6 +143,16 @@ exports.createProduct = async (req, res, next) => {
  */
 exports.updateProduct = async (req, res, next) => {
   try {
+    // Handle Image Upload if present
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.path, 'products');
+      if (result) {
+        req.body.image = result.url;
+        // Optionally append to images or replace? For simple update, let's keep it simple.
+        // req.body.images = [result.url]; 
+      }
+    }
+
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -185,7 +207,20 @@ exports.deleteProduct = async (req, res, next) => {
  */
 exports.getFeaturedProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ featured: true }).limit(6);
+    // Try to find marked featured products first
+    let products = await Product.find({ featured: true }).limit(6);
+
+    // If not enough featured products, fill with newest items
+    if (products.length < 4) {
+      const existingIds = products.map((p) => p._id);
+      const newProducts = await Product.find({ _id: { $nin: existingIds } })
+        .sort({ createdAt: -1 })
+        .limit(8 - products.length); // Fetch enough to make a decent grid
+      products = [...products, ...newProducts];
+    }
+
+    // Limit to 8 max just in case
+    products = products.slice(0, 8);
 
     res.status(200).json({
       status: 'success',

@@ -22,6 +22,8 @@ exports.createProduct = async (req, res) => {
       sizes,
       material,
       featured,
+      gender,
+      tags,
     } = req.body;
 
     // Validate required fields
@@ -30,6 +32,30 @@ exports.createProduct = async (req, res) => {
         status: 'error',
         message: 'Please provide name, price, and category',
       });
+    }
+
+    // Handle image - either from file upload or URL
+    let imageUrl = image || '/images/placeholder.jpg';
+
+    if (req.file) {
+      // If file was uploaded, use the file path
+      // Move file from temp to public/images/products
+      const fs = require('fs');
+      const path = require('path');
+      const publicDir = path.join(__dirname, '..', '..', 'public', 'images', 'products');
+
+      // Create directory if it doesn't exist
+      if (!fs.existsSync(publicDir)) {
+        fs.mkdirSync(publicDir, { recursive: true });
+      }
+
+      const newFileName = Date.now() + '-' + req.file.originalname;
+      const newPath = path.join(publicDir, newFileName);
+
+      // Move file
+      fs.renameSync(req.file.path, newPath);
+
+      imageUrl = `/images/products/${newFileName}`;
     }
 
     // Check if product already exists
@@ -41,17 +67,35 @@ exports.createProduct = async (req, res) => {
       });
     }
 
+    // Parse arrays if they're strings - safely handle undefined/empty values
+    let parsedSizes;
+    let parsedTags;
+
+    try {
+      parsedSizes = sizes && typeof sizes === 'string' ? JSON.parse(sizes) : (Array.isArray(sizes) ? sizes : undefined);
+    } catch (e) {
+      parsedSizes = undefined;
+    }
+
+    try {
+      parsedTags = tags && typeof tags === 'string' ? JSON.parse(tags) : (Array.isArray(tags) ? tags : undefined);
+    } catch (e) {
+      parsedTags = undefined;
+    }
+
     // Create product
     const product = await Product.create({
       name,
       description,
       price,
       category,
-      image: image || '/images/placeholder.jpg',
-      stock: stock || 0,
-      sizes: sizes || ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+      image: imageUrl,
+      stock: stock || 10,
+      sizes: parsedSizes || ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
       material: material || 'Cotton',
       featured: featured || false,
+      gender: gender || undefined,
+      tags: parsedTags || [],
     });
 
     res.status(201).json({

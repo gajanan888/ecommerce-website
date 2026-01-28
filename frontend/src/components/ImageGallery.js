@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FiZoomIn, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { getImageUrl, FALLBACK_IMAGE } from '../utils/imageUtils';
 
 const ImageGallery = ({ images, productName, discount }) => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -29,8 +30,7 @@ const ImageGallery = ({ images, productName, discount }) => {
     setSelectedImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  const currentImage =
-    images[selectedImage] || 'https://via.placeholder.com/500?text=No+Image';
+  const currentImage = images[selectedImage] || '';
 
   return (
     <div className="w-full">
@@ -42,20 +42,20 @@ const ImageGallery = ({ images, productName, discount }) => {
           onMouseLeave={handleMouseLeave}
         >
           <img
-            src={currentImage}
+            src={getImageUrl(currentImage)}
             alt={productName}
-            className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
-              zoomPosition
-                ? 'cursor-zoom-in scale-150'
-                : 'cursor-zoom-out scale-100'
-            }`}
+            className={`w-full h-full object-cover transition-transform duration-300 ease-out ${zoomPosition
+              ? 'cursor-zoom-in scale-150'
+              : 'cursor-zoom-out scale-100'
+              }`}
             style={
               zoomPosition
                 ? {
-                    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                  }
+                  transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                }
                 : {}
             }
+            onError={(e) => (e.target.src = FALLBACK_IMAGE)}
           />
         </div>
 
@@ -104,16 +104,16 @@ const ImageGallery = ({ images, productName, discount }) => {
             <button
               key={idx}
               onClick={() => setSelectedImage(idx)}
-              className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${
-                selectedImage === idx
-                  ? 'border-orange-600 ring-2 ring-orange-300 ring-offset-2 scale-102'
-                  : 'border-slate-300 hover:border-slate-400'
-              }`}
+              className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${selectedImage === idx
+                ? 'border-orange-600 ring-2 ring-orange-300 ring-offset-2 scale-102'
+                : 'border-slate-300 hover:border-slate-400'
+                }`}
             >
               <img
-                src={image}
+                src={getImageUrl(image)}
                 alt={`View ${idx + 1}`}
                 className="w-full h-full object-cover"
+                onError={(e) => (e.target.src = FALLBACK_IMAGE)}
               />
             </button>
           ))}

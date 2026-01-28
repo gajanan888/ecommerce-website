@@ -12,7 +12,7 @@ exports.getDashboardStats = async (req, res) => {
 
     const totalRevenue = await Order.aggregate([
       { $match: { paymentStatus: 'completed' } },
-      { $group: { _id: null, total: { $sum: '$finalAmount' } } },
+      { $group: { _id: null, total: { $sum: '$total' } } },
     ]);
 
     const pendingOrders = await Order.countDocuments({ status: 'pending' });
@@ -206,7 +206,7 @@ exports.getPaymentStats = async (req, res) => {
         $group: {
           _id: '$paymentMethod',
           count: { $sum: 1 },
-          total: { $sum: '$finalAmount' },
+          total: { $sum: '$total' },
         },
       },
     ]);
@@ -271,7 +271,7 @@ exports.getUserById = async (req, res) => {
 
     const userOrders = await Order.find({ userId: req.params.id });
     const totalSpent = userOrders.reduce(
-      (sum, order) => sum + order.finalAmount,
+      (sum, order) => sum + order.total,
       0
     );
 

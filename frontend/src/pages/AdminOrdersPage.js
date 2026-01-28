@@ -149,7 +149,7 @@ export default function AdminOrdersPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3 text-sm font-medium text-gray-800">
-                          ${order.total?.toFixed(2) || '0.00'}
+                          ₹{order.total?.toFixed(2) || '0.00'}
                         </td>
                         <td className="px-4 py-3 text-sm">
                           <StatusBadge status={order.status} />
@@ -234,9 +234,8 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        colors[status] || 'bg-gray-100 text-gray-800'
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
+        }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -253,9 +252,8 @@ function PaymentBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        colors[status] || 'bg-gray-100 text-gray-800'
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
+        }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -390,7 +388,9 @@ function OrderDetailModal({
             <div>
               <p className="text-gray-600">Address</p>
               <p className="font-medium text-gray-800">
-                {order.userId?.address || 'N/A'}
+                {order.shippingAddress
+                  ? `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}, ${order.shippingAddress.country}`
+                  : order.userId?.address || "N/A"}
               </p>
             </div>
           </div>
@@ -412,7 +412,7 @@ function OrderDetailModal({
                   <p className="text-gray-600">Qty: {item.quantity}</p>
                 </div>
                 <p className="font-medium text-gray-800">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  ₹{(item.price * item.quantity).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -424,14 +424,14 @@ function OrderDetailModal({
           <div className="flex justify-between">
             <span className="text-gray-600">Subtotal</span>
             <span className="font-medium">
-              ${order.subtotal?.toFixed(2) || '0.00'}
+              ₹{order.subtotal?.toFixed(2) || '0.00'}
             </span>
           </div>
           {order.tax > 0 && (
             <div className="flex justify-between">
               <span className="text-gray-600">Tax</span>
               <span className="font-medium">
-                ${order.tax?.toFixed(2) || '0.00'}
+                ₹{order.tax?.toFixed(2) || '0.00'}
               </span>
             </div>
           )}
@@ -439,13 +439,13 @@ function OrderDetailModal({
             <div className="flex justify-between">
               <span className="text-gray-600">Shipping</span>
               <span className="font-medium">
-                ${order.shipping?.toFixed(2) || '0.00'}
+                ₹{order.shipping?.toFixed(2) || '0.00'}
               </span>
             </div>
           )}
           <div className="flex justify-between text-base font-bold pt-2 border-t border-gray-200">
             <span>Total</span>
-            <span>${order.total?.toFixed(2) || '0.00'}</span>
+            <span>₹{order.total?.toFixed(2) || '0.00'}</span>
           </div>
         </div>
 

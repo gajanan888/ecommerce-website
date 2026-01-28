@@ -1,8 +1,14 @@
 import axios from 'axios';
 
-// Create Axios instance with base URL
+// Always ensure /api is present in the base URL
+export const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+let apiBase = BASE_URL;
+if (!apiBase.endsWith('/api')) {
+  apiBase = apiBase.replace(/\/$/, '') + '/api';
+}
+
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  baseURL: apiBase,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -28,7 +34,12 @@ API.interceptors.response.use(
   (response) => response,
   (error) => {
     // Handle 401 - Token expired or invalid
-    if (error.response?.status === 401) {
+    // Don't redirect if it's a login failure (let the component handle it)
+    if (
+      error.response?.status === 401 &&
+      !error.config.url.includes('/auth/login') &&
+      !error.config.url.includes('/auth/signup')
+    ) {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('user');
@@ -83,7 +94,18 @@ export const orderAPI = {
   getMyOrders: () => API.get('/orders'),
   getOrderById: (id) => API.get(`/orders/${id}`),
   updateOrder: (id, data) => API.put(`/orders/${id}`, data),
+  updateShippingAddress: (id, address) => API.put(`/orders/${id}/address`, { shippingAddress: address }),
+  confirmCOD: (id) => API.put(`/orders/${id}/confirm-cod`),
   cancelOrder: (id) => API.delete(`/orders/${id}`),
+};
+
+// ============================================
+// User Endpoints
+// ============================================
+
+export const userAPI = {
+  updateProfile: (userId, data) => API.put(`/users/${userId}`, data),
+  updatePassword: (data) => API.put('/auth/update-password', data),
 };
 
 // ============================================

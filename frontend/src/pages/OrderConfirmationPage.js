@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ordersAPI } from '../services/api';
+import { orderAPI } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { FiCheckCircle, FiLoader, FiHome, FiPackage } from 'react-icons/fi';
 
@@ -17,7 +17,7 @@ const OrderConfirmationPage = () => {
 
   const fetchOrder = async () => {
     try {
-      const response = await ordersAPI.getById(orderId);
+      const response = await orderAPI.getOrderById(orderId);
       setOrder(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -97,9 +97,8 @@ const OrderConfirmationPage = () => {
             <div>
               <p className="text-gray-600 text-sm mb-2">Order Status</p>
               <span
-                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
-                  statusColors[order.status]
-                }`}
+                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${statusColors[order.status]
+                  }`}
               >
                 {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
               </span>
@@ -107,11 +106,10 @@ const OrderConfirmationPage = () => {
             <div>
               <p className="text-gray-600 text-sm mb-2">Payment Status</p>
               <span
-                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
-                  order.paymentStatus === 'completed'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}
+                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${order.paymentStatus === 'completed'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-yellow-100 text-yellow-800'
+                  }`}
               >
                 {order.paymentStatus?.charAt(0).toUpperCase() +
                   order.paymentStatus?.slice(1)}
@@ -125,21 +123,21 @@ const OrderConfirmationPage = () => {
               <FiPackage /> Order Items
             </h2>
             <div className="space-y-3">
-              {order.products?.map((item, idx) => (
+              {(order.items || order.products)?.map((item, idx) => (
                 <div
                   key={idx}
                   className="flex justify-between items-center p-4 bg-gray-50 rounded-lg"
                 >
                   <div>
                     <p className="font-medium text-gray-800">
-                      {item.productId?.name}
+                      {item.productName || item.productId?.name}
                     </p>
                     <p className="text-sm text-gray-600">
                       Quantity: {item.quantity}
                     </p>
                   </div>
                   <p className="font-medium text-gray-800">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -151,18 +149,18 @@ const OrderConfirmationPage = () => {
             <div className="space-y-3">
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal:</span>
-                <span>${(order.totalAmount || 0).toFixed(2)}</span>
+                <span>₹{(order.subtotal || order.totalAmount || 0).toFixed(2)}</span>
               </div>
-              {order.discountAmount > 0 && (
+              {(order.discountAmount > 0 || order.discount > 0) && (
                 <div className="flex justify-between text-green-600">
                   <span>Discount:</span>
-                  <span>-${order.discountAmount.toFixed(2)}</span>
+                  <span>-₹{(order.discountAmount || order.discount || 0).toFixed(2)}</span>
                 </div>
               )}
               <div className="flex justify-between text-gray-600 pt-3 border-t border-gray-200">
                 <span className="font-bold">Total:</span>
                 <span className="font-bold text-blue-600">
-                  ${(order.finalAmount || order.totalAmount || 0).toFixed(2)}
+                  ₹{(order.total || order.finalAmount || order.totalAmount || 0).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -173,8 +171,8 @@ const OrderConfirmationPage = () => {
             <div className="bg-gray-50 rounded-lg p-6 mb-8">
               <h3 className="font-bold text-gray-800 mb-3">Shipping Address</h3>
               <div className="text-gray-600 space-y-1">
-                <p>{order.shippingAddress.fullName}</p>
-                <p>{order.shippingAddress.address}</p>
+                <p>{order.shippingAddress.name || order.shippingAddress.fullName}</p>
+                <p>{order.shippingAddress.street || order.shippingAddress.address}</p>
                 <p>
                   {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
                   {order.shippingAddress.zipCode}

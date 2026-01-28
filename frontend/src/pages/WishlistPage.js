@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { WishlistContext } from '../context/WishlistContext';
+import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { FiTrash2, FiShoppingCart } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
 import { productAPI } from '../services/api';
 
-const WishlistPage = ({ onNavigate, onAddToCart, onViewDetails }) => {
+const WishlistPage = () => {
+  const navigate = useNavigate();
   const { wishlistItems, removeFromWishlist, clearWishlist, loading } =
     useContext(WishlistContext);
+  const { addToCart } = useCart();
   const { showSuccess, showError } = useToast();
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
@@ -54,13 +58,26 @@ const WishlistPage = ({ onNavigate, onAddToCart, onViewDetails }) => {
     }
   };
 
+  const onAddToCart = async (product) => {
+    try {
+      await addToCart(product);
+      return { success: true };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  const onViewDetails = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   if (loading || productsLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 text-lg font-medium">
-            Loading wishlist...
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white/20 mx-auto mb-4"></div>
+          <p className="text-white/40 text-[10px] font-black uppercase tracking-widest">
+            Synchronizing...
           </p>
         </div>
       </div>
@@ -69,22 +86,19 @@ const WishlistPage = ({ onNavigate, onAddToCart, onViewDetails }) => {
 
   if (wishlistItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center bg-white p-8 rounded-xl shadow-lg max-w-md">
-          <div className="text-5xl mb-4">💔</div>
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">
-            Your wishlist is empty
+      <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
+        <div className="text-center p-8 max-w-md">
+          <h2 className="text-5xl font-black mb-4 text-white uppercase tracking-tighter">
+            VAULT EMPTY
           </h2>
-          <p className="text-gray-600 mb-6">
-            Add items to your wishlist to save them for later. You can access
-            them anytime!
+          <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px] mb-8">
+            Your saved artifacts will appear here.
           </p>
           <button
-            onClick={() => onNavigate('/')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 ease-in-out shadow-md hover:shadow-lg transform hover:scale-105 font-medium inline-flex items-center gap-2"
+            onClick={() => navigate('/products')}
+            className="bg-white text-black px-10 py-5 rounded-full hover:bg-orange-500 hover:text-white transition-all duration-500 font-black text-[10px] uppercase tracking-[0.3em] shadow-2xl"
           >
-            <FiShoppingCart size={18} />
-            Start Shopping
+            Explore
           </button>
         </div>
       </div>
@@ -92,26 +106,24 @@ const WishlistPage = ({ onNavigate, onAddToCart, onViewDetails }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-[#0A0A0A] py-12">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-12 flex justify-between items-end border-b border-white/5 pb-8">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">
-              ❤️ My Wishlist
+            <h1 className="text-6xl font-black text-white uppercase tracking-tighter">
+              VAULT
             </h1>
-            <p className="text-gray-600">
-              {wishlistItems.length} item{wishlistItems.length !== 1 ? 's' : ''}{' '}
-              saved
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mt-1">
+              {wishlistItems.length} SELECTION{wishlistItems.length !== 1 ? 'S' : ''}
             </p>
           </div>
           {wishlistItems.length > 0 && (
             <button
               onClick={handleClearWishlist}
-              className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-all duration-300 flex items-center gap-2 shadow-md hover:shadow-lg"
+              className="text-white/40 hover:text-red-500 transition-colors font-black text-[8px] uppercase tracking-[0.3em] border-b border-transparent hover:border-red-500 pb-1"
             >
-              <FiTrash2 size={18} />
-              Clear All
+              Wipe Vault
             </button>
           )}
         </div>
@@ -136,7 +148,7 @@ const WishlistPage = ({ onNavigate, onAddToCart, onViewDetails }) => {
               Ready to checkout some of these items?
             </p>
             <button
-              onClick={() => onNavigate('/cart')}
+              onClick={() => navigate('/cart')}
               className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 font-medium inline-flex items-center gap-2"
             >
               <FiShoppingCart size={20} />

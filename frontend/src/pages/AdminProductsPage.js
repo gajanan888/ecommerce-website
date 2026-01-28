@@ -4,6 +4,7 @@ import ProductForm from '../components/ProductForm';
 import ConfirmDialog from '../components/ConfirmDialog';
 import Toast from '../components/Toast';
 import { adminProductAPI } from '../services/adminAPI';
+import { getImageUrl } from '../utils/imageUtils';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -32,10 +33,20 @@ export default function AdminProductsPage() {
       if (searchTerm) filters.search = searchTerm;
       if (categoryFilter) filters.category = categoryFilter;
 
-      const response = await adminProductAPI.getAll(page, 10, filters);
-      setProducts(response.data.products);
-      setTotalPages(response.data.pages);
+      console.log('🔍 Fetching admin products...', { page, filters });
+      const response = await adminProductAPI.getAll(page, 50, filters);
+      console.log('📦 Admin API Response:', response);
+
+      // adminProductAPI returns response.data which is: { status, data: { products }, pages }
+      const products = response.data?.products || [];
+      const totalPages = response.pages || 1;
+
+      console.log('✅ Products:', products.length, 'Total Pages:', totalPages);
+      setProducts(products);
+      setTotalPages(totalPages);
     } catch (error) {
+      console.error('❌ Admin Products Error:', error);
+      console.error('Error response:', error.response);
       const errorMsg =
         error.response?.data?.message || 'Failed to load products';
       setToast({ message: errorMsg, type: 'error' });
@@ -61,14 +72,32 @@ export default function AdminProductsPage() {
   const handleFormSubmit = async (formData) => {
     try {
       setSubmitting(true);
+
+      const submitData = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (key === 'imageFile') {
+          if (formData[key]) {
+            submitData.append('image', formData[key]); // Append file as 'image'
+          }
+        } else if (key === 'image') {
+          // If no new file is selected, allow the existing URL to be sent
+          // If a new file IS selected, we ignore the 'image' string (which is likely a base64 preview)
+          if (!formData.imageFile) {
+            submitData.append('image', formData[key]);
+          }
+        } else {
+          submitData.append(key, formData[key]);
+        }
+      });
+
       if (editingProduct) {
-        await adminProductAPI.update(editingProduct._id, formData);
+        await adminProductAPI.update(editingProduct._id, submitData);
         setToast({
           message: 'Product updated successfully!',
           type: 'success',
         });
       } else {
-        await adminProductAPI.create(formData);
+        await adminProductAPI.create(submitData);
         setToast({
           message: 'Product created successfully!',
           type: 'success',
@@ -242,7 +271,7 @@ export default function AdminProductsPage() {
                         <td className="px-4 py-3 text-sm text-gray-800">
                           <div className="flex items-center gap-3">
                             <img
-                              src={product.image}
+                              src={getImageUrl(product.image)}
                               alt={product.name}
                               className="w-10 h-10 rounded object-cover"
                               onError={(e) => {
@@ -257,15 +286,14 @@ export default function AdminProductsPage() {
                           {product.category}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-800 font-medium">
-                          ${product.price.toFixed(2)}
+                          ₹{product.price.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-600">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              product.stock > 0
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${product.stock > 0
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                              }`}
                           >
                             {product.stock}
                           </span>

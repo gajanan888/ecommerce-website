@@ -12,11 +12,21 @@ class APIError extends Error {
 }
 
 /**
+ * Not found handler middleware
+ */
+const notFoundHandler = (req, res) => {
+  res.status(404).json({
+    status: 'error',
+    message: 'Route not found',
+  });
+};
+
+/**
  * Error handling middleware
  */
 const errorHandler = (err, req, res, next) => {
   const status = err.status || err.statusCode || 500;
-  const message = err.message || "Internal server error";
+  const message = err.message || 'Internal server error';
 
   console.error(`❌ [${status}] ${message}`, {
     path: req.path,
@@ -28,7 +38,7 @@ const errorHandler = (err, req, res, next) => {
     error: {
       message,
       status,
-      ...(process.env.NODE_ENV === "development" && {
+      ...(process.env.NODE_ENV === 'development' && {
         stack: err.stack,
         details: err.details || null,
       }),
@@ -57,7 +67,7 @@ class ValidationError extends APIError {
  * Not found error
  */
 class NotFoundError extends APIError {
-  constructor(message = "Resource not found") {
+  constructor(message = 'Resource not found') {
     super(message, 404);
   }
 }
@@ -66,7 +76,7 @@ class NotFoundError extends APIError {
  * Unauthorized error
  */
 class UnauthorizedError extends APIError {
-  constructor(message = "Unauthorized access") {
+  constructor(message = 'Unauthorized access') {
     super(message, 401);
   }
 }
@@ -75,7 +85,7 @@ class UnauthorizedError extends APIError {
  * Forbidden error
  */
 class ForbiddenError extends APIError {
-  constructor(message = "Forbidden") {
+  constructor(message = 'Forbidden') {
     super(message, 403);
   }
 }
@@ -87,5 +97,6 @@ module.exports = {
   UnauthorizedError,
   ForbiddenError,
   errorHandler,
+  notFoundHandler,
   asyncHandler,
 };

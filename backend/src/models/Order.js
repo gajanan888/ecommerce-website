@@ -6,31 +6,46 @@ const orderSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  products: [
+  items: [
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true,
       },
-      name: String,
-      price: Number,
+      productName: String,
+      image: String,
+      price: {
+        type: Number,
+        required: true,
+      },
       quantity: {
         type: Number,
         required: true,
         min: 1,
       },
+      size: {
+        type: String,
+        default: 'M',
+      },
     },
   ],
-  totalAmount: {
+  subtotal: {
     type: Number,
     required: true,
-  },
-  discountAmount: {
-    type: Number,
     default: 0,
   },
-  finalAmount: {
+  tax: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  shipping: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  total: {
     type: Number,
     required: true,
   },
@@ -41,15 +56,14 @@ const orderSchema = new mongoose.Schema({
   },
   paymentStatus: {
     type: String,
-    enum: ['pending', 'completed', 'failed', 'refunded'],
-    default: 'pending',
+    enum: ['unpaid', 'pending', 'completed', 'failed', 'refunded'],
+    default: 'unpaid',
   },
   paymentMethod: {
     type: String,
     enum: ['card', 'paypal', 'stripe', 'googlepay', 'applepay', 'bank', 'cod'],
-    required: true,
+    required: false, // Not required on creation
   },
-  transactionId: String,
   shippingAddress: {
     name: String,
     street: String,

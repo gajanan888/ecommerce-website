@@ -1,151 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiHeart } from 'react-icons/fi';
+import { FiArrowRight } from 'react-icons/fi';
+import { useCart } from '../context/CartContext';
+import { useToast } from '../context/ToastContext';
+import { productAPI } from '../services/api';
+import ProductCard from './ProductCard';
 
 const NewArrivals = () => {
   const navigate = useNavigate();
-  const [wishlist, setWishlist] = useState({});
-  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const { addToCart } = useCart();
+  const { showSuccess, showError } = useToast();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const products = [
-    {
-      id: 1,
-      name: 'Minimalist Linen Shirt',
-      category: 'Shirts',
-      price: 89.99,
-      image:
-        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=600&fit=crop',
-    },
-    {
-      id: 2,
-      name: 'Classic White Tee',
-      category: 'Basics',
-      price: 49.99,
-      image:
-        'https://images.unsplash.com/photo-1516992654410-330330fc5388?w=500&h=600&fit=crop',
-    },
-    {
-      id: 3,
-      name: 'Tailored Black Blazer',
-      category: 'Outerwear',
-      price: 199.99,
-      image:
-        'https://images.unsplash.com/photo-1539533057440-7cc28baa34d8?w=500&h=600&fit=crop',
-    },
-    {
-      id: 4,
-      name: 'Slim Fit Jeans',
-      category: 'Denim',
-      price: 129.99,
-      image:
-        'https://images.unsplash.com/photo-1542272604-787c62d465d1?w=500&h=600&fit=crop',
-    },
-  ];
+  useEffect(() => {
+    const fetchNewArrivals = async () => {
+      try {
+        const response = await productAPI.getFeatured();
+        const data = response.data.data || [];
+        setProducts(data.slice(0, 4));
+      } catch (error) {
+        console.error('Failed to fetch new arrivals', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNewArrivals();
+  }, []);
 
-  const toggleWishlist = (productId, e) => {
-    e.stopPropagation();
-    setWishlist((prev) => ({
-      ...prev,
-      [productId]: !prev[productId],
-    }));
+  const handleAddToCart = async (product) => {
+    try {
+      await addToCart(product, 1);
+      showSuccess('Added to cart');
+    } catch (error) {
+      showError('Failed to add to cart');
+    }
   };
 
-  const handleAddToCart = (productId, e) => {
-    e.stopPropagation();
-    // Add to cart logic here
+  const handleViewDetails = (id) => {
+    navigate(`/product/${id}`);
   };
 
-  const handleViewAll = () => {
-    navigate('/new-arrivals');
-  };
+  if (loading) return null;
 
   return (
-    <section
-      id="new-arrivals"
-      className="w-full pt-0 pb-12 md:pb-16 lg:pb-20 bg-white"
-    >
-      {/* Container */}
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
+    <section className="py-24 bg-[#0A0A0A] overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-            New Arrivals
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600 font-light max-w-2xl mx-auto">
-            Fresh styles just dropped
-          </p>
-        </div>
+        <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-6">
+          <div className="max-w-xl">
+            <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight">
+              NEW DROPS
+            </h2>
+            <p className="text-xl text-white/40 font-bold max-w-md uppercase tracking-widest text-xs mt-4">
+              Fresh digital artifacts for the next generation.
+            </p>
+          </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-12 md:mb-16">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              onMouseEnter={() => setHoveredProduct(product.id)}
-              onMouseLeave={() => setHoveredProduct(null)}
-              className="group cursor-pointer flex flex-col h-full"
-            >
-              {/* Image Container */}
-              <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl mb-4 bg-gray-100">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                />
-
-                {/* Wishlist Button */}
-                <button
-                  onClick={(e) => toggleWishlist(product.id, e)}
-                  className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 hover:bg-white"
-                  aria-label="Add to wishlist"
-                >
-                  <FiHeart
-                    size={20}
-                    className={`transition-all duration-300 ${
-                      wishlist[product.id]
-                        ? 'fill-gray-900 text-gray-900'
-                        : 'text-gray-700 hover:text-gray-900'
-                    }`}
-                  />
-                </button>
-
-                {/* Add to Cart Button - Shows on Hover */}
-                {hoveredProduct === product.id && (
-                  <div className="absolute inset-0 bg-black/20 flex items-center justify-center transition-all duration-300">
-                    <button
-                      onClick={(e) => handleAddToCart(product.id, e)}
-                      className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Product Info */}
-              <div className="flex-1 flex flex-col">
-                <p className="text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">
-                  {product.category}
-                </p>
-                <h3 className="text-sm md:text-base font-semibold text-gray-900 mb-3 leading-snug hover:text-gray-700 transition-colors">
-                  {product.name}
-                </h3>
-                <p className="text-base font-semibold text-gray-900">
-                  ${product.price}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* View All Button */}
-        <div className="flex justify-center">
           <button
-            onClick={handleViewAll}
-            className="px-8 md:px-12 py-4 md:py-5 border-2 border-gray-900 text-gray-900 font-semibold rounded-sm hover:bg-gray-900 hover:text-white transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
+            onClick={() => navigate('/products?tag=new')}
+            className="hidden md:flex items-center gap-2 font-black text-white/60 hover:text-white transition-all uppercase tracking-widest text-xs"
           >
-            View All New Arrivals
+            VIEW COLLECTION <FiArrowRight className="ml-2" />
           </button>
+        </div>
+
+        {/* Grid using unified ProductCard */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((product) => (
+            <ProductCard
+              key={product._id}
+              product={product}
+              onAddToCart={() => handleAddToCart(product)}
+              onViewDetails={handleViewDetails}
+            />
+          ))}
         </div>
       </div>
     </section>

@@ -7,6 +7,8 @@ const {
   getOrderById,
   updateOrder,
   cancelOrder,
+  updateShippingAddress,
+  confirmCODOrder,
 } = require('../controllers/orderController');
 
 /**
@@ -27,6 +29,16 @@ router.get('/', protect, getMyOrders);
 // @desc    Get single order by ID
 // @access  Private
 router.get('/:id', protect, getOrderById);
+
+// @route   PUT /api/orders/:id/address
+// @desc    Update shipping address
+// @access  Private
+router.put('/:id/address', protect, updateShippingAddress);
+
+// @route   PUT /api/orders/:id/confirm-cod
+// @desc    Confirm COD order
+// @access  Private
+router.put('/:id/confirm-cod', protect, confirmCODOrder);
 
 // @route   PUT /api/orders/:id
 // @desc    Update order status (Admin)

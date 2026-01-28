@@ -1,15 +1,23 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Hardcoded to fix env variable issue
+const API_BASE_URL = 'http://localhost:5000/api';
+
+console.log('🌐 Admin API Base URL:', API_BASE_URL);
 
 // Create axios instance with JWT token
-const getHeaders = () => {
+const getHeaders = (isMultipart = false) => {
   const token = localStorage.getItem('accessToken');
-  return {
-    'Content-Type': 'application/json',
+  const headers = {
     Authorization: token ? `Bearer ${token}` : '',
   };
+
+  if (!isMultipart) {
+    headers['Content-Type'] = 'application/json';
+  }
+  // For multipart, axios sets the correct Content-Type with boundary automatically
+
+  return headers;
 };
 
 // ============================================
@@ -50,10 +58,11 @@ export const adminProductAPI = {
   // Create product
   create: async (data) => {
     try {
+      const isMultipart = data instanceof FormData;
       const response = await axios.post(
         `${API_BASE_URL}/admin/products`,
         data,
-        { headers: getHeaders() }
+        { headers: getHeaders(isMultipart) }
       );
       return response.data;
     } catch (error) {
@@ -64,10 +73,11 @@ export const adminProductAPI = {
   // Update product
   update: async (id, data) => {
     try {
+      const isMultipart = data instanceof FormData;
       const response = await axios.put(
         `${API_BASE_URL}/admin/products/${id}`,
         data,
-        { headers: getHeaders() }
+        { headers: getHeaders(isMultipart) }
       );
       return response.data;
     } catch (error) {

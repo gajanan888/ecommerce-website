@@ -37,7 +37,7 @@ const ProductSpecifications = ({ product }) => {
     {
       title: 'Free Worldwide Shipping',
       description:
-        'Orders over $50 ship free. Standard delivery 5-10 business days.',
+        'Orders over ₹500 ship free. Standard delivery 5-10 business days.',
     },
     {
       title: '30-Day Easy Returns',
@@ -62,11 +62,10 @@ const ProductSpecifications = ({ product }) => {
           <button
             key={tab.id}
             onClick={() => setExpandedTab(tab.id)}
-            className={`py-4 px-6 font-semibold transition-colors border-b-2 flex items-center gap-2 ${
-              expandedTab === tab.id
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-gray-600 hover:text-gray-900'
-            }`}
+            className={`py-4 px-6 font-semibold transition-colors border-b-2 flex items-center gap-2 ${expandedTab === tab.id
+              ? 'border-orange-600 text-orange-600'
+              : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
           >
             <tab.icon size={18} />
             {tab.label}

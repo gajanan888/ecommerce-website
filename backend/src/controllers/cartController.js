@@ -46,22 +46,21 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
   try {
     const { productId, quantity = 1, size = 'M' } = req.body;
-
+    console.log(`🛒 AddToCart Request - User: ${req.userId}, Product: ${productId}, Qty: ${quantity}`);
+    const mongoose = require('mongoose');
     // Validate input
-    if (!productId) {
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
       return res.status(400).json({
         status: 'error',
-        message: 'Product ID is required',
+        message: 'Valid Product ID is required',
       });
     }
-
     if (quantity < 1 || quantity > 100) {
       return res.status(400).json({
         status: 'error',
         message: 'Quantity must be between 1 and 100',
       });
     }
-
     // Fetch product details
     const product = await Product.findById(productId);
     if (!product) {
@@ -114,6 +113,7 @@ exports.addToCart = async (req, res, next) => {
     }
 
     await cart.save();
+    console.log(`🛒 AddToCart SUCCESS - CartID: ${cart._id}, UserID: ${req.userId}, Items: ${cart.items.length}`);
 
     res.status(201).json({
       status: 'success',
@@ -138,7 +138,14 @@ exports.updateCartItem = async (req, res, next) => {
   try {
     const { itemId } = req.params;
     const { quantity } = req.body;
-
+    const mongoose = require('mongoose');
+    // Validate itemId
+    if (!itemId || !mongoose.Types.ObjectId.isValid(itemId)) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Valid cart item ID is required',
+      });
+    }
     // Validate quantity
     if (!quantity || quantity < 1 || quantity > 100) {
       return res.status(400).json({
@@ -146,7 +153,6 @@ exports.updateCartItem = async (req, res, next) => {
         message: 'Quantity must be between 1 and 100',
       });
     }
-
     const cart = await Cart.findOne({ userId: req.userId });
     if (!cart) {
       return res.status(404).json({
@@ -154,7 +160,6 @@ exports.updateCartItem = async (req, res, next) => {
         message: 'Cart not found',
       });
     }
-
     // Find the item
     const item = cart.items.id(itemId);
     if (!item) {

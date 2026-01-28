@@ -15,7 +15,43 @@ exports.createOrder = async (req, res, next) => {
       'items.productId'
     );
 
-    if (!cart || cart.items.length === 0) {
+    let finalItems = [];
+    let orderSubtotal = 0;
+
+    // Strategy 1: Try DB Cart (Best Practice)
+    if (cart && cart.items && cart.items.length > 0) {
+      console.log(
+        `🛒 CreateOrder - Found DB Cart with ${cart.items.length} items`
+      );
+      finalItems = cart.items;
+      orderSubtotal = cart.getTotal();
+    }
+    // Strategy 2: Fallback to Request Body (Self-Healing)
+    else if (req.body.items && req.body.items.length > 0) {
+      console.log(
+        '⚠️ CreateOrder - DB Cart Empty. Using Request Body Fallback.'
+      );
+      const Product = require('../models/Product');
+
+      for (const item of req.body.items) {
+        // Validation: Verify product exists and get REAL price
+        const product = await Product.findById(item.productId);
+        if (product) {
+          finalItems.push({
+            productId: product._id,
+            productName: product.name,
+            image: product.image,
+            price: product.price, // Security: Always use DB price
+            quantity: item.quantity,
+            size: item.size || 'M',
+            tax: 0,
+          });
+          orderSubtotal += product.price * item.quantity;
+        }
+      }
+    }
+
+    if (finalItems.length === 0) {
       return res.status(400).json({
         status: 'error',
         message: 'Cart is empty. Add items before placing an order.',
@@ -23,16 +59,16 @@ exports.createOrder = async (req, res, next) => {
     }
 
     // Calculate order totals
-    const subtotal = cart.getTotal();
-    const tax = subtotal * 0.1; // 10% tax
-    const shipping = subtotal > 100 ? 0 : 10; // Free shipping above $100
-    const total = subtotal + tax + shipping;
+    // Use the calculated subtotal from above
+    const tax = orderSubtotal * 0.1; // 10% tax
+    const shipping = orderSubtotal > 100 ? 0 : 10; // Free shipping above $100
+    const total = orderSubtotal + tax + shipping;
 
     // Create order
     const order = await Order.create({
       userId: req.userId,
-      items: cart.items,
-      subtotal,
+      items: finalItems,
+      subtotal: orderSubtotal,
       tax,
       shipping,
       total,
@@ -42,8 +78,7 @@ exports.createOrder = async (req, res, next) => {
       paymentStatus: 'unpaid',
     });
 
-    // Clear cart after successful order
-    await Cart.findOneAndUpdate({ userId: req.userId }, { items: [] });
+    // Cart is no longer cleared after successful order
 
     res.status(201).json({
       status: 'success',
@@ -186,6 +221,111 @@ exports.cancelOrder = async (req, res, next) => {
       status: 'success',
       message: 'Order cancelled successfully',
       data: order,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Update shipping address
+ * @route   PUT /api/orders/:id/address
+ * @access  Private
+ */
+exports.updateShippingAddress = async (req, res, next) => {
+  try {
+    const { name, street, city, state, zipCode, country, phone } = req.body;
+
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Order not found',
+      });
+    }
+
+    // Verify user owns this order
+    if (order.userId.toString() !== req.userId) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Not authorized to update this order',
+      });
+    }
+
+    // Can only update address for pending orders
+    if (order.status !== 'pending') {
+      return res.status(400).json({
+        status: 'error',
+        message: `Cannot update address for ${order.status} order`,
+      });
+    }
+
+    order.shippingAddress = {
+      name: name || order.shippingAddress.name,
+      street: street || order.shippingAddress.street,
+      city: city || order.shippingAddress.city,
+      state: state || order.shippingAddress.state,
+      zipCode: zipCode || order.shippingAddress.zipCode,
+      country: country || order.shippingAddress.country,
+      phone: phone || order.shippingAddress.phone,
+    };
+
+    const updatedOrder = await order.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Shipping address updated',
+      data: updatedOrder,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Confirm COD order
+ * @route   PUT /api/orders/:id/confirm-cod
+ * @access  Private
+ */
+exports.confirmCODOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Order not found',
+      });
+    }
+
+    // Verify user owns this order
+    if (order.userId.toString() !== req.userId) {
+      return res.status(403).json({
+        status: 'error',
+        message: 'Not authorized to confirm this order',
+      });
+    }
+
+    // Can only confirm pending orders
+    if (order.status !== 'pending') {
+      return res.status(400).json({
+        status: 'error',
+        message: `Order is already ${order.status}`,
+      });
+    }
+
+    // Update order for COD
+    order.paymentMethod = 'cod';
+    order.status = 'processing';
+    order.paymentStatus = 'unpaid';
+
+    const updatedOrder = await order.save();
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Order confirmed successfully with Cash on Delivery',
+      data: updatedOrder,
     });
   } catch (error) {
     next(error);

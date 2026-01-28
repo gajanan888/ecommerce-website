@@ -32,98 +32,121 @@ export default function AdminLayout({ children }) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
+    <div className="flex h-screen bg-[#050505] text-white overflow-hidden font-sans selection:bg-orange-500/30">
+      {/* Cinematic Sidebar */}
       <div
-        className={`${
-          sidebarOpen ? 'w-64' : 'w-20'
-        } bg-gray-900 text-white transition-all duration-300 flex flex-col`}
+        className={`${sidebarOpen ? 'w-72' : 'w-24'
+          } bg-[#0A0A0A] border-r border-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col relative z-20`}
       >
-        {/* Logo */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
-          {sidebarOpen && <h1 className="text-xl font-bold">Admin Panel</h1>}
+        {/* Logo Section */}
+        <div className="h-24 flex items-center justify-between px-8 border-b border-white/5">
+          {sidebarOpen ? (
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-black tracking-tighter uppercase text-white">
+                ELITE<span className="text-orange-500">CTRL</span>
+              </span>
+            </div>
+          ) : (
+            <span className="text-xl font-black text-orange-500 mx-auto">E</span>
+          )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded hover:bg-gray-800"
+            className="p-2 rounded-xl hover:bg-white/5 text-white/40 hover:text-white transition-all"
           >
-            ☰
+            {sidebarOpen ? '←' : '→'}
           </button>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="flex-1 p-4 space-y-2">
+        {/* Navigation */}
+        <nav className="flex-1 py-8 px-4 space-y-2 overflow-y-auto custom-scrollbar">
+          <div className="mb-2 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
+            {sidebarOpen && 'Main Module'}
+          </div>
           <SidebarLink
             to="/admin/dashboard"
-            label="Dashboard"
-            icon="📊"
+            label="Command Center"
+            icon="⚡"
             open={sidebarOpen}
           />
           <SidebarLink
             to="/admin/products"
-            label="Products"
+            label="Inventory"
             icon="📦"
             open={sidebarOpen}
           />
           <SidebarLink
             to="/admin/orders"
-            label="Orders"
-            icon="🛒"
+            label="Transactions"
+            icon="💳"
             open={sidebarOpen}
           />
+
+          <div className="mt-8 mb-2 px-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
+            {sidebarOpen && 'Management'}
+          </div>
           <SidebarLink
             to="/admin/users"
-            label="Users"
+            label="User Grid"
             icon="👥"
             open={sidebarOpen}
           />
           <SidebarLink
             to="/admin/discounts"
-            label="Discounts"
-            icon="💰"
-            open={sidebarOpen}
-          />
-          <SidebarLink
-            to="/admin/payments"
-            label="Payments"
-            icon="💳"
+            label="Promotions"
+            icon="🏷️"
             open={sidebarOpen}
           />
         </nav>
 
-        {/* User Section */}
-        <div className="p-4 border-t border-gray-700">
+        {/* Admin User Footer */}
+        <div className="p-6 border-t border-white/5 bg-white/5backdrop-blur-md">
           {sidebarOpen && (
-            <div className="mb-4">
-              <p className="text-sm text-gray-400">Logged in as</p>
-              <p className="font-semibold truncate">{user?.name}</p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center font-bold text-white shadow-lg shadow-orange-500/20">
+                {user?.name?.[0] || 'A'}
+              </div>
+              <div className="overflow-hidden">
+                <p className="font-bold text-sm text-white truncate">{user?.name}</p>
+                <p className="text-[10px] uppercase tracking-wider text-white/40">Administrator</p>
+              </div>
             </div>
           )}
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 text-white transition duration-200 bg-orange-600 rounded hover:bg-orange-700"
+            className={`w-full py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all ${sidebarOpen
+                ? 'bg-white/5 hover:bg-red-500/10 text-white hover:text-red-500 border border-white/5 hover:border-red-500/50'
+                : 'text-white/40 hover:text-red-500'
+              }`}
           >
-            {sidebarOpen ? 'Logout' : '🚪'}
+            {sidebarOpen ? 'Terminate Session' : '⏻'}
           </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Top Bar */}
-        <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Welcome, {user?.name}
-          </h2>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
-              {new Date().toLocaleDateString()}
-            </span>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col relative z-10 bg-[#050505]">
+        {/* Top Header */}
+        <header className="h-24 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur-xl flex items-center justify-between px-8 lg:px-12">
+          <div>
+            <h2 className="text-2xl font-black uppercase tracking-tighter text-white">
+              {window.location.pathname.split('/').pop() === 'dashboard' ? 'Overview' : window.location.pathname.split('/').pop()}
+            </h2>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mt-1">
+              System Operational • {new Date().toLocaleDateString()}
+            </p>
           </div>
-        </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-green-500">Live</span>
+            </div>
+          </div>
+        </header>
 
-        {/* Content Area */}
-        <div className="flex-1 p-6 overflow-auto">{children}</div>
+        {/* Scrollable Content */}
+        <main className="flex-1 overflow-auto p-8 lg:p-12 custom-scrollbar">
+          {children}
+        </main>
       </div>
     </div>
   );
@@ -137,14 +160,18 @@ function SidebarLink({ to, label, icon, open }) {
   return (
     <Link
       to={to}
-      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition duration-200 ${
-        isActive
-          ? 'bg-orange-600 text-white'
-          : 'hover:bg-gray-800 text-gray-300'
-      }`}
+      className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 group ${isActive
+          ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
+          : 'text-white/40 hover:bg-white/5 hover:text-white'
+        }`}
     >
-      <span className="text-xl">{icon}</span>
-      {open && <span className="text-sm">{label}</span>}
+      <span className={`text-xl transition-transform duration-300 ${!isActive && 'group-hover:scale-110 grayscale group-hover:grayscale-0'}`}>{icon}</span>
+      {open && (
+        <span className="font-bold text-[10px] uppercase tracking-[0.15em]">{label}</span>
+      )}
+      {isActive && open && (
+        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+      )}
     </Link>
   );
 }
