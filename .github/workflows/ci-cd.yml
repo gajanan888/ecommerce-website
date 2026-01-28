@@ -31,6 +31,11 @@ jobs:
       - name: Install frontend dependencies
         run: cd frontend && npm install && cd ..
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.10.0
+        with:
+          mongodb-version: '6.0'
+
       - name: Run backend tests
         run: cd backend && npm test && cd ..
 
