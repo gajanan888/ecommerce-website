@@ -1,0 +1,42 @@
+
+> ecommerce-backend@1.0.0 test
+> node check-mongo.js && jest
+
+✅ MongoDB is running.
+(node:23836) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+  console.log
+    ✅ MongoDB Connected
+
+      at log (src/config/database.js:14:13)
+
+  console.log
+       URI: mongodb://localhost:27017/ecommerce
+
+      at log (src/config/database.js:15:13)
+
+  console.log
+    📦 GetAllProducts - Request Received {}
+
+      at log (src/controllers/productController.js:12:13)
+
+  console.log
+    ✅ MongoDB Disconnected
+
+      at log (src/config/database.js:28:13)
+
+PASS tests/api.test.js
+  API Integration Tests
+    Health Check
+      √ GET /api/health should return 200 OK (58 ms)
+    Security Middleware
+      √ should have Rate-Limit headers (33 ms)
+      √ should have Helmet security headers (17 ms)
+    Product API
+      √ GET /api/products should return list of products (112 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        4.146 s, estimated 7 s
+Ran all test suites.
