@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const ProductReviews = ({ productId }) => {
@@ -11,11 +11,7 @@ const ProductReviews = ({ productId }) => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  useEffect(() => {
-    fetchReviews();
-  }, [productId]);
-
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     setLoading(true);
     try {
       const response = await axios.get(
@@ -27,7 +23,11 @@ const ProductReviews = ({ productId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [productId]);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [productId, fetchReviews]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiStar, FiShoppingCart, FiHeart, FiCheck } from 'react-icons/fi';
+import { FiX, FiStar, FiShoppingCart, FiHeart } from 'react-icons/fi';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
@@ -14,7 +14,8 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [added, setAdded] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [wishlistLoading, setWishlistLoading] = useState(false);
+  // wishlistLoading is used for the toggle action
+  const [, setWishlistLoading] = useState(false);
   const [heartBeat, setHeartBeat] = useState(false);
 
   if (!isOpen || !product) return null;
@@ -124,11 +125,10 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-500 ${
-                        currentImageIndex === index
-                          ? 'border-orange-500 scale-110 shadow-lg'
-                          : 'border-white/10 hover:border-white/30'
-                      }`}
+                      className={`relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-500 ${currentImageIndex === index
+                        ? 'border-orange-500 scale-110 shadow-lg'
+                        : 'border-white/10 hover:border-white/30'
+                        }`}
                     >
                       <img
                         src={getImageUrl(img)}
@@ -208,11 +208,10 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                     <button
                       onClick={handleAddToCart}
                       disabled={addingToCart || !product.stock || added}
-                      className={`flex-1 group relative py-6 px-8 rounded-full font-black text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-500 ${
-                        added
-                          ? 'bg-green-500 text-white'
-                          : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                      }`}
+                      className={`flex-1 group relative py-6 px-8 rounded-full font-black text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-500 ${added
+                        ? 'bg-green-500 text-white'
+                        : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                        }`}
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3">
                         {addingToCart ? (
@@ -229,11 +228,10 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
 
                     <button
                       onClick={handleWishlistToggle}
-                      className={`p-6 rounded-full border border-white/10 transition-all duration-500 ${
-                        inWishlist
-                          ? 'bg-red-500 border-red-500 text-white'
-                          : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10'
-                      }`}
+                      className={`p-6 rounded-full border border-white/10 transition-all duration-500 ${inWishlist
+                        ? 'bg-red-500 border-red-500 text-white'
+                        : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10'
+                        }`}
                     >
                       <FiHeart
                         size={24}

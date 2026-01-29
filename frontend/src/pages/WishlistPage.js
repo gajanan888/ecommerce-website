@@ -3,16 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { WishlistContext } from '../context/WishlistContext';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
-import { FiTrash2, FiShoppingCart } from 'react-icons/fi';
+import { FiShoppingCart } from 'react-icons/fi';
 import ProductCard from '../components/ProductCard';
 import { productAPI } from '../services/api';
 
 const WishlistPage = () => {
   const navigate = useNavigate();
-  const { wishlistItems, removeFromWishlist, clearWishlist, loading } =
+  const { wishlistItems, clearWishlist, loading } =
     useContext(WishlistContext);
   const { addToCart } = useCart();
-  const { showSuccess, showError } = useToast();
+  const { showSuccess } = useToast();
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
 
@@ -44,10 +44,10 @@ const WishlistPage = () => {
     fetchProducts();
   }, [wishlistItems]);
 
-  const handleRemove = (productId) => {
+  /* const handleRemove = (productId) => {
     removeFromWishlist(productId);
     showSuccess('Removed from wishlist');
-  };
+  }; */
 
   const handleClearWishlist = () => {
     if (

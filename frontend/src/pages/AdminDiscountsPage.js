@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../services/api';
 
@@ -27,11 +27,7 @@ export default function AdminDiscountsPage() {
     isActive: true,
   });
 
-  useEffect(() => {
-    fetchDiscounts();
-  }, [page, activeFilter]);
-
-  const fetchDiscounts = async () => {
+  const fetchDiscounts = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -47,7 +43,11 @@ export default function AdminDiscountsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, activeFilter]);
+
+  useEffect(() => {
+    fetchDiscounts();
+  }, [page, activeFilter, fetchDiscounts]);
 
   const handleAddDiscount = () => {
     setEditingDiscount(null);
@@ -426,11 +426,10 @@ export default function AdminDiscountsPage() {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        discount.isActive
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${discount.isActive
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}
                     >
                       {discount.isActive ? 'Active' : 'Inactive'}
                     </span>

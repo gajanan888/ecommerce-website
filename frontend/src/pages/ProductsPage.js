@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTitle } from '../hooks/useTitle';
 import ProductCard from '../components/ProductCard';
 import SearchFilterBar from '../components/SearchFilterBar';
 import { productAPI } from '../services/api';
-import { FiFilter, FiX, FiChevronDown, FiSearch } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 
 import { useCart } from '../context/CartContext'; // Switch to CartContext
 
@@ -18,10 +17,10 @@ export default function ProductsPage() {
   const [activeFilter, setActiveFilter] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  /* const [, setIsFilterOpen] = useState(false); */
 
   // Sorting options
   const getSortedProducts = (products) => {

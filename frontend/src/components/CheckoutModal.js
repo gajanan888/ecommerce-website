@@ -1,21 +1,20 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import StripeCheckoutForm from './StripeCheckoutForm';
 import { CartContext } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
-import { FiArrowLeft, FiCheck, FiX } from 'react-icons/fi';
+import { FiCheck, FiX } from 'react-icons/fi';
 import { ordersAPI } from '../services/api';
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLIC_KEY ||
-    'pk_test_1234567890abcdefghijklmnop'
+  'pk_test_1234567890abcdefghijklmnop'
 );
 
 const CheckoutModal = ({ isOpen, onClose, onSuccess }) => {
-  const navigate = useNavigate();
+  // navigate is not used in this component
   const { user } = useAuth();
   const { cart } = useContext(CartContext);
   const { showError } = useToast();
@@ -32,7 +31,7 @@ const CheckoutModal = ({ isOpen, onClose, onSuccess }) => {
     country: 'United States',
   });
 
-  const [billingAddressSame, setBillingAddressSame] = useState(true);
+  // billingAddressSame is not used in this component currently
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState('card');
 
@@ -152,26 +151,23 @@ const CheckoutModal = ({ isOpen, onClose, onSuccess }) => {
             ].map((s, idx) => (
               <div key={s.num} className="flex items-center flex-1">
                 <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${
-                    step >= s.num
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-gray-200 text-gray-600'
-                  }`}
+                  className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm ${step >= s.num
+                    ? 'bg-orange-600 text-white'
+                    : 'bg-gray-200 text-gray-600'
+                    }`}
                 >
                   {step > s.num ? <FiCheck /> : s.num}
                 </div>
                 <span
-                  className={`ml-2 text-sm font-medium ${
-                    step >= s.num ? 'text-orange-600' : 'text-gray-500'
-                  }`}
+                  className={`ml-2 text-sm font-medium ${step >= s.num ? 'text-orange-600' : 'text-gray-500'
+                    }`}
                 >
                   {s.label}
                 </span>
                 {idx < 3 && (
                   <div
-                    className={`flex-1 h-1 mx-2 ${
-                      step > s.num ? 'bg-orange-600' : 'bg-gray-200'
-                    }`}
+                    className={`flex-1 h-1 mx-2 ${step > s.num ? 'bg-orange-600' : 'bg-gray-200'
+                      }`}
                   />
                 )}
               </div>

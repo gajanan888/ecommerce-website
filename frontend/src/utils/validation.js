@@ -112,7 +112,7 @@ export const validateRegisterForm = (formData) => {
   return errors;
 };
 
-export default {
+const validationUtils = {
   isValidEmail,
   isValidPassword,
   isValidPhone,
@@ -124,3 +124,5 @@ export default {
   validateLoginForm,
   validateRegisterForm,
 };
+
+export default validationUtils;

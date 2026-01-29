@@ -4,8 +4,6 @@ import {
   FiTwitter,
   FiInstagram,
   FiLinkedin,
-  FiArrowRight,
-  FiMail,
   FiFeather,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';

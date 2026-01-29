@@ -16,7 +16,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { addToCart } = useContext(CartContext);
-  const { token, isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
   const { showSuccess, showError } = useToast();
   const [isLoading, setIsLoading] = useState(true);
@@ -287,11 +287,10 @@ export default function ProductDetail() {
                       setSelectedSize(size);
                       setSizeError(false);
                     }}
-                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${
-                      selectedSize === size
+                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${selectedSize === size
                         ? 'bg-white text-black'
                         : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'
-                    }`}
+                      }`}
                   >
                     {size}
                   </button>
@@ -330,11 +329,10 @@ export default function ProductDetail() {
               {/* Add to Cart - Primary */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${
-                  addedToCart
+                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${addedToCart
                     ? 'bg-green-500 text-white'
                     : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                }`}
+                  }`}
                 aria-label={`Add ${product?.name} to cart`}
               >
                 {addedToCart ? '✓ Added' : 'Add to Cart'}
@@ -359,11 +357,10 @@ export default function ProductDetail() {
                     ? 'Remove from wishlist'
                     : 'Add to wishlist'
                 }
-                className={`py-4 px-6 border-2 transition-colors duration-300 ${
-                  isInWishlist(product._id)
+                className={`py-4 px-6 border-2 transition-colors duration-300 ${isInWishlist(product._id)
                     ? 'bg-red-50 border-red-200 text-red-500'
                     : 'bg-white border-gray-300 text-gray-400 hover:border-black hover:text-black'
-                }`}
+                  }`}
                 aria-label={
                   isInWishlist(product._id)
                     ? 'Remove from wishlist'

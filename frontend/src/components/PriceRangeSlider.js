@@ -68,8 +68,6 @@ const PriceRangeSlider = ({
             className="absolute w-full h-2 top-2 left-0 appearance-none bg-transparent pointer-events-none z-5"
             style={{
               WebkitAppearance: 'slider-horizontal',
-            }}
-            style={{
               zIndex: localMin > maxPrice - (maxPrice - minPrice) / 2 ? 5 : 3,
             }}
           />

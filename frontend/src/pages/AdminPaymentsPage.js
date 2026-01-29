@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../services/api';
 
@@ -9,11 +9,7 @@ export default function AdminPaymentsPage() {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
-  useEffect(() => {
-    fetchPaymentStats();
-  }, []);
-
-  const fetchPaymentStats = async () => {
+  const fetchPaymentStats = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -27,7 +23,11 @@ export default function AdminPaymentsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    fetchPaymentStats();
+  }, [fetchPaymentStats]);
 
   const handleFilter = () => {
     fetchPaymentStats();
@@ -128,11 +128,11 @@ export default function AdminPaymentsPage() {
                   paymentStats.totalCompleted === 0
                     ? 'N/A'
                     : `${(
-                        (paymentStats.totalCompleted /
-                          (paymentStats.totalCompleted +
-                            paymentStats.totalFailed)) *
-                        100
-                      ).toFixed(1)}%`
+                      (paymentStats.totalCompleted /
+                        (paymentStats.totalCompleted +
+                          paymentStats.totalFailed)) *
+                      100
+                    ).toFixed(1)}%`
                 }
                 icon="📊"
                 color="bg-blue-500"
@@ -165,10 +165,6 @@ export default function AdminPaymentsPage() {
                     </thead>
                     <tbody className="divide-y">
                       {paymentStats.byMethod.map((method) => {
-                        const totalCount = paymentStats.byMethod.reduce(
-                          (sum, m) => sum + m.count,
-                          0
-                        );
                         const totalAmount = paymentStats.byMethod.reduce(
                           (sum, m) => sum + m.total,
                           0
@@ -228,11 +224,11 @@ export default function AdminPaymentsPage() {
                   value={
                     paymentStats.totalCompleted > 0
                       ? `$${(
-                          paymentStats.byMethod.reduce(
-                            (sum, m) => sum + m.total,
-                            0
-                          ) / paymentStats.totalCompleted
-                        ).toFixed(2)}`
+                        paymentStats.byMethod.reduce(
+                          (sum, m) => sum + m.total,
+                          0
+                        ) / paymentStats.totalCompleted
+                      ).toFixed(2)}`
                       : 'N/A'
                   }
                   className="bg-blue-50"
@@ -257,11 +253,11 @@ export default function AdminPaymentsPage() {
                     paymentStats.totalCompleted === 0
                       ? '0%'
                       : `${(
-                          (paymentStats.totalCompleted /
-                            (paymentStats.totalCompleted +
-                              paymentStats.totalFailed)) *
-                          100
-                        ).toFixed(1)}%`
+                        (paymentStats.totalCompleted /
+                          (paymentStats.totalCompleted +
+                            paymentStats.totalFailed)) *
+                        100
+                      ).toFixed(1)}%`
                   }
                 />
                 <MetricCard
@@ -270,11 +266,11 @@ export default function AdminPaymentsPage() {
                     paymentStats.totalFailed === 0
                       ? '0%'
                       : `${(
-                          (paymentStats.totalFailed /
-                            (paymentStats.totalCompleted +
-                              paymentStats.totalFailed)) *
-                          100
-                        ).toFixed(1)}%`
+                        (paymentStats.totalFailed /
+                          (paymentStats.totalCompleted +
+                            paymentStats.totalFailed)) *
+                        100
+                      ).toFixed(1)}%`
                   }
                 />
                 <MetricCard
@@ -287,11 +283,11 @@ export default function AdminPaymentsPage() {
                     paymentStats.totalCompleted === 0
                       ? 'N/A'
                       : `${(
-                          (paymentStats.totalCompleted /
-                            (paymentStats.totalCompleted +
-                              paymentStats.totalFailed)) *
-                          100
-                        ).toFixed(0)}%`
+                        (paymentStats.totalCompleted /
+                          (paymentStats.totalCompleted +
+                            paymentStats.totalFailed)) *
+                        100
+                      ).toFixed(0)}%`
                   }
                 />
               </div>

@@ -4,7 +4,6 @@ import {
   FiMail,
   FiPhone,
   FiEdit2,
-  FiSave,
   FiX,
   FiLogOut,
   FiMapPin,
@@ -18,7 +17,6 @@ import {
   FiClock,
   FiDollarSign,
   FiChevronRight,
-  FiCreditCard,
   FiShield,
 } from 'react-icons/fi';
 import { AuthContext } from '../context/AuthContext';
@@ -239,11 +237,10 @@ const ProfilePage = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className={`fixed top-24 right-8 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md border border-white/10 ${
-                message.includes('❌')
+              className={`fixed top-24 right-8 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md border border-white/10 ${message.includes('❌')
                   ? 'bg-red-500/90 text-white'
                   : 'bg-[#0A0A0A]/90 text-white shadow-orange-500/10'
-              }`}
+                }`}
             >
               {message.includes('❌') ? (
                 <FiX size={18} />
@@ -291,11 +288,10 @@ const ProfilePage = () => {
                 {user.email}
               </p>
               <div
-                className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                  user.role === 'admin'
+                className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${user.role === 'admin'
                     ? 'bg-orange-500 text-white'
                     : 'bg-white/10 text-white/60'
-                }`}
+                  }`}
               >
                 {user.role === 'admin' ? 'Admin Access' : 'Member'}
               </div>
@@ -307,11 +303,10 @@ const ProfilePage = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center justify-between px-6 py-4 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
-                    activeTab === tab.id
+                  className={`w-full flex items-center justify-between px-6 py-4 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeTab === tab.id
                       ? 'bg-white text-black shadow-lg shadow-white/10 translate-x-1'
                       : 'text-white/40 hover:bg-white/5 hover:text-white'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-4">
                     <tab.icon

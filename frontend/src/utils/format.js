@@ -107,7 +107,7 @@ export const slugify = (str) => {
     .replace(/^-+|-+$/g, '');
 };
 
-export default {
+const formatUtils = {
   formatCurrency,
   formatDate,
   formatDateTime,
@@ -122,3 +122,5 @@ export default {
   stripHTML,
   slugify,
 };
+
+export default formatUtils;

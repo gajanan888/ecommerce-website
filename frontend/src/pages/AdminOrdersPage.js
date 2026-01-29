@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import Toast from '../components/Toast';
 import { adminOrderAPI } from '../services/adminAPI';
@@ -16,7 +16,7 @@ export default function AdminOrdersPage() {
   // Notifications
   const [toast, setToast] = useState({ message: '', type: '' });
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       const filters = {};
@@ -32,11 +32,11 @@ export default function AdminOrdersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, statusFilter, paymentStatusFilter]);
 
   useEffect(() => {
     fetchOrders();
-  }, [page, statusFilter, paymentStatusFilter]);
+  }, [fetchOrders]);
 
   return (
     <AdminLayout>
@@ -234,9 +234,8 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        colors[status] || 'bg-gray-100 text-gray-800'
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
+        }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -253,9 +252,8 @@ function PaymentBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${
-        colors[status] || 'bg-gray-100 text-gray-800'
-      }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
+        }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>

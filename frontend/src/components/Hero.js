@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { FiArrowRight } from 'react-icons/fi';
 
 export default function Hero() {
   const navigate = useNavigate();
-  const [isHoveringPrimary, setIsHoveringPrimary] = useState(false);
-  const [isHoveringSecondary, setIsHoveringSecondary] = useState(false);
+  /* const [isHoveringPrimary] = useState(false); */
+  /* const [isHoveringSecondary] = useState(false); */
 
   // 3D Tilt Effect Logic
   const x = useMotionValue(0);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import { useToast } from '../context/ToastContext';
@@ -15,17 +15,13 @@ import OrderTracker from '../components/OrderTracker';
 
 const OrderHistoryPage = ({ onNavigate }) => {
   const navigate = useNavigate();
-  const { showSuccess, showError, showInfo } = useToast();
+  const { showSuccess, showError } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [filterStatus, setFilterStatus] = useState('all');
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       const response = await orderAPI.getMyOrders();
@@ -36,7 +32,11 @@ const OrderHistoryPage = ({ onNavigate }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [showError]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   const handleCancelOrder = async (orderId) => {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
@@ -168,11 +168,10 @@ const OrderHistoryPage = ({ onNavigate }) => {
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-8 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-300 border ${
-                filterStatus === status
-                  ? 'bg-white text-black border-white shadow-xl shadow-white/5'
-                  : 'bg-white/5 text-white/40 border-white/5 hover:border-white/20'
-              }`}
+              className={`px-8 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-300 border ${filterStatus === status
+                ? 'bg-white text-black border-white shadow-xl shadow-white/5'
+                : 'bg-white/5 text-white/40 border-white/5 hover:border-white/20'
+                }`}
             >
               {status}
             </button>
@@ -314,14 +313,14 @@ const OrderHistoryPage = ({ onNavigate }) => {
                     </button>
                     {(order.status === 'pending' ||
                       order.status === 'processing') && (
-                      <button
-                        onClick={() => handleCancelOrder(order._id)}
-                        className="flex-1 sm:flex-none px-8 py-4 bg-red-500/10 text-red-500 rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all inline-flex items-center justify-center gap-3 border border-red-500/20"
-                      >
-                        <FiXCircle size={14} />
-                        Abort Protocol
-                      </button>
-                    )}
+                        <button
+                          onClick={() => handleCancelOrder(order._id)}
+                          className="flex-1 sm:flex-none px-8 py-4 bg-red-500/10 text-red-500 rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all inline-flex items-center justify-center gap-3 border border-red-500/20"
+                        >
+                          <FiXCircle size={14} />
+                          Abort Protocol
+                        </button>
+                      )}
                   </div>
                 </div>
               )}

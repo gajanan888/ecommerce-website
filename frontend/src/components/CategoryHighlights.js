@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowUpRight } from 'react-icons/fi';
 
 const CategoryHighlights = () => {
   const navigate = useNavigate();
-  const [hoveredCategory, setHoveredCategory] = useState(null);
+  /* const [hoveredCategory, setHoveredCategory] = useState(null); */
 
   const categories = [
     {
@@ -83,8 +83,8 @@ const CategoryHighlights = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               onClick={() => handleCategoryClick(category.id)}
-              onMouseEnter={() => setHoveredCategory(category.id)}
-              onMouseLeave={() => setHoveredCategory(null)}
+              onMouseEnter={() => { }}
+              onMouseLeave={() => { }}
               className={`relative group cursor-pointer overflow-hidden rounded-3xl ${category.size}`}
             >
               <div className="absolute inset-0 bg-gray-200">

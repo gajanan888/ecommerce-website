@@ -1,7 +1,6 @@
 // --- 3D ANIMATED PRODUCT CARD ---
-import React, { useState, useContext, useRef } from 'react';
-import { FiShoppingCart, FiStar, FiHeart, FiEye } from 'react-icons/fi';
-import { WishlistContext } from '../context/WishlistContext';
+import React, { useState } from 'react';
+import { FiShoppingCart, FiStar } from 'react-icons/fi';
 import { useToast } from '../context/ToastContext';
 import { getImageUrl, FALLBACK_IMAGE } from '../utils/imageUtils';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
@@ -9,11 +8,11 @@ import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
   const [addingToCart, setAddingToCart] = useState(false);
   const [added, setAdded] = useState(false);
-  const { toggleWishlist, isInWishlist } = useContext(WishlistContext);
-  const { showSuccess, showError } = useToast();
+  // const { toggleWishlist } = useCart();
+  const { showError } = useToast();
   const discount = Number(product.discount) || 0;
   const discountedPrice = Number(product.price) * (1 - discount / 100);
-  const inWishlist = isInWishlist(product._id);
+  /* const inWishlist = isInWishlist(product._id); */
 
   // 3D Tilt Logic
   const x = useMotionValue(0);
@@ -64,15 +63,8 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
     }
   };
 
-  const handleWishlistToggle = async (e) => {
-    e.stopPropagation();
-    try {
-      await toggleWishlist(product._id);
-      showSuccess(inWishlist ? 'Removed from wishlist' : 'Added to wishlist');
-    } catch (error) {
-      showError('Error updating wishlist');
-    }
-  };
+  // handleWishlistToggle moved to ProductDetails or handled via Context directly in some views
+  // if you need it back, ensure it's used in the JSX below
 
   return (
     <motion.div
@@ -162,13 +154,12 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
               <button
                 onClick={handleAddToCart}
                 disabled={addingToCart || product.stock === 0}
-                className={`p-4 rounded-full transition-all duration-500 ${
-                  addingToCart
-                    ? 'bg-white/10 text-white/20'
-                    : added
-                      ? 'bg-green-500 text-white'
-                      : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                }`}
+                className={`p-4 rounded-full transition-all duration-500 ${addingToCart
+                  ? 'bg-white/10 text-white/20'
+                  : added
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                  }`}
               >
                 {added ? (
                   <FiStar size={20} className="fill-current" />

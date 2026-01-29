@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FiChevronRight } from 'react-icons/fi';
 import ProductCard from './ProductCard';
 import { SkeletonGrid } from './SkeletonLoader';

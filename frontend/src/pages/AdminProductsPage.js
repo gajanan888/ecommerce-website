@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import ProductForm from '../components/ProductForm';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -26,7 +26,7 @@ export default function AdminProductsPage() {
     onConfirm: null,
   });
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       const filters = {};
@@ -53,11 +53,11 @@ export default function AdminProductsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, searchTerm, categoryFilter]);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, searchTerm, categoryFilter]);
+  }, [fetchProducts]);
 
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -290,11 +290,10 @@ export default function AdminProductsPage() {
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-600">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              product.stock > 0
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${product.stock > 0
                                 ? 'bg-green-100 text-green-800'
                                 : 'bg-red-100 text-red-800'
-                            }`}
+                              }`}
                           >
                             {product.stock}
                           </span>

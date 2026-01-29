@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import api from '../services/api';
 
@@ -12,11 +12,7 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    fetchUsers();
-  }, [page, roleFilter, activeFilter]);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -33,7 +29,11 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, roleFilter, activeFilter]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const handleRoleUpdate = async (userId, newRole) => {
     try {
@@ -148,22 +148,20 @@ export default function AdminUsersPage() {
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        user.role === 'admin'
-                          ? 'bg-purple-100 text-purple-800'
-                          : 'bg-blue-100 text-blue-800'
-                      }`}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${user.role === 'admin'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-blue-100 text-blue-800'
+                        }`}
                     >
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        user.isActive
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${user.isActive
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                        }`}
                     >
                       {user.isActive ? 'Active' : 'Inactive'}
                     </span>
@@ -224,11 +222,7 @@ function UserManagementModal({ user, onClose, onRoleUpdate, onToggleActive }) {
   const [userStats, setUserStats] = React.useState(null);
   const [loadingStats, setLoadingStats] = React.useState(true);
 
-  React.useEffect(() => {
-    fetchUserStats();
-  }, []);
-
-  const fetchUserStats = async () => {
+  const fetchUserStats = React.useCallback(async () => {
     try {
       const response = await api.get(`/admin/users/${user._id}`);
       setUserStats(response.data.user);
@@ -237,7 +231,11 @@ function UserManagementModal({ user, onClose, onRoleUpdate, onToggleActive }) {
     } finally {
       setLoadingStats(false);
     }
-  };
+  }, [user._id]);
+
+  React.useEffect(() => {
+    fetchUserStats();
+  }, [fetchUserStats]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -316,11 +314,10 @@ function UserManagementModal({ user, onClose, onRoleUpdate, onToggleActive }) {
             <p className="text-sm font-semibold mb-2">Account Status</p>
             <button
               onClick={() => onToggleActive(user._id)}
-              className={`w-full py-2 rounded font-semibold transition ${
-                user.isActive
-                  ? 'bg-red-100 hover:bg-red-200 text-red-800'
-                  : 'bg-green-100 hover:bg-green-200 text-green-800'
-              }`}
+              className={`w-full py-2 rounded font-semibold transition ${user.isActive
+                ? 'bg-red-100 hover:bg-red-200 text-red-800'
+                : 'bg-green-100 hover:bg-green-200 text-green-800'
+                }`}
             >
               {user.isActive ? 'Deactivate Account' : 'Activate Account'}
             </button>

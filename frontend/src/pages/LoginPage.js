@@ -9,8 +9,6 @@ import {
   FiEye,
   FiEyeOff,
   FiArrowRight,
-  FiCheck,
-  FiX,
   FiAlertCircle,
   FiFeather,
 } from 'react-icons/fi';

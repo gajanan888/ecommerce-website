@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -6,7 +6,6 @@ import api, { orderAPI } from '../services/api';
 import {
   FiCheck,
   FiLock,
-  FiShoppingBag,
   FiLoader,
   FiArrowRight,
   FiTruck,
@@ -20,33 +19,13 @@ const CheckoutPage = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
-  const [paymentType, setPaymentType] = useState('upi');
+  const [paymentType] = useState('upi');
   const [processing, setProcessing] = useState(false);
 
   // Razorpay state
-  const [razorpayOrderId, setRazorpayOrderId] = useState(null);
-
-  // Stripe state
-  const [clientSecret, setClientSecret] = useState(null);
-
-  // PayPal state
-  const [paypalOrderId, setPaypalOrderId] = useState(null);
-
-  useEffect(() => {
-    fetchOrder();
-    loadPaymentScripts();
-  }, []);
-
-  const fetchOrder = async () => {
-    try {
-      const response = await api.get(`/orders/${orderId}`);
-      setOrder(response.data.data); // Use .data.data to match backend
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching order:', error);
-      setLoading(false);
-    }
-  };
+  const [, setRazorpayOrderId] = useState(null);
+  const [, setClientSecret] = useState(null);
+  const [, setPaypalOrderId] = useState(null);
 
   const [address, setAddress] = useState({
     name: '',
@@ -105,7 +84,18 @@ const CheckoutPage = () => {
     }
   };
 
-  const loadPaymentScripts = () => {
+  const fetchOrder = useCallback(async () => {
+    try {
+      const response = await api.get(`/orders/${orderId}`);
+      setOrder(response.data.data); // Use .data.data to match backend
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching order:', error);
+      setLoading(false);
+    }
+  }, [orderId]);
+
+  const loadPaymentScripts = useCallback(() => {
     // Load Razorpay script
     const razorpayScript = document.createElement('script');
     razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -120,7 +110,12 @@ const CheckoutPage = () => {
     const paypalScript = document.createElement('script');
     paypalScript.src = `https://www.paypal.com/sdk/js?client-id=${process.env.REACT_APP_PAYPAL_CLIENT_ID}`;
     document.body.appendChild(paypalScript);
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchOrder();
+    loadPaymentScripts();
+  }, [fetchOrder, loadPaymentScripts]);
 
   const initiateRazorpayPayment = async () => {
     try {
@@ -352,11 +347,10 @@ const CheckoutPage = () => {
             <div key={item.step} className="flex items-center flex-1">
               <div className="flex flex-col items-center gap-3">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${
-                    item.active
-                      ? 'bg-white text-black ring-8 ring-white/5'
-                      : 'bg-white/5 text-white/20 border border-white/10'
-                  }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${item.active
+                    ? 'bg-white text-black ring-8 ring-white/5'
+                    : 'bg-white/5 text-white/20 border border-white/10'
+                    }`}
                 >
                   {item.step}
                 </div>
@@ -559,11 +553,10 @@ const CheckoutPage = () => {
               ].map((method) => (
                 <label
                   key={method.id}
-                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${
-                    paymentMethod === method.id
-                      ? 'border-white bg-white text-black'
-                      : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
-                  }`}
+                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${paymentMethod === method.id
+                    ? 'border-white bg-white text-black'
+                    : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
+                    }`}
                 >
                   <div className="flex items-center gap-6">
                     <input

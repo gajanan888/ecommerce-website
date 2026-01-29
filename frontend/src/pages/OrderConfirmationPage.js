@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import { useToast } from '../context/ToastContext';
@@ -11,11 +11,7 @@ const OrderConfirmationPage = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchOrder();
-  }, [orderId]);
-
-  const fetchOrder = async () => {
+  const fetchOrder = useCallback(async () => {
     try {
       const response = await orderAPI.getOrderById(orderId);
       setOrder(response.data.data);
@@ -27,7 +23,11 @@ const OrderConfirmationPage = () => {
       console.error(error);
       setLoading(false);
     }
-  };
+  }, [orderId, showError]);
+
+  useEffect(() => {
+    fetchOrder();
+  }, [orderId, fetchOrder]);
 
   if (loading) {
     return (
@@ -97,9 +97,8 @@ const OrderConfirmationPage = () => {
             <div>
               <p className="text-gray-600 text-sm mb-2">Order Status</p>
               <span
-                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
-                  statusColors[order.status]
-                }`}
+                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${statusColors[order.status]
+                  }`}
               >
                 {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
               </span>
@@ -107,11 +106,10 @@ const OrderConfirmationPage = () => {
             <div>
               <p className="text-gray-600 text-sm mb-2">Payment Status</p>
               <span
-                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${
-                  order.paymentStatus === 'completed'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}
+                className={`inline-block px-4 py-2 rounded-lg text-sm font-medium ${order.paymentStatus === 'completed'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-yellow-100 text-yellow-800'
+                  }`}
               >
                 {order.paymentStatus?.charAt(0).toUpperCase() +
                   order.paymentStatus?.slice(1)}

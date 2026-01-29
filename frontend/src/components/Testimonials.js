@@ -3,9 +3,6 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiStar,
-  FiTruck,
-  FiLock,
-  FiArrowRight,
 } from 'react-icons/fi';
 
 const Testimonials = () => {
@@ -215,11 +212,10 @@ const Testimonials = () => {
                         setCurrentIndex(idx);
                         setAutoPlay(false);
                       }}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        idx === currentIndex
+                      className={`h-2 rounded-full transition-all duration-300 ${idx === currentIndex
                           ? 'w-8 bg-orange-600'
                           : 'w-2 bg-gray-300 hover:bg-gray-400'
-                      }`}
+                        }`}
                       aria-label={`Go to testimonial ${idx + 1}`}
                     />
                   ))}

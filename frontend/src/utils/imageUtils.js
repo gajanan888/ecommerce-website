@@ -26,7 +26,9 @@ export const getImageUrl = (path) => {
   return `${BASE_URL.replace(/\/api$/, '')}${cleanPath}`;
 };
 
-export default {
+const imageUtils = {
   getImageUrl,
   FALLBACK_IMAGE,
 };
+
+export default imageUtils;
