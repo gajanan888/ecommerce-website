@@ -35,8 +35,9 @@ export default function AdminLayout({ children }) {
     <div className="flex h-screen bg-[#050505] text-white overflow-hidden font-sans selection:bg-orange-500/30">
       {/* Cinematic Sidebar */}
       <div
-        className={`${sidebarOpen ? 'w-72' : 'w-24'
-          } bg-[#0A0A0A] border-r border-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col relative z-20`}
+        className={`${
+          sidebarOpen ? 'w-72' : 'w-24'
+        } bg-[#0A0A0A] border-r border-white/5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col relative z-20`}
       >
         {/* Logo Section */}
         <div className="h-24 flex items-center justify-between px-8 border-b border-white/5">
@@ -47,7 +48,9 @@ export default function AdminLayout({ children }) {
               </span>
             </div>
           ) : (
-            <span className="text-xl font-black text-orange-500 mx-auto">E</span>
+            <span className="text-xl font-black text-orange-500 mx-auto">
+              E
+            </span>
           )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -106,17 +109,22 @@ export default function AdminLayout({ children }) {
                 {user?.name?.[0] || 'A'}
               </div>
               <div className="overflow-hidden">
-                <p className="font-bold text-sm text-white truncate">{user?.name}</p>
-                <p className="text-[10px] uppercase tracking-wider text-white/40">Administrator</p>
+                <p className="font-bold text-sm text-white truncate">
+                  {user?.name}
+                </p>
+                <p className="text-[10px] uppercase tracking-wider text-white/40">
+                  Administrator
+                </p>
               </div>
             </div>
           )}
           <button
             onClick={handleLogout}
-            className={`w-full py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all ${sidebarOpen
+            className={`w-full py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all ${
+              sidebarOpen
                 ? 'bg-white/5 hover:bg-red-500/10 text-white hover:text-red-500 border border-white/5 hover:border-red-500/50'
                 : 'text-white/40 hover:text-red-500'
-              }`}
+            }`}
           >
             {sidebarOpen ? 'Terminate Session' : '⏻'}
           </button>
@@ -129,7 +137,9 @@ export default function AdminLayout({ children }) {
         <header className="h-24 border-b border-white/5 bg-[#0A0A0A]/50 backdrop-blur-xl flex items-center justify-between px-8 lg:px-12">
           <div>
             <h2 className="text-2xl font-black uppercase tracking-tighter text-white">
-              {window.location.pathname.split('/').pop() === 'dashboard' ? 'Overview' : window.location.pathname.split('/').pop()}
+              {window.location.pathname.split('/').pop() === 'dashboard'
+                ? 'Overview'
+                : window.location.pathname.split('/').pop()}
             </h2>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mt-1">
               System Operational • {new Date().toLocaleDateString()}
@@ -138,7 +148,9 @@ export default function AdminLayout({ children }) {
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-green-500">Live</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-green-500">
+                Live
+              </span>
             </div>
           </div>
         </header>
@@ -160,14 +172,21 @@ function SidebarLink({ to, label, icon, open }) {
   return (
     <Link
       to={to}
-      className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 group ${isActive
+      className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 group ${
+        isActive
           ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
           : 'text-white/40 hover:bg-white/5 hover:text-white'
-        }`}
+      }`}
     >
-      <span className={`text-xl transition-transform duration-300 ${!isActive && 'group-hover:scale-110 grayscale group-hover:grayscale-0'}`}>{icon}</span>
+      <span
+        className={`text-xl transition-transform duration-300 ${!isActive && 'group-hover:scale-110 grayscale group-hover:grayscale-0'}`}
+      >
+        {icon}
+      </span>
       {open && (
-        <span className="font-bold text-[10px] uppercase tracking-[0.15em]">{label}</span>
+        <span className="font-bold text-[10px] uppercase tracking-[0.15em]">
+          {label}
+        </span>
       )}
       {isActive && open && (
         <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />

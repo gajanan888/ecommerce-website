@@ -62,10 +62,11 @@ const ProductSpecifications = ({ product }) => {
           <button
             key={tab.id}
             onClick={() => setExpandedTab(tab.id)}
-            className={`py-4 px-6 font-semibold transition-colors border-b-2 flex items-center gap-2 ${expandedTab === tab.id
-              ? 'border-orange-600 text-orange-600'
-              : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
+            className={`py-4 px-6 font-semibold transition-colors border-b-2 flex items-center gap-2 ${
+              expandedTab === tab.id
+                ? 'border-orange-600 text-orange-600'
+                : 'border-transparent text-gray-600 hover:text-gray-900'
+            }`}
           >
             <tab.icon size={18} />
             {tab.label}

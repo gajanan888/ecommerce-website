@@ -9,7 +9,11 @@ const {
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const validate = require('../middleware/validate');
-const { signupSchema, loginSchema, updatePasswordSchema } = require('../validators/auth.schema');
+const {
+  signupSchema,
+  loginSchema,
+  updatePasswordSchema,
+} = require('../validators/auth.schema');
 
 /**
  * Public Routes
@@ -42,6 +46,11 @@ router.get('/me', protect, getMe);
 // @route   PUT /api/auth/update-password
 // @desc    Update password
 // @access  Private
-router.put('/update-password', protect, validate(updatePasswordSchema), updatePassword);
+router.put(
+  '/update-password',
+  protect,
+  validate(updatePasswordSchema),
+  updatePassword
+);
 
 module.exports = router;

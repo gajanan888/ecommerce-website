@@ -115,7 +115,8 @@ const WishlistPage = () => {
               VAULT
             </h1>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mt-1">
-              {wishlistItems.length} SELECTION{wishlistItems.length !== 1 ? 'S' : ''}
+              {wishlistItems.length} SELECTION
+              {wishlistItems.length !== 1 ? 'S' : ''}
             </p>
           </div>
           {wishlistItems.length > 0 && (

@@ -103,10 +103,7 @@ export default function CartPage() {
           >
             <div className="relative inline-block mb-12">
               <div className="w-32 h-32 bg-white/5 rounded-full flex items-center justify-center border border-white/5">
-                <FiShoppingBag
-                  size={48}
-                  className="text-white/20"
-                />
+                <FiShoppingBag size={48} className="text-white/20" />
               </div>
             </div>
 
@@ -114,7 +111,8 @@ export default function CartPage() {
               Archive Empty
             </h1>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-12 max-w-md mx-auto leading-relaxed">
-              No specimens recorded in your primary bag. Start building your architectural wardrobe.
+              No specimens recorded in your primary bag. Start building your
+              architectural wardrobe.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -136,7 +134,9 @@ export default function CartPage() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header Section */}
         <div className="mb-16">
-          <p className="text-orange-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4">Acquisition Log</p>
+          <p className="text-orange-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4">
+            Acquisition Log
+          </p>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/5">
             <h1 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-none">
               Specimen Bag
@@ -195,7 +195,9 @@ export default function CartPage() {
 
                           <div className="flex items-center gap-6">
                             <div className="flex items-center gap-3">
-                              <span className="text-[10px] font-black uppercase tracking-widest text-white/20">Specimen Size:</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                                Specimen Size:
+                              </span>
                               <span className="px-4 py-1.5 bg-white/5 rounded-full text-[10px] font-black text-white border border-white/5">
                                 {item.size}
                               </span>
@@ -207,7 +209,9 @@ export default function CartPage() {
                           {/* Quantity Selector */}
                           <div className="flex items-center gap-2 bg-white/5 rounded-full p-1.5 border border-white/5">
                             <button
-                              onClick={() => decreaseQuantity(item.id, item.size)}
+                              onClick={() =>
+                                decreaseQuantity(item.id, item.size)
+                              }
                               className="w-10 h-10 flex items-center justify-center hover:bg-white hover:text-black rounded-full transition-all"
                               disabled={isProcessing}
                             >
@@ -217,7 +221,9 @@ export default function CartPage() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => increaseQuantity(item.id, item.size)}
+                              onClick={() =>
+                                increaseQuantity(item.id, item.size)
+                              }
                               className="w-10 h-10 flex items-center justify-center hover:bg-white hover:text-black rounded-full transition-all"
                               disabled={isProcessing}
                             >
@@ -245,7 +251,9 @@ export default function CartPage() {
             <div className="sticky top-32 space-y-8">
               {/* Summary Card */}
               <div className="designer-card p-10">
-                <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-10">Sign-Off Protocol</h2>
+                <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-10">
+                  Sign-Off Protocol
+                </h2>
 
                 {error && (
                   <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-500">
@@ -275,7 +283,9 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex justify-between items-end mb-12">
-                  <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Signature Total</span>
+                  <span className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
+                    Signature Total
+                  </span>
                   <span className="text-5xl font-black text-white tracking-tighter">
                     ₹{total.toFixed(0)}
                   </span>
@@ -305,7 +315,9 @@ export default function CartPage() {
               <div className="designer-card p-8">
                 <div className="flex items-center gap-4 mb-6">
                   <FiTag className="text-white/20" size={16} />
-                  <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">Auth Code</h3>
+                  <h3 className="text-[10px] font-black text-white uppercase tracking-[0.3em]">
+                    Auth Code
+                  </h3>
                 </div>
                 <div className="flex gap-3">
                   <input

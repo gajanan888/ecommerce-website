@@ -5,7 +5,7 @@
 /**
  * Success response
  */
-const successResponse = (data, message = "Success", status = 200) => {
+const successResponse = (data, message = 'Success', status = 200) => {
   return {
     success: true,
     status,
@@ -18,7 +18,7 @@ const successResponse = (data, message = "Success", status = 200) => {
 /**
  * Paginated response
  */
-const paginatedResponse = (data, total, page, limit, message = "Success") => {
+const paginatedResponse = (data, total, page, limit, message = 'Success') => {
   return {
     success: true,
     message,

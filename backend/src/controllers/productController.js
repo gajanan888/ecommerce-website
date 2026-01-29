@@ -85,15 +85,8 @@ exports.getProductById = async (req, res, next) => {
  */
 exports.createProduct = async (req, res, next) => {
   try {
-    const {
-      name,
-      description,
-      price,
-      category,
-      stock,
-      sizes,
-      material,
-    } = req.body;
+    const { name, description, price, category, stock, sizes, material } =
+      req.body;
 
     let image = req.body.image;
     let images = req.body.images;
@@ -123,7 +116,11 @@ exports.createProduct = async (req, res, next) => {
       image,
       images: images || [image],
       stock: stock || 10,
-      sizes: sizes ? (typeof sizes === 'string' ? JSON.parse(sizes) : sizes) : ['XS', 'S', 'M', 'L', 'XL', 'XXL'], // Handle form-data array parsing
+      sizes: sizes
+        ? typeof sizes === 'string'
+          ? JSON.parse(sizes)
+          : sizes
+        : ['XS', 'S', 'M', 'L', 'XL', 'XXL'], // Handle form-data array parsing
       material: material || 'Premium Cotton Blend',
     });
 
@@ -149,7 +146,7 @@ exports.updateProduct = async (req, res, next) => {
       if (result) {
         req.body.image = result.url;
         // Optionally append to images or replace? For simple update, let's keep it simple.
-        // req.body.images = [result.url]; 
+        // req.body.images = [result.url];
       }
     }
 

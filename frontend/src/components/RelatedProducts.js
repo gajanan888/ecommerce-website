@@ -16,7 +16,10 @@ const RelatedProducts = ({ currentProductId, category }) => {
         setLoading(true);
         // Fetch products in the same category
         // Note: getAll accepts params object directly
-        const response = await productAPI.getAll({ category: category, limit: 10 });
+        const response = await productAPI.getAll({
+          category: category,
+          limit: 10,
+        });
 
         let allProducts = [];
         // Handle different response structures if necessary, but typically response.data.data or response.data.products
@@ -30,7 +33,7 @@ const RelatedProducts = ({ currentProductId, category }) => {
 
         // Filter out the current product and take top 4
         const related = allProducts
-          .filter(p => p._id !== currentProductId)
+          .filter((p) => p._id !== currentProductId)
           .slice(0, 4);
 
         setProducts(related);
@@ -52,7 +55,10 @@ const RelatedProducts = ({ currentProductId, category }) => {
         <div className="h-8 w-48 bg-gray-200 rounded mb-6 animate-pulse"></div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-[450px] bg-gray-200 rounded-2xl animate-pulse"></div>
+            <div
+              key={i}
+              className="h-[450px] bg-gray-200 rounded-2xl animate-pulse"
+            ></div>
           ))}
         </div>
       </div>

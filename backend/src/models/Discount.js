@@ -1,26 +1,26 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const discountSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "Please provide a discount name"],
+    required: [true, 'Please provide a discount name'],
     trim: true,
   },
   description: String,
   discountType: {
     type: String,
-    enum: ["percentage", "fixed"],
-    default: "percentage",
+    enum: ['percentage', 'fixed'],
+    default: 'percentage',
   },
   discountValue: {
     type: Number,
-    required: [true, "Please provide a discount value"],
+    required: [true, 'Please provide a discount value'],
     min: 0,
   },
   applicableProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: 'Product',
     },
   ],
   applicableCategories: [String],
@@ -61,7 +61,7 @@ const discountSchema = new mongoose.Schema({
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   createdAt: {
@@ -74,4 +74,4 @@ const discountSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Discount", discountSchema);
+module.exports = mongoose.model('Discount', discountSchema);

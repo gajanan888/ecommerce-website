@@ -11,7 +11,7 @@ import {
   FiArrowRight,
   FiCheck,
   FiAlertCircle,
-  FiFeather
+  FiFeather,
 } from 'react-icons/fi';
 
 const RegisterPage = () => {
@@ -150,7 +150,9 @@ const RegisterPage = () => {
           <div>
             <div className="flex items-center gap-2 mb-8">
               <FiFeather className="text-4xl text-orange-500" />
-              <span className="text-3xl font-bold tracking-tight">EliteWear</span>
+              <span className="text-3xl font-bold tracking-tight">
+                EliteWear
+              </span>
             </div>
           </div>
 
@@ -160,7 +162,8 @@ const RegisterPage = () => {
               <span className="text-orange-500">Fashion Revolution.</span>
             </h2>
             <p className="text-lg text-gray-300 font-light leading-relaxed">
-              Create an account to start your journey. Get personalized recommendations, early access to sales, and seamless checkout.
+              Create an account to start your journey. Get personalized
+              recommendations, early access to sales, and seamless checkout.
             </p>
           </div>
 
@@ -186,7 +189,9 @@ const RegisterPage = () => {
         >
           <div className="text-center space-y-4">
             <div className="lg:hidden flex justify-center mb-4">
-              <div className="text-4xl text-orange-500"><FiFeather /></div>
+              <div className="text-4xl text-orange-500">
+                <FiFeather />
+              </div>
             </div>
             <h2 className="text-3xl font-black tracking-tighter text-white uppercase">
               REGISTER
@@ -202,9 +207,14 @@ const RegisterPage = () => {
               animate={{ height: 'auto', opacity: 1 }}
               className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3"
             >
-              <FiAlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={18} />
+              <FiAlertCircle
+                className="text-red-500 mt-0.5 flex-shrink-0"
+                size={18}
+              />
               <div>
-                <h4 className="text-sm font-semibold text-red-800">Registration Failed</h4>
+                <h4 className="text-sm font-semibold text-red-800">
+                  Registration Failed
+                </h4>
                 <p className="text-sm text-red-600 mt-1">{errors.submit}</p>
               </div>
             </motion.div>
@@ -213,7 +223,9 @@ const RegisterPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Name Input */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Full Name</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                Full Name
+              </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                   <FiUser className="h-5 w-5 text-white/20 transition-colors group-focus-within:text-orange-500" />
@@ -227,15 +239,23 @@ const RegisterPage = () => {
                   placeholder="John Doe"
                 />
               </div>
-              {errors.name && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">
+                  {errors.name}
+                </p>
+              )}
             </div>
 
             {/* Email Input */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Email Address</label>
+              <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                Email Address
+              </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                  <FiMail className={`h-5 w-5 transition-colors ${validateEmail(formData.email) && formData.email ? 'text-green-500' : 'text-white/20 group-focus-within:text-orange-500'}`} />
+                  <FiMail
+                    className={`h-5 w-5 transition-colors ${validateEmail(formData.email) && formData.email ? 'text-green-500' : 'text-white/20 group-focus-within:text-orange-500'}`}
+                  />
                 </div>
                 <input
                   type="email"
@@ -246,12 +266,18 @@ const RegisterPage = () => {
                   placeholder="name@company.com"
                 />
               </div>
-              {errors.email && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             {/* Phone Input */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 ml-1">Phone Number (Optional)</label>
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Phone Number (Optional)
+              </label>
               <input
                 type="tel"
                 name="phone"
@@ -264,7 +290,9 @@ const RegisterPage = () => {
 
             {/* Address Section */}
             <div className="space-y-3 pt-2">
-              <h3 className="text-sm font-semibold text-gray-700">Shipping Address (Optional)</h3>
+              <h3 className="text-sm font-semibold text-gray-700">
+                Shipping Address (Optional)
+              </h3>
 
               <input
                 type="text"
@@ -316,7 +344,9 @@ const RegisterPage = () => {
 
             {/* Password Input */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 ml-1">Password</label>
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Password
+              </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <FiLock className="h-5 w-5 text-gray-400 transition-colors group-focus-within:text-orange-500" />
@@ -356,31 +386,46 @@ const RegisterPage = () => {
                     ))}
                   </div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs font-semibold" style={{ color: getPasswordStrengthColor() }}>
+                    <span
+                      className="text-xs font-semibold"
+                      style={{ color: getPasswordStrengthColor() }}
+                    >
                       {getPasswordStrengthLabel()}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                     {passwordStrengthChecks.map((check, idx) => (
                       <div key={idx} className="flex items-center gap-1.5">
-                        <div className={`w-3 h-3 rounded-full flex items-center justify-center flex-shrink-0 ${check.met ? 'bg-green-500 text-white' : 'bg-gray-200'}`}>
+                        <div
+                          className={`w-3 h-3 rounded-full flex items-center justify-center flex-shrink-0 ${check.met ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+                        >
                           {check.met && <FiCheck size={8} />}
                         </div>
-                        <span className={`text-[10px] ${check.met ? 'text-green-700 font-medium' : 'text-gray-500'}`}>{check.label}</span>
+                        <span
+                          className={`text-[10px] ${check.met ? 'text-green-700 font-medium' : 'text-gray-500'}`}
+                        >
+                          {check.label}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-              {errors.password && <p className="text-xs text-red-500 ml-1">{errors.password}</p>}
+              {errors.password && (
+                <p className="text-xs text-red-500 ml-1">{errors.password}</p>
+              )}
             </div>
 
             {/* Confirm Password Input */}
             <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700 ml-1">Confirm Password</label>
+              <label className="text-sm font-medium text-gray-700 ml-1">
+                Confirm Password
+              </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <FiLock className={`h-5 w-5 transition-colors ${formData.password === formData.confirmPassword && formData.confirmPassword ? 'text-green-500' : 'text-gray-400 group-focus-within:text-orange-500'}`} />
+                  <FiLock
+                    className={`h-5 w-5 transition-colors ${formData.password === formData.confirmPassword && formData.confirmPassword ? 'text-green-500' : 'text-gray-400 group-focus-within:text-orange-500'}`}
+                  />
                 </div>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -402,7 +447,11 @@ const RegisterPage = () => {
                   )}
                 </button>
               </div>
-              {errors.confirmPassword && <p className="text-xs text-red-500 ml-1">{errors.confirmPassword}</p>}
+              {errors.confirmPassword && (
+                <p className="text-xs text-red-500 ml-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
 
             <button

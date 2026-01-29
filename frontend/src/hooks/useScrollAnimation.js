@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 /**
  * Custom hook for triggering animations when elements scroll into view
@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
  */
 export const useScrollAnimation = ({
   threshold = 0.1,
-  animationClass = "animate-fadeInUp",
+  animationClass = 'animate-fadeInUp',
   repeat = false,
 } = {}) => {
   const ref = useRef(null);
@@ -36,7 +36,7 @@ export const useScrollAnimation = ({
       },
       {
         threshold: threshold,
-        rootMargin: "0px 0px -50px 0px", // Trigger slightly before fully visible
+        rootMargin: '0px 0px -50px 0px', // Trigger slightly before fully visible
       }
     );
 
@@ -63,7 +63,7 @@ export const useScrollAnimation = ({
  */
 export const useStaggeredAnimation = ({
   staggerDelay = 100,
-  animationClass = "animate-fadeInUp",
+  animationClass = 'animate-fadeInUp',
 } = {}) => {
   const ref = useRef(null);
   const itemRefs = useRef([]);
@@ -86,7 +86,7 @@ export const useStaggeredAnimation = ({
       },
       {
         threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px",
+        rootMargin: '0px 0px -50px 0px',
       }
     );
 

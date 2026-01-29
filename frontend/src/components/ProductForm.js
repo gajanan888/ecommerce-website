@@ -85,10 +85,16 @@ export default function ProductForm({
         ...formData,
         // Convert comma-separated strings to arrays
         sizes: formData.sizes
-          ? formData.sizes.split(',').map((s) => s.trim()).filter((s) => s)
+          ? formData.sizes
+              .split(',')
+              .map((s) => s.trim())
+              .filter((s) => s)
           : undefined,
         tags: formData.tags
-          ? formData.tags.split(',').map((t) => t.trim()).filter((t) => t)
+          ? formData.tags
+              .split(',')
+              .map((t) => t.trim())
+              .filter((t) => t)
           : undefined,
       };
       onSubmit(submitData);
@@ -108,8 +114,9 @@ export default function ProductForm({
           value={formData.name}
           onChange={handleChange}
           placeholder="Enter product name"
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-300'
-            }`}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.name ? 'border-red-500' : 'border-gray-300'
+          }`}
           disabled={isLoading}
         />
         {errors.name && (
@@ -126,8 +133,9 @@ export default function ProductForm({
           name="category"
           value={formData.category}
           onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.category ? 'border-red-500' : 'border-gray-300'
-            }`}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.category ? 'border-red-500' : 'border-gray-300'
+          }`}
           disabled={isLoading}
         >
           <option value="">Select a category</option>
@@ -164,8 +172,9 @@ export default function ProductForm({
           placeholder="0.00"
           step="0.01"
           min="0"
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.price ? 'border-red-500' : 'border-gray-300'
-            }`}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.price ? 'border-red-500' : 'border-gray-300'
+          }`}
           disabled={isLoading}
         />
         {errors.price && (
@@ -187,17 +196,17 @@ export default function ProductForm({
           onChange={(e) => {
             const file = e.target.files[0];
             if (file) {
-              setFormData(prev => ({ ...prev, imageFile: file }));
+              setFormData((prev) => ({ ...prev, imageFile: file }));
               // Create local preview
               const reader = new FileReader();
               reader.onloadend = () => {
-                setFormData(prev => ({ ...prev, image: reader.result }));
+                setFormData((prev) => ({ ...prev, image: reader.result }));
               };
               reader.readAsDataURL(file);
 
               // Clear error
               if (errors.image) {
-                setErrors(prev => ({ ...prev, image: '' }));
+                setErrors((prev) => ({ ...prev, image: '' }));
               }
             }
           }}
@@ -217,13 +226,19 @@ export default function ProductForm({
         <input
           type="text"
           name="imageUrl"
-          value={!formData.imageFile && formData.image && !formData.image.startsWith('data:') ? formData.image : ''}
+          value={
+            !formData.imageFile &&
+            formData.image &&
+            !formData.image.startsWith('data:')
+              ? formData.image
+              : ''
+          }
           onChange={(e) => {
             const url = e.target.value;
-            setFormData(prev => ({ ...prev, image: url, imageFile: null }));
+            setFormData((prev) => ({ ...prev, image: url, imageFile: null }));
             // Clear error
             if (errors.image) {
-              setErrors(prev => ({ ...prev, image: '' }));
+              setErrors((prev) => ({ ...prev, image: '' }));
             }
           }}
           placeholder="Paste Image URL (e.g., /images/products/shirt.jpg)"
@@ -244,7 +259,8 @@ export default function ProductForm({
               alt="Preview"
               className="h-32 w-32 object-cover rounded-lg border border-gray-200 shadow-sm"
               onError={(e) => {
-                e.target.src = 'https://via.placeholder.com/100?text=Image+Error';
+                e.target.src =
+                  'https://via.placeholder.com/100?text=Image+Error';
               }}
             />
           </div>
@@ -340,8 +356,7 @@ export default function ProductForm({
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1"
-        >
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           Description *
         </label>
         <textarea
@@ -350,8 +365,9 @@ export default function ProductForm({
           onChange={handleChange}
           placeholder="Enter product description"
           rows="4"
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-300'
-            }`}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            errors.description ? 'border-red-500' : 'border-gray-300'
+          }`}
           disabled={isLoading}
         />
         {errors.description && (

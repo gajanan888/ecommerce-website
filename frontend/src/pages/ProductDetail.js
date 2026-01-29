@@ -135,7 +135,7 @@ export default function ProductDetail() {
           </h1>
           <p className="text-white/40 mb-12 uppercase tracking-widest text-xs font-bold leading-relaxed">
             {notFound
-              ? "We could not locate the requested architectural specimen in our digital archive."
+              ? 'We could not locate the requested architectural specimen in our digital archive.'
               : 'Invalid specimen identifier. Please verify the protocol/URL.'}
           </p>
           <button
@@ -159,7 +159,9 @@ export default function ProductDetail() {
           className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
         >
           <FiArrowLeft size={20} />
-          <span className="text-sm font-black uppercase tracking-widest">Back to Collections</span>
+          <span className="text-sm font-black uppercase tracking-widest">
+            Back to Collections
+          </span>
         </button>
       </div>
 
@@ -202,8 +204,12 @@ export default function ProductDetail() {
                   <span className="text-orange-500 font-black text-xs">01</span>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Architecture</p>
-                  <p className="text-[11px] text-white font-black uppercase">Pure Cotton</p>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">
+                    Architecture
+                  </p>
+                  <p className="text-[11px] text-white font-black uppercase">
+                    Pure Cotton
+                  </p>
                 </div>
               </div>
               <div className="space-y-4">
@@ -211,8 +217,12 @@ export default function ProductDetail() {
                   <span className="text-orange-500 font-black text-xs">02</span>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Transit</p>
-                  <p className="text-[11px] text-white font-black uppercase">Express Air</p>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">
+                    Transit
+                  </p>
+                  <p className="text-[11px] text-white font-black uppercase">
+                    Express Air
+                  </p>
                 </div>
               </div>
               <div className="space-y-4">
@@ -220,8 +230,12 @@ export default function ProductDetail() {
                   <span className="text-orange-500 font-black text-xs">03</span>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Ethical</p>
-                  <p className="text-[11px] text-white font-black uppercase">Sustainable</p>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">
+                    Ethical
+                  </p>
+                  <p className="text-[11px] text-white font-black uppercase">
+                    Sustainable
+                  </p>
                 </div>
               </div>
               <div className="space-y-4">
@@ -229,8 +243,12 @@ export default function ProductDetail() {
                   <span className="text-orange-500 font-black text-xs">04</span>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">Origin</p>
-                  <p className="text-[11px] text-white font-black uppercase">Elite Craft</p>
+                  <p className="text-[10px] uppercase tracking-widest text-white/40 font-black mb-1">
+                    Origin
+                  </p>
+                  <p className="text-[11px] text-white font-black uppercase">
+                    Elite Craft
+                  </p>
                 </div>
               </div>
             </div>
@@ -269,10 +287,11 @@ export default function ProductDetail() {
                       setSelectedSize(size);
                       setSizeError(false);
                     }}
-                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${selectedSize === size
-                      ? 'bg-white text-black'
-                      : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'
-                      }`}
+                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${
+                      selectedSize === size
+                        ? 'bg-white text-black'
+                        : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'
+                    }`}
                   >
                     {size}
                   </button>
@@ -311,10 +330,11 @@ export default function ProductDetail() {
               {/* Add to Cart - Primary */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${addedToCart
-                  ? 'bg-green-500 text-white'
-                  : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                  }`}
+                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${
+                  addedToCart
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                }`}
                 aria-label={`Add ${product?.name} to cart`}
               >
                 {addedToCart ? '✓ Added' : 'Add to Cart'}
@@ -339,10 +359,11 @@ export default function ProductDetail() {
                     ? 'Remove from wishlist'
                     : 'Add to wishlist'
                 }
-                className={`py-4 px-6 border-2 transition-colors duration-300 ${isInWishlist(product._id)
-                  ? 'bg-red-50 border-red-200 text-red-500'
-                  : 'bg-white border-gray-300 text-gray-400 hover:border-black hover:text-black'
-                  }`}
+                className={`py-4 px-6 border-2 transition-colors duration-300 ${
+                  isInWishlist(product._id)
+                    ? 'bg-red-50 border-red-200 text-red-500'
+                    : 'bg-white border-gray-300 text-gray-400 hover:border-black hover:text-black'
+                }`}
                 aria-label={
                   isInWishlist(product._id)
                     ? 'Remove from wishlist'
@@ -363,11 +384,18 @@ export default function ProductDetail() {
               {[
                 { label: 'AUTHENTICITY', detail: 'VERIFIED GRADE' },
                 { label: 'RETURNS', detail: '30 DAY WINDOW' },
-                { label: 'SECURITY', detail: 'ENCRYPTED' }
+                { label: 'SECURITY', detail: 'ENCRYPTED' },
               ].map((badge, i) => (
-                <div key={i} className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-500 group">
-                  <p className="text-[10px] font-black tracking-[0.3em] text-orange-500 mb-2 group-hover:translate-x-1 transition-transform">{badge.label}</p>
-                  <p className="text-[11px] font-black text-white/40 uppercase tracking-widest">{badge.detail}</p>
+                <div
+                  key={i}
+                  className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-500 group"
+                >
+                  <p className="text-[10px] font-black tracking-[0.3em] text-orange-500 mb-2 group-hover:translate-x-1 transition-transform">
+                    {badge.label}
+                  </p>
+                  <p className="text-[11px] font-black text-white/40 uppercase tracking-widest">
+                    {badge.detail}
+                  </p>
                 </div>
               ))}
             </div>
@@ -380,6 +408,6 @@ export default function ProductDetail() {
           category={product.category}
         />
       </section>
-    </main >
+    </main>
   );
 }

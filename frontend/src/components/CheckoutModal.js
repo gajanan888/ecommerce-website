@@ -516,14 +516,14 @@ const CheckoutModal = ({ isOpen, onClose, onSuccess }) => {
                     {paymentMethod === 'card'
                       ? 'Credit/Debit Card'
                       : paymentMethod === 'paypal'
-                      ? 'PayPal'
-                      : paymentMethod === 'googlepay'
-                      ? 'Google Pay'
-                      : paymentMethod === 'applepay'
-                      ? 'Apple Pay'
-                      : paymentMethod === 'bank'
-                      ? 'Bank Transfer'
-                      : 'Cash on Delivery'}
+                        ? 'PayPal'
+                        : paymentMethod === 'googlepay'
+                          ? 'Google Pay'
+                          : paymentMethod === 'applepay'
+                            ? 'Apple Pay'
+                            : paymentMethod === 'bank'
+                              ? 'Bank Transfer'
+                              : 'Cash on Delivery'}
                   </span>
                 </p>
               </div>

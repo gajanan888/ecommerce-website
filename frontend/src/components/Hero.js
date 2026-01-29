@@ -51,7 +51,7 @@ export default function Hero() {
           rotateX,
           rotateY,
           translateZ: -200,
-          transformStyle: 'preserve-3d'
+          transformStyle: 'preserve-3d',
         }}
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-20 translate-y-20"
       >
@@ -66,7 +66,7 @@ export default function Hero() {
           rotateX,
           rotateY,
           translateZ: 50,
-          transformStyle: 'preserve-3d'
+          transformStyle: 'preserve-3d',
         }}
         className="relative z-10 w-[60vh] h-[60vh] rounded-full overflow-hidden border-[12px] border-white/5 shadow-[0_0_100px_rgba(255,255,255,0.05)] cursor-pointer group translate-y-20"
       >
@@ -77,7 +77,7 @@ export default function Hero() {
           style={{
             x: useTransform(x, [-0.5, 0.5], [40, -40]),
             y: useTransform(y, [-0.5, 0.5], [40, -40]),
-            scale: 1.15
+            scale: 1.15,
           }}
           className="w-full h-full object-cover grayscale-[0.2] transition-colors duration-700 group-hover:grayscale-0"
         />
@@ -93,7 +93,7 @@ export default function Hero() {
             rotateX,
             rotateY,
             translateZ: 150,
-            transformStyle: 'preserve-3d'
+            transformStyle: 'preserve-3d',
           }}
           className="text-center"
         >
@@ -119,11 +119,14 @@ export default function Hero() {
       <div className="absolute bottom-12 left-0 w-full px-12 flex justify-between items-end z-30">
         <div className="space-y-4">
           <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase max-w-[150px]">
-            Redefining the digital wardrobe for the next generation of trendsetters.
+            Redefining the digital wardrobe for the next generation of
+            trendsetters.
           </p>
           <div className="flex gap-4">
             <div className="w-12 h-[1px] bg-white/20 mt-2"></div>
-            <span className="text-white text-[10px] font-black uppercase">Est. 2026</span>
+            <span className="text-white text-[10px] font-black uppercase">
+              Est. 2026
+            </span>
           </div>
         </div>
 
@@ -144,7 +147,7 @@ export default function Hero() {
           rotateX,
           rotateY,
           translateZ: 80,
-          transformStyle: 'preserve-3d'
+          transformStyle: 'preserve-3d',
         }}
         className="absolute top-1/2 left-12 -translate-y-1/2 hidden lg:block select-none pointer-events-none"
       >

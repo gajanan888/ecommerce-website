@@ -11,30 +11,34 @@ const CategoryHighlights = () => {
     {
       id: 'women',
       name: 'Women',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop',
       size: 'col-span-1 md:col-span-2 md:row-span-2', // Large Square
-      description: 'Elegant styles for every occasion'
+      description: 'Elegant styles for every occasion',
     },
     {
       id: 'men',
       name: 'Men',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop',
       size: 'col-span-1 md:row-span-2', // Tall Portrait
-      description: 'Timeless essentials'
+      description: 'Timeless essentials',
     },
     {
       id: 'accessories',
       name: 'Accessories',
-      image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&h=400&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=600&h=400&fit=crop',
       size: 'col-span-1', // Standard
-      description: 'The perfect finish'
+      description: 'The perfect finish',
     },
     {
       id: 'new-arrivals',
       name: 'New Arrivals',
-      image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop',
+      image:
+        'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=400&fit=crop',
       size: 'col-span-1', // Standard
-      description: 'Fresh drops daily'
+      description: 'Fresh drops daily',
     },
   ];
 

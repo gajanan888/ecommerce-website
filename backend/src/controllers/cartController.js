@@ -46,7 +46,9 @@ exports.getCart = async (req, res, next) => {
 exports.addToCart = async (req, res, next) => {
   try {
     const { productId, quantity = 1, size = 'M' } = req.body;
-    console.log(`🛒 AddToCart Request - User: ${req.userId}, Product: ${productId}, Qty: ${quantity}`);
+    console.log(
+      `🛒 AddToCart Request - User: ${req.userId}, Product: ${productId}, Qty: ${quantity}`
+    );
     const mongoose = require('mongoose');
     // Validate input
     if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
@@ -113,7 +115,9 @@ exports.addToCart = async (req, res, next) => {
     }
 
     await cart.save();
-    console.log(`🛒 AddToCart SUCCESS - CartID: ${cart._id}, UserID: ${req.userId}, Items: ${cart.items.length}`);
+    console.log(
+      `🛒 AddToCart SUCCESS - CartID: ${cart._id}, UserID: ${req.userId}, Items: ${cart.items.length}`
+    );
 
     res.status(201).json({
       status: 'success',

@@ -37,3 +37,33 @@ npm run dev
 ```
 
 Or run separately:
+
+- Backend: `npm run backend`
+- Frontend: `npm run frontend`
+
+## 📚 Documentation
+
+See [README.md](./README.md) for detailed documentation.
+
+## 🎯 Features
+
+✅ User Authentication (JWT)
+✅ Product Catalog with Filters
+✅ Shopping Cart
+✅ Order Management
+✅ Reviews & Ratings
+✅ Admin Dashboard Ready
+✅ Payment Integration Ready
+✅ Responsive Design
+
+## 📦 Tech Stack
+
+- **Frontend**: React, Tailwind CSS, Axios
+- **Backend**: Node.js, Express, MongoDB
+- **Database**: MongoDB with Mongoose
+- **Authentication**: JWT
+- **Payment**: Stripe Ready
+
+---
+
+Built for Portfolio & Resume 💼

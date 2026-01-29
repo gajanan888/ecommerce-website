@@ -103,7 +103,9 @@ const OrderHistoryPage = ({ onNavigate }) => {
       <div className="min-h-screen flex items-center justify-center bg-[#0A0A0A]">
         <div className="text-center">
           <div className="w-16 h-16 border-2 border-white/5 border-t-orange-500 rounded-full animate-spin mx-auto mb-6"></div>
-          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">Decoding Orders...</p>
+          <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em]">
+            Decoding Orders...
+          </p>
         </div>
       </div>
     );
@@ -120,7 +122,8 @@ const OrderHistoryPage = ({ onNavigate }) => {
             Archive Empty
           </h2>
           <p className="text-white/40 mb-12 font-bold uppercase tracking-widest text-xs leading-relaxed">
-            No acquisitions recorded in your primary ledger. Start building your architectural wardrobe.
+            No acquisitions recorded in your primary ledger. Start building your
+            architectural wardrobe.
           </p>
           <button
             onClick={() => navigate('/products')}
@@ -138,7 +141,9 @@ const OrderHistoryPage = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
         <div className="mb-16">
-          <p className="text-orange-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4">Ledger Overview</p>
+          <p className="text-orange-500 font-black uppercase tracking-[0.4em] text-[10px] mb-4">
+            Ledger Overview
+          </p>
           <h1 className="text-6xl md:text-8xl font-black text-white mb-4 uppercase tracking-tighter leading-tight">
             Acquisitions
           </h1>
@@ -163,10 +168,11 @@ const OrderHistoryPage = ({ onNavigate }) => {
             <button
               key={status}
               onClick={() => setFilterStatus(status)}
-              className={`px-8 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-300 border ${filterStatus === status
-                ? 'bg-white text-black border-white shadow-xl shadow-white/5'
-                : 'bg-white/5 text-white/40 border-white/5 hover:border-white/20'
-                }`}
+              className={`px-8 py-3 rounded-full font-black uppercase tracking-[0.2em] text-[10px] transition-all duration-300 border ${
+                filterStatus === status
+                  ? 'bg-white text-black border-white shadow-xl shadow-white/5'
+                  : 'bg-white/5 text-white/40 border-white/5 hover:border-white/20'
+              }`}
             >
               {status}
             </button>
@@ -176,10 +182,7 @@ const OrderHistoryPage = ({ onNavigate }) => {
         {/* Orders List */}
         <div className="space-y-6">
           {filteredOrders.map((order) => (
-            <div
-              key={order._id}
-              className="designer-card p-0 overflow-hidden"
-            >
+            <div key={order._id} className="designer-card p-0 overflow-hidden">
               <div className="p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8">
                 {/* Order Info */}
                 <div className="flex-1">
@@ -199,14 +202,16 @@ const OrderHistoryPage = ({ onNavigate }) => {
 
                   {/* Products Preview */}
                   <div className="flex flex-wrap gap-2">
-                    {(order.items || order.products)?.slice(0, 3).map((item, idx) => (
-                      <span
-                        key={idx}
-                        className="text-[8px] font-black uppercase tracking-widest bg-white/5 text-white/60 px-3 py-1.5 rounded-lg border border-white/5"
-                      >
-                        {item.productName || item.name}
-                      </span>
-                    ))}
+                    {(order.items || order.products)
+                      ?.slice(0, 3)
+                      .map((item, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[8px] font-black uppercase tracking-widest bg-white/5 text-white/60 px-3 py-1.5 rounded-lg border border-white/5"
+                        >
+                          {item.productName || item.name}
+                        </span>
+                      ))}
                     {(order.items || order.products)?.length > 3 && (
                       <span className="text-[8px] font-black uppercase tracking-widest bg-white/5 text-white/40 px-3 py-1.5 rounded-lg border border-white/5">
                         +{(order.items || order.products).length - 3} SPECIMENS
@@ -246,7 +251,9 @@ const OrderHistoryPage = ({ onNavigate }) => {
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     <div>
-                      <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">Inventory Detail</h4>
+                      <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">
+                        Inventory Detail
+                      </h4>
                       <div className="space-y-3">
                         {(order.items || order.products)?.map((item, idx) => (
                           <div
@@ -270,11 +277,15 @@ const OrderHistoryPage = ({ onNavigate }) => {
                     </div>
 
                     <div>
-                      <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">Execution Detail</h4>
+                      <h4 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">
+                        Execution Detail
+                      </h4>
                       <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                         <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
                           <span>Subtotal</span>
-                          <span className="text-white">₹{order.subtotal?.toFixed(0) || '0'}</span>
+                          <span className="text-white">
+                            ₹{order.subtotal?.toFixed(0) || '0'}
+                          </span>
                         </div>
                         {order.discount > 0 && (
                           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-orange-500">
@@ -301,7 +312,8 @@ const OrderHistoryPage = ({ onNavigate }) => {
                       <FiDownload size={14} />
                       Archival Invoice
                     </button>
-                    {(order.status === 'pending' || order.status === 'processing') && (
+                    {(order.status === 'pending' ||
+                      order.status === 'processing') && (
                       <button
                         onClick={() => handleCancelOrder(order._id)}
                         className="flex-1 sm:flex-none px-8 py-4 bg-red-500/10 text-red-500 rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all inline-flex items-center justify-center gap-3 border border-red-500/20"

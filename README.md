@@ -124,6 +124,26 @@ cd backend/scripts
 node makeAdmin.js
 ```
 
+### 5. Formatting
+
+Keep the codebase clean and consistent:
+
+```bash
+npm run format
+```
+
+---
+
+## 📖 Documentation & Guides
+
+Detailed guides can be found in the [docs](./docs) directory:
+
+- [Getting Started](./docs/GETTING_STARTED.md)
+- [Admin Guide](./docs/ADMIN_GUIDE.md)
+- [Deployment Guide](./docs/DEPLOYMENT_GUIDE.md)
+- [Contributing Guide](./docs/CONTRIBUTING.md)
+- [System Health Report](./docs/SYSTEM_HEALTH_REPORT.md)
+
 ---
 
 ## 🏃‍♂️ Running the Application

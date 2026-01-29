@@ -73,8 +73,9 @@ export default function Navbar() {
         initial={{ y: -100, x: '-50%' }}
         animate={{ y: 0, x: '-50%' }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 z-50 transition-all duration-700 crystal-island crystal-island-dark border-white/10 ${isScrolled ? 'py-1.5' : 'py-3'
-          }`}
+        className={`fixed top-0 z-50 transition-all duration-700 crystal-island crystal-island-dark border-white/10 ${
+          isScrolled ? 'py-1.5' : 'py-3'
+        }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
@@ -107,7 +108,9 @@ export default function Navbar() {
                         className="relative group text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 text-white/60 hover:text-white"
                       >
                         {link.name}
-                        <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full`} />
+                        <span
+                          className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 transition-all duration-300 group-hover:w-full`}
+                        />
                       </Link>
                     ))}
                   </motion.div>
@@ -145,8 +148,11 @@ export default function Navbar() {
               {/* Search Toggle */}
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
-                className={`hidden md:flex p-2 rounded-full transition-all ${isTransparentHome ? 'text-white/60 hover:text-white hover:bg-white/10' : 'text-white/40 hover:text-white hover:bg-white/5'
-                  } ${searchOpen ? 'bg-orange-500 text-white' : ''}`}
+                className={`hidden md:flex p-2 rounded-full transition-all ${
+                  isTransparentHome
+                    ? 'text-white/60 hover:text-white hover:bg-white/10'
+                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                } ${searchOpen ? 'bg-orange-500 text-white' : ''}`}
               >
                 {searchOpen ? <FiX size={20} /> : <FiSearch size={20} />}
               </button>
@@ -154,8 +160,11 @@ export default function Navbar() {
               {/* Wishlist */}
               <Link
                 to="/wishlist"
-                className={`relative p-2 rounded-full transition-all ${isTransparentHome ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-white/40 hover:text-white hover:bg-white/5'
-                  }`}
+                className={`relative p-2 rounded-full transition-all ${
+                  isTransparentHome
+                    ? 'text-white/40 hover:text-white hover:bg-white/10'
+                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                }`}
               >
                 <FiHeart size={20} />
                 {wishlistCount > 0 && (
@@ -168,8 +177,11 @@ export default function Navbar() {
               {/* Cart */}
               <Link
                 to="/cart"
-                className={`relative p-2 rounded-full transition-all ${isTransparentHome ? 'text-white/40 hover:text-white hover:bg-white/10' : 'text-white/40 hover:text-white hover:bg-white/5'
-                  }`}
+                className={`relative p-2 rounded-full transition-all ${
+                  isTransparentHome
+                    ? 'text-white/40 hover:text-white hover:bg-white/10'
+                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                }`}
               >
                 <FiShoppingCart size={20} />
                 {itemCount > 0 && (
@@ -181,20 +193,28 @@ export default function Navbar() {
 
               {/* User Menu */}
               {user ? (
-                <div className={`hidden md:flex items-center gap-2 pl-2 border-l ${isTransparentHome ? 'border-white/10' : 'border-gray-200'}`}>
+                <div
+                  className={`hidden md:flex items-center gap-2 pl-2 border-l ${isTransparentHome ? 'border-white/10' : 'border-gray-200'}`}
+                >
                   {user.role === 'admin' && (
                     <Link
                       to="/admin/dashboard"
-                      className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all mr-2 uppercase tracking-wider ${isTransparentHome ? 'bg-white text-black hover:bg-orange-500 hover:text-white' : 'bg-gray-900 text-white hover:bg-gray-800'
-                        }`}
+                      className={`px-3 py-1.5 text-xs font-bold rounded-full transition-all mr-2 uppercase tracking-wider ${
+                        isTransparentHome
+                          ? 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                          : 'bg-gray-900 text-white hover:bg-gray-800'
+                      }`}
                     >
                       Admin Panel
                     </Link>
                   )}
                   <Link
                     to="/profile"
-                    className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isTransparentHome ? 'text-white hover:bg-white/10' : 'text-white/60 hover:bg-white/5 hover:text-white'
-                      }`}
+                    className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${
+                      isTransparentHome
+                        ? 'text-white hover:bg-white/10'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white'
+                    }`}
                     title="View Profile"
                   >
                     <FiUser size={16} />
@@ -203,8 +223,11 @@ export default function Navbar() {
                   <button
                     onClick={handleLogout}
                     title="Logout"
-                    className={`p-2 rounded-full transition-all ${isTransparentHome ? 'text-white/20 hover:text-red-500' : 'text-white/20 hover:text-red-500'
-                      }`}
+                    className={`p-2 rounded-full transition-all ${
+                      isTransparentHome
+                        ? 'text-white/20 hover:text-red-500'
+                        : 'text-white/20 hover:text-red-500'
+                    }`}
                   >
                     <FiLogOut size={20} />
                   </button>
@@ -212,8 +235,11 @@ export default function Navbar() {
               ) : (
                 <Link
                   to="/login"
-                  className={`hidden md:flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5 ${isTransparentHome ? 'bg-white text-black hover:bg-orange-500 hover:text-white' : 'bg-gray-900 text-white hover:bg-orange-600'
-                    }`}
+                  className={`hidden md:flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5 ${
+                    isTransparentHome
+                      ? 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                      : 'bg-gray-900 text-white hover:bg-orange-600'
+                  }`}
                 >
                   <FiUser size={18} />
                   <span>Login</span>
@@ -223,8 +249,11 @@ export default function Navbar() {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`md:hidden p-2 rounded-lg transition-all ${isTransparentHome ? 'text-white hover:bg-white/10' : 'text-white hover:bg-white/5'
-                  }`}
+                className={`md:hidden p-2 rounded-lg transition-all ${
+                  isTransparentHome
+                    ? 'text-white hover:bg-white/10'
+                    : 'text-white hover:bg-white/5'
+                }`}
               >
                 {mobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
               </button>
@@ -285,7 +314,9 @@ export default function Navbar() {
                           </div>
                           <div className="flex-1">
                             <p className="font-semibold">Admin Dashboard</p>
-                            <p className="text-xs text-gray-300">Manage Store</p>
+                            <p className="text-xs text-gray-300">
+                              Manage Store
+                            </p>
                           </div>
                         </Link>
                       )}
@@ -298,7 +329,9 @@ export default function Navbar() {
                           {user.name[0]}
                         </div>
                         <div className="flex-1">
-                          <p className="font-semibold text-gray-900">{user.name}</p>
+                          <p className="font-semibold text-gray-900">
+                            {user.name}
+                          </p>
                           <p className="text-xs text-gray-500">{user.email}</p>
                         </div>
                         <FiUser className="text-gray-400" size={18} />

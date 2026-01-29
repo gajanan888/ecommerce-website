@@ -61,7 +61,7 @@ const NewsletterSection = () => {
             {[
               { emoji: '🎁', label: 'OFFERS' },
               { emoji: '⚡', label: 'EARLY' },
-              { emoji: '📦', label: 'FREE' }
+              { emoji: '📦', label: 'FREE' },
             ].map((item, i) => (
               <div key={i} className="text-center group">
                 <div className="text-3xl mb-3 grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110">
@@ -75,7 +75,10 @@ const NewsletterSection = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubscribe} className="space-y-4 max-w-md mx-auto">
+          <form
+            onSubmit={handleSubscribe}
+            className="space-y-4 max-w-md mx-auto"
+          >
             <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"

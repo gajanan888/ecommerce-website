@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Always ensure /api is present in the base URL
-export const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+export const BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:5000';
 let apiBase = BASE_URL;
 if (!apiBase.endsWith('/api')) {
   apiBase = apiBase.replace(/\/$/, '') + '/api';
@@ -94,7 +95,8 @@ export const orderAPI = {
   getMyOrders: () => API.get('/orders'),
   getOrderById: (id) => API.get(`/orders/${id}`),
   updateOrder: (id, data) => API.put(`/orders/${id}`, data),
-  updateShippingAddress: (id, address) => API.put(`/orders/${id}/address`, { shippingAddress: address }),
+  updateShippingAddress: (id, address) =>
+    API.put(`/orders/${id}/address`, { shippingAddress: address }),
   confirmCOD: (id) => API.put(`/orders/${id}/confirm-cod`),
   cancelOrder: (id) => API.delete(`/orders/${id}`),
 };

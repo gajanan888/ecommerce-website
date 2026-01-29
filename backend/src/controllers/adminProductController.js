@@ -42,7 +42,14 @@ exports.createProduct = async (req, res) => {
       // Move file from temp to public/images/products
       const fs = require('fs');
       const path = require('path');
-      const publicDir = path.join(__dirname, '..', '..', 'public', 'images', 'products');
+      const publicDir = path.join(
+        __dirname,
+        '..',
+        '..',
+        'public',
+        'images',
+        'products'
+      );
 
       // Create directory if it doesn't exist
       if (!fs.existsSync(publicDir)) {
@@ -72,13 +79,23 @@ exports.createProduct = async (req, res) => {
     let parsedTags;
 
     try {
-      parsedSizes = sizes && typeof sizes === 'string' ? JSON.parse(sizes) : (Array.isArray(sizes) ? sizes : undefined);
+      parsedSizes =
+        sizes && typeof sizes === 'string'
+          ? JSON.parse(sizes)
+          : Array.isArray(sizes)
+            ? sizes
+            : undefined;
     } catch (e) {
       parsedSizes = undefined;
     }
 
     try {
-      parsedTags = tags && typeof tags === 'string' ? JSON.parse(tags) : (Array.isArray(tags) ? tags : undefined);
+      parsedTags =
+        tags && typeof tags === 'string'
+          ? JSON.parse(tags)
+          : Array.isArray(tags)
+            ? tags
+            : undefined;
     } catch (e) {
       parsedTags = undefined;
     }

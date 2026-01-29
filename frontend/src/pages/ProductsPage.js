@@ -27,11 +27,18 @@ export default function ProductsPage() {
   const getSortedProducts = (products) => {
     const sorted = [...products];
     switch (sortBy) {
-      case 'price-asc': return sorted.sort((a, b) => a.price - b.price);
-      case 'price-desc': return sorted.sort((a, b) => b.price - a.price);
-      case 'newest': return sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      case 'rating': return sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-      default: return sorted;
+      case 'price-asc':
+        return sorted.sort((a, b) => a.price - b.price);
+      case 'price-desc':
+        return sorted.sort((a, b) => b.price - a.price);
+      case 'newest':
+        return sorted.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+      case 'rating':
+        return sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      default:
+        return sorted;
     }
   };
 
@@ -90,9 +97,10 @@ export default function ProductsPage() {
 
     // 1. Text Search (Global)
     if (searchTerm.trim()) {
-      results = results.filter(p =>
-        p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      results = results.filter(
+        (p) =>
+          p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          p.category?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -100,25 +108,34 @@ export default function ProductsPage() {
     if (activeFilter) {
       // Category / Gender / Tag specific logic
       if (activeFilter.type === 'gender') {
-        results = results.filter(p => p.gender?.toLowerCase() === activeFilter.value.toLowerCase());
+        results = results.filter(
+          (p) => p.gender?.toLowerCase() === activeFilter.value.toLowerCase()
+        );
       } else if (activeFilter.type === 'tag') {
-        results = results.filter(p => p.isNewArrival === true || p.tags?.includes(activeFilter.value));
+        results = results.filter(
+          (p) => p.isNewArrival === true || p.tags?.includes(activeFilter.value)
+        );
       }
 
       // Sidebar Category Filter
       if (activeFilter.category && activeFilter.category !== 'All') {
-        results = results.filter(p => p.category?.toLowerCase() === activeFilter.category.toLowerCase());
+        results = results.filter(
+          (p) =>
+            p.category?.toLowerCase() === activeFilter.category.toLowerCase()
+        );
       }
 
       // Sidebar Price Filter
       if (activeFilter.priceRange) {
         const [min, max] = activeFilter.priceRange;
-        results = results.filter(p => p.price >= min && p.price <= max);
+        results = results.filter((p) => p.price >= min && p.price <= max);
       }
     } else {
       // Fallback for direct legacy category selection
       if (selectedCategory && selectedCategory !== 'All') {
-        results = results.filter(p => p.category?.toLowerCase() === selectedCategory.toLowerCase());
+        results = results.filter(
+          (p) => p.category?.toLowerCase() === selectedCategory.toLowerCase()
+        );
       }
     }
 
@@ -128,7 +145,10 @@ export default function ProductsPage() {
   const sortedAndFilteredProducts = getSortedProducts(filteredProducts);
 
   // Dynamic categories from products
-  const categories = ['All', ...new Set(products.map(p => p.category).filter(Boolean))];
+  const categories = [
+    'All',
+    ...new Set(products.map((p) => p.category).filter(Boolean)),
+  ];
 
   return (
     <main className="min-h-screen bg-[#0A0A0A]">
@@ -173,7 +193,7 @@ export default function ProductsPage() {
                 onFilterChange={(filters) => {
                   setActiveFilter({
                     ...activeFilter,
-                    ...filters
+                    ...filters,
                   });
                   // If category changes in filter bar, update the simple state too for consistency
                   if (filters.category !== undefined) {
@@ -191,7 +211,11 @@ export default function ProductsPage() {
             {/* Mobile Filter Toggle & Results Count */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <p className="text-white/40 font-bold uppercase tracking-widest text-[10px]">
-                Showing <span className="text-white">{sortedAndFilteredProducts.length}</span> results
+                Showing{' '}
+                <span className="text-white">
+                  {sortedAndFilteredProducts.length}
+                </span>{' '}
+                results
               </p>
 
               {/* Mobile Sort (Visible only on mobile if Sidebar is hidden/collapsed logic is handled inside SearchFilterBar, 
@@ -233,9 +257,12 @@ export default function ProductsPage() {
                 <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/10">
                   <FiSearch size={32} className="text-orange-500" />
                 </div>
-                <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">Archive Empty</h3>
+                <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tighter">
+                  Archive Empty
+                </h3>
                 <p className="text-white/40 max-w-sm mx-auto mb-10 text-xs font-bold uppercase tracking-widest leading-relaxed">
-                  No specimens match your current filter parameters. Refine your search or clear all protocols.
+                  No specimens match your current filter parameters. Refine your
+                  search or clear all protocols.
                 </p>
                 <button
                   onClick={() => {

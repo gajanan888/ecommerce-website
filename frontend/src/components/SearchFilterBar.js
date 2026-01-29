@@ -87,8 +87,14 @@ const SearchFilterBar = ({
         onClick={() => setShowFilters(!showFilters)}
         className="lg:hidden flex items-center justify-between w-full px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-black transition-colors font-bold text-sm"
       >
-        <span className="flex items-center gap-2"><FiFilter /> Filters</span>
-        {showFilters ? <FiChevronDown className="rotate-180 transition-transform" /> : <FiChevronDown className="transition-transform" />}
+        <span className="flex items-center gap-2">
+          <FiFilter /> Filters
+        </span>
+        {showFilters ? (
+          <FiChevronDown className="rotate-180 transition-transform" />
+        ) : (
+          <FiChevronDown className="transition-transform" />
+        )}
       </button>
 
       {/* Filters (Desktop Always, Mobile Toggle) */}
@@ -114,7 +120,9 @@ const SearchFilterBar = ({
                     className="peer appearance-none w-4 h-4 border border-white/20 rounded-full checked:bg-orange-500 checked:border-orange-500 transition-all"
                   />
                 </div>
-                <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${selectedCategory === category ? 'text-white' : 'text-white/20 group-hover:text-white/40'}`}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-widest transition-colors ${selectedCategory === category ? 'text-white' : 'text-white/20 group-hover:text-white/40'}`}
+                >
                   {category}
                 </span>
               </label>
@@ -131,7 +139,9 @@ const SearchFilterBar = ({
             {/* Range Inputs for functionality */}
             <div className="flex gap-4">
               <div className="flex-1">
-                <label className="text-[8px] font-black text-white/20 uppercase mb-2 block tracking-widest">Floor</label>
+                <label className="text-[8px] font-black text-white/20 uppercase mb-2 block tracking-widest">
+                  Floor
+                </label>
                 <input
                   type="number"
                   min="0"
@@ -143,7 +153,9 @@ const SearchFilterBar = ({
                 />
               </div>
               <div className="flex-1">
-                <label className="text-[8px] font-black text-white/20 uppercase mb-2 block tracking-widest">Ceiling</label>
+                <label className="text-[8px] font-black text-white/20 uppercase mb-2 block tracking-widest">
+                  Ceiling
+                </label>
                 <input
                   type="number"
                   min="0"
@@ -169,10 +181,18 @@ const SearchFilterBar = ({
               onChange={(e) => handleSort(e.target.value)}
               className="w-full px-6 py-5 bg-white/5 border border-white/5 rounded-2xl appearance-none cursor-pointer focus:outline-none focus:border-white/10 text-[10px] font-black uppercase tracking-widest text-white/60"
             >
-              <option value="newest" className="bg-[#0A0A0A] text-white">Newest First</option>
-              <option value="price-asc" className="bg-[#0A0A0A] text-white">Price: Low to High</option>
-              <option value="price-desc" className="bg-[#0A0A0A] text-white">Price: High to Low</option>
-              <option value="rating" className="bg-[#0A0A0A] text-white">Highest Rated</option>
+              <option value="newest" className="bg-[#0A0A0A] text-white">
+                Newest First
+              </option>
+              <option value="price-asc" className="bg-[#0A0A0A] text-white">
+                Price: Low to High
+              </option>
+              <option value="price-desc" className="bg-[#0A0A0A] text-white">
+                Price: High to Low
+              </option>
+              <option value="rating" className="bg-[#0A0A0A] text-white">
+                Highest Rated
+              </option>
             </select>
             <FiChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none" />
           </div>

@@ -234,8 +234,9 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
-        }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        colors[status] || 'bg-gray-100 text-gray-800'
+      }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -252,8 +253,9 @@ function PaymentBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
-        }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        colors[status] || 'bg-gray-100 text-gray-800'
+      }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -390,7 +392,7 @@ function OrderDetailModal({
               <p className="font-medium text-gray-800">
                 {order.shippingAddress
                   ? `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}, ${order.shippingAddress.country}`
-                  : order.userId?.address || "N/A"}
+                  : order.userId?.address || 'N/A'}
               </p>
             </div>
           </div>

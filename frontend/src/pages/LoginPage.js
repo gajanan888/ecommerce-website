@@ -12,7 +12,7 @@ import {
   FiCheck,
   FiX,
   FiAlertCircle,
-  FiFeather
+  FiFeather,
 } from 'react-icons/fi';
 
 const LoginPage = () => {
@@ -100,7 +100,9 @@ const LoginPage = () => {
           <div>
             <div className="flex items-center gap-2 mb-8">
               <FiFeather className="text-4xl text-orange-500" />
-              <span className="text-3xl font-bold tracking-tight">EliteWear</span>
+              <span className="text-3xl font-bold tracking-tight">
+                EliteWear
+              </span>
             </div>
           </div>
 
@@ -110,19 +112,29 @@ const LoginPage = () => {
               <span className="text-orange-500">Digital Style.</span>
             </h2>
             <p className="text-lg text-gray-300 font-light leading-relaxed">
-              Join our community of trendsetters. Access exclusive collections, track your orders, and personalize your shopping experience.
+              Join our community of trendsetters. Access exclusive collections,
+              track your orders, and personalize your shopping experience.
             </p>
             <div className="flex gap-4 pt-4">
               <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full border-2 border-gray-900 bg-gray-700 overflow-hidden">
-                    <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="User" className="w-full h-full object-cover" />
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="w-10 h-10 rounded-full border-2 border-gray-900 bg-gray-700 overflow-hidden"
+                  >
+                    <img
+                      src={`https://i.pravatar.cc/100?img=${i + 10}`}
+                      alt="User"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 ))}
               </div>
               <div className="flex flex-col justify-center">
                 <div className="flex text-yellow-500 text-sm">★★★★★</div>
-                <span className="text-xs text-gray-400">Trusted by 50k+ fashionistas</span>
+                <span className="text-xs text-gray-400">
+                  Trusted by 50k+ fashionistas
+                </span>
               </div>
             </div>
           </div>
@@ -149,7 +161,9 @@ const LoginPage = () => {
         >
           <div className="text-center space-y-4">
             <div className="lg:hidden flex justify-center mb-4">
-              <div className="text-4xl text-orange-500"><FiFeather /></div>
+              <div className="text-4xl text-orange-500">
+                <FiFeather />
+              </div>
             </div>
             <h2 className="text-5xl font-black tracking-tighter text-white">
               LOGIN
@@ -165,9 +179,14 @@ const LoginPage = () => {
               animate={{ height: 'auto', opacity: 1 }}
               className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3"
             >
-              <FiAlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={18} />
+              <FiAlertCircle
+                className="text-red-500 mt-0.5 flex-shrink-0"
+                size={18}
+              />
               <div>
-                <h4 className="text-sm font-semibold text-red-800">Login Failed</h4>
+                <h4 className="text-sm font-semibold text-red-800">
+                  Login Failed
+                </h4>
                 <p className="text-sm text-red-600 mt-1">{errors.submit}</p>
               </div>
             </motion.div>
@@ -177,10 +196,14 @@ const LoginPage = () => {
             <div className="space-y-4">
               {/* Email Input */}
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">Email Address</label>
+                <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                  Email Address
+                </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                    <FiMail className={`h-5 w-5 transition-colors ${isEmailValid ? 'text-green-500' : 'text-white/20 group-focus-within:text-orange-500'}`} />
+                    <FiMail
+                      className={`h-5 w-5 transition-colors ${isEmailValid ? 'text-green-500' : 'text-white/20 group-focus-within:text-orange-500'}`}
+                    />
                   </div>
                   <input
                     type="email"
@@ -191,14 +214,23 @@ const LoginPage = () => {
                     placeholder="name@company.com"
                   />
                 </div>
-                {errors.email && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               {/* Password Input */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between ml-2">
-                  <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Password</label>
-                  <button type="button" className="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors">
+                  <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    className="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors"
+                  >
                     Forgot?
                   </button>
                 </div>
@@ -219,10 +251,18 @@ const LoginPage = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 pr-6 flex items-center text-white/20 hover:text-white cursor-pointer"
                   >
-                    {showPassword ? <FiEyeOff className="h-5 w-5" /> : <FiEye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <FiEyeOff className="h-5 w-5" />
+                    ) : (
+                      <FiEye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
-                {errors.password && <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-[10px] text-red-500 font-black uppercase tracking-widest ml-2">
+                    {errors.password}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -233,7 +273,9 @@ const LoginPage = () => {
             >
               <span className="relative z-10 flex items-center gap-2">
                 {loading ? 'Authenticating...' : 'Sign In'}
-                {!loading && <FiArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />}
+                {!loading && (
+                  <FiArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                )}
               </span>
             </button>
           </form>
@@ -251,18 +293,33 @@ const LoginPage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Google</span>
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-4 h-4"
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                Google
+              </span>
             </button>
             <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
-              <img src="https://www.svgrepo.com/show/448234/apple.svg" alt="Apple" className="w-4 h-4 invert" />
-              <span className="text-[10px] font-black uppercase tracking-widest">Apple</span>
+              <img
+                src="https://www.svgrepo.com/show/448234/apple.svg"
+                alt="Apple"
+                className="w-4 h-4 invert"
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest">
+                Apple
+              </span>
             </button>
           </div>
 
           <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
             No account?{' '}
-            <Link to="/register" className="text-white hover:text-orange-500 transition-colors">
+            <Link
+              to="/register"
+              className="text-white hover:text-orange-500 transition-colors"
+            >
               Initialize here
             </Link>
           </p>

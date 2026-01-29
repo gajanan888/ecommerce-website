@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema({
   orderId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Order",
+    ref: 'Order',
     required: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
   amount: {
@@ -17,23 +17,23 @@ const paymentSchema = new mongoose.Schema({
   },
   currency: {
     type: String,
-    default: "INR",
-    enum: ["INR", "USD", "EUR"],
+    default: 'INR',
+    enum: ['INR', 'USD', 'EUR'],
   },
   paymentMethod: {
     type: String,
     required: true,
-    enum: ["razorpay", "stripe", "paypal"],
+    enum: ['razorpay', 'stripe', 'paypal'],
   },
   paymentType: {
     type: String,
     required: true,
-    enum: ["upi", "card", "netbanking", "wallet", "paypal"],
+    enum: ['upi', 'card', 'netbanking', 'wallet', 'paypal'],
   },
   paymentStatus: {
     type: String,
-    enum: ["initiated", "pending", "completed", "failed", "refunded"],
-    default: "initiated",
+    enum: ['initiated', 'pending', 'completed', 'failed', 'refunded'],
+    default: 'initiated',
   },
   gatewayTransactionId: {
     type: String,
@@ -81,4 +81,4 @@ paymentSchema.index({ gatewayTransactionId: 1 });
 paymentSchema.index({ orderId: 1 });
 paymentSchema.index({ userId: 1 });
 
-module.exports = mongoose.model("Payment", paymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema);

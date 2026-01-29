@@ -90,8 +90,9 @@ const Toast = ({ toast, onClose }) => {
   };
 
   const getStyles = () => {
-    const baseClasses = `flex items-center gap-4 px-6 py-4 rounded-[1.5rem] shadow-2xl backdrop-blur-xl pointer-events-auto transition-all duration-500 border border-white/10 ${isExiting ? 'toast-exit' : 'toast-enter'
-      }`;
+    const baseClasses = `flex items-center gap-4 px-6 py-4 rounded-[1.5rem] shadow-2xl backdrop-blur-xl pointer-events-auto transition-all duration-500 border border-white/10 ${
+      isExiting ? 'toast-exit' : 'toast-enter'
+    }`;
 
     switch (toast.type) {
       case 'success':

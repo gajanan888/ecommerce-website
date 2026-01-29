@@ -17,34 +17,38 @@ export default function TrustSection() {
           animate={{ x: [0, -1000] }}
           transition={{
             repeat: Infinity,
-            ease: "linear",
-            duration: 20
+            ease: 'linear',
+            duration: 20,
           }}
           className="flex gap-16 items-center whitespace-nowrap text-gray-400 text-xs font-medium tracking-[0.2em] uppercase px-8"
         >
-          {[...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <item.icon size={14} className="text-white" />
-              <span>{item.text}</span>
-            </div>
-          ))}
+          {[...trustItems, ...trustItems, ...trustItems, ...trustItems].map(
+            (item, idx) => (
+              <div key={idx} className="flex items-center gap-3">
+                <item.icon size={14} className="text-white" />
+                <span>{item.text}</span>
+              </div>
+            )
+          )}
         </motion.div>
         {/* Duplicate for seamless loop if needed, though the map above handles repeat */}
         <motion.div
           animate={{ x: [0, -1000] }}
           transition={{
             repeat: Infinity,
-            ease: "linear",
-            duration: 20
+            ease: 'linear',
+            duration: 20,
           }}
           className="flex gap-16 items-center whitespace-nowrap text-gray-400 text-xs font-medium tracking-[0.2em] uppercase px-8"
         >
-          {[...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, idx) => (
-            <div key={`dup-${idx}`} className="flex items-center gap-3">
-              <item.icon size={14} className="text-white" />
-              <span>{item.text}</span>
-            </div>
-          ))}
+          {[...trustItems, ...trustItems, ...trustItems, ...trustItems].map(
+            (item, idx) => (
+              <div key={`dup-${idx}`} className="flex items-center gap-3">
+                <item.icon size={14} className="text-white" />
+                <span>{item.text}</span>
+              </div>
+            )
+          )}
         </motion.div>
       </div>
       {/* Gradient masks for smooth fade */}

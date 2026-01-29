@@ -74,7 +74,7 @@ export default function AdminProductsPage() {
       setSubmitting(true);
 
       const submitData = new FormData();
-      Object.keys(formData).forEach(key => {
+      Object.keys(formData).forEach((key) => {
         if (key === 'imageFile') {
           if (formData[key]) {
             submitData.append('image', formData[key]); // Append file as 'image'
@@ -290,10 +290,11 @@ export default function AdminProductsPage() {
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-600">
                           <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium ${product.stock > 0
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-red-100 text-red-800'
-                              }`}
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              product.stock > 0
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-red-100 text-red-800'
+                            }`}
                           >
                             {product.stock}
                           </span>

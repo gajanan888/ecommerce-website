@@ -28,7 +28,7 @@ const isValidPassword = (password) => {
 const validateRequired = (obj, fields) => {
   const missing = [];
   fields.forEach((field) => {
-    if (!obj[field] || (typeof obj[field] === "string" && !obj[field].trim())) {
+    if (!obj[field] || (typeof obj[field] === 'string' && !obj[field].trim())) {
       missing.push(field);
     }
   });
@@ -41,15 +41,15 @@ const validateRequired = (obj, fields) => {
 const validateProduct = (data) => {
   const errors = [];
 
-  if (!data.name || !data.name.trim()) errors.push("Product name is required");
+  if (!data.name || !data.name.trim()) errors.push('Product name is required');
   if (!data.price || data.price <= 0)
-    errors.push("Product price must be greater than 0");
+    errors.push('Product price must be greater than 0');
   if (!data.description || !data.description.trim())
-    errors.push("Product description is required");
+    errors.push('Product description is required');
   if (!data.category || !data.category.trim())
-    errors.push("Product category is required");
+    errors.push('Product category is required');
   if (data.stock !== undefined && data.stock < 0)
-    errors.push("Product stock cannot be negative");
+    errors.push('Product stock cannot be negative');
 
   return errors;
 };
@@ -61,16 +61,16 @@ const validateOrder = (data) => {
   const errors = [];
 
   if (!data.items || !Array.isArray(data.items) || data.items.length === 0) {
-    errors.push("Order must contain at least one item");
+    errors.push('Order must contain at least one item');
   }
 
   if (!data.shippingAddress) {
-    errors.push("Shipping address is required");
+    errors.push('Shipping address is required');
   } else {
-    const addressFields = ["street", "city", "state", "zipCode", "country"];
+    const addressFields = ['street', 'city', 'state', 'zipCode', 'country'];
     const missingFields = validateRequired(data.shippingAddress, addressFields);
     if (missingFields.length > 0) {
-      errors.push(`Shipping address missing: ${missingFields.join(", ")}`);
+      errors.push(`Shipping address missing: ${missingFields.join(', ')}`);
     }
   }
 
@@ -81,21 +81,21 @@ const validateOrder = (data) => {
  * Sanitize user input to prevent XSS
  */
 const sanitizeInput = (input) => {
-  if (typeof input !== "string") return input;
-  return input.replace(/[<>]/g, "").trim().substring(0, 500); // Limit length
+  if (typeof input !== 'string') return input;
+  return input.replace(/[<>]/g, '').trim().substring(0, 500); // Limit length
 };
 
 /**
  * Sanitize object recursively
  */
 const sanitizeObject = (obj) => {
-  if (!obj || typeof obj !== "object") return obj;
+  if (!obj || typeof obj !== 'object') return obj;
 
   const sanitized = Array.isArray(obj) ? [] : {};
   for (const key in obj) {
-    if (typeof obj[key] === "string") {
+    if (typeof obj[key] === 'string') {
       sanitized[key] = sanitizeInput(obj[key]);
-    } else if (typeof obj[key] === "object") {
+    } else if (typeof obj[key] === 'object') {
       sanitized[key] = sanitizeObject(obj[key]);
     } else {
       sanitized[key] = obj[key];

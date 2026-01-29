@@ -44,15 +44,16 @@ const ImageGallery = ({ images, productName, discount }) => {
           <img
             src={getImageUrl(currentImage)}
             alt={productName}
-            className={`w-full h-full object-cover transition-transform duration-300 ease-out ${zoomPosition
-              ? 'cursor-zoom-in scale-150'
-              : 'cursor-zoom-out scale-100'
-              }`}
+            className={`w-full h-full object-cover transition-transform duration-300 ease-out ${
+              zoomPosition
+                ? 'cursor-zoom-in scale-150'
+                : 'cursor-zoom-out scale-100'
+            }`}
             style={
               zoomPosition
                 ? {
-                  transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-                }
+                    transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+                  }
                 : {}
             }
             onError={(e) => (e.target.src = FALLBACK_IMAGE)}
@@ -104,10 +105,11 @@ const ImageGallery = ({ images, productName, discount }) => {
             <button
               key={idx}
               onClick={() => setSelectedImage(idx)}
-              className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${selectedImage === idx
-                ? 'border-orange-600 ring-2 ring-orange-300 ring-offset-2 scale-102'
-                : 'border-slate-300 hover:border-slate-400'
-                }`}
+              className={`flex-shrink-0 w-24 h-24 rounded-2xl overflow-hidden border-2 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 ${
+                selectedImage === idx
+                  ? 'border-orange-600 ring-2 ring-orange-300 ring-offset-2 scale-102'
+                  : 'border-slate-300 hover:border-slate-400'
+              }`}
             >
               <img
                 src={getImageUrl(image)}

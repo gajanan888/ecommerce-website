@@ -110,7 +110,10 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
 
           {/* Floating High-End Labels */}
-          <div className="absolute top-6 left-6 flex flex-col gap-2" style={{ transform: 'translateZ(40px)' }}>
+          <div
+            className="absolute top-6 left-6 flex flex-col gap-2"
+            style={{ transform: 'translateZ(40px)' }}
+          >
             {product.isNewArrival && (
               <span className="bg-white text-black text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
                 NEW
@@ -159,14 +162,19 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
               <button
                 onClick={handleAddToCart}
                 disabled={addingToCart || product.stock === 0}
-                className={`p-4 rounded-full transition-all duration-500 ${addingToCart
+                className={`p-4 rounded-full transition-all duration-500 ${
+                  addingToCart
                     ? 'bg-white/10 text-white/20'
                     : added
                       ? 'bg-green-500 text-white'
                       : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                  }`}
+                }`}
               >
-                {added ? <FiStar size={20} className="fill-current" /> : <FiShoppingCart size={20} />}
+                {added ? (
+                  <FiStar size={20} className="fill-current" />
+                ) : (
+                  <FiShoppingCart size={20} />
+                )}
               </button>
             </div>
           </div>

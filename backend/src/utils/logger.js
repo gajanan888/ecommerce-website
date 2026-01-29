@@ -3,11 +3,11 @@
  */
 
 const LOG_LEVELS = {
-  ERROR: "ERROR",
-  WARN: "WARN",
-  INFO: "INFO",
-  DEBUG: "DEBUG",
-  SUCCESS: "SUCCESS",
+  ERROR: 'ERROR',
+  WARN: 'WARN',
+  INFO: 'INFO',
+  DEBUG: 'DEBUG',
+  SUCCESS: 'SUCCESS',
 };
 
 /**
@@ -17,16 +17,16 @@ const formatLog = (level, message, data = null) => {
   const timestamp = new Date().toISOString();
   const levelIcon =
     {
-      ERROR: "❌",
-      WARN: "⚠️",
-      INFO: "ℹ️",
-      DEBUG: "🐛",
-      SUCCESS: "✅",
-    }[level] || "📝";
+      ERROR: '❌',
+      WARN: '⚠️',
+      INFO: 'ℹ️',
+      DEBUG: '🐛',
+      SUCCESS: '✅',
+    }[level] || '📝';
 
   let output = `${levelIcon} [${timestamp}] [${level}] ${message}`;
   if (data) {
-    output += "\n" + JSON.stringify(data, null, 2);
+    output += '\n' + JSON.stringify(data, null, 2);
   }
 
   return output;
@@ -49,7 +49,7 @@ const logger = {
   },
 
   debug: (message, data = null) => {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV === 'development') {
       console.log(formatLog(LOG_LEVELS.DEBUG, message, data));
     }
   },
@@ -60,7 +60,7 @@ const logger = {
 
   http: (method, path, status, duration = 0) => {
     const statusIcon =
-      status >= 200 && status < 300 ? "✅" : status >= 400 ? "❌" : "⚠️";
+      status >= 200 && status < 300 ? '✅' : status >= 400 ? '❌' : '⚠️';
     console.log(`${statusIcon} ${method} ${path} - ${status} (${duration}ms)`);
   },
 };

@@ -20,7 +20,10 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
   if (!isOpen || !product) return null;
 
   const discountedPrice = product.price * (1 - (product.discount || 0) / 100);
-  const images = product.images?.length > 0 ? product.images : [product.image || FALLBACK_IMAGE];
+  const images =
+    product.images?.length > 0
+      ? product.images
+      : [product.image || FALLBACK_IMAGE];
   const inWishlist = isInWishlist(product._id);
 
   const handleAddToCart = async () => {
@@ -84,7 +87,10 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
               onClick={onClose}
               className="absolute top-8 right-8 z-50 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all group lg:scale-125"
             >
-              <FiX className="text-white group-hover:rotate-90 transition-transform duration-500" size={24} />
+              <FiX
+                className="text-white group-hover:rotate-90 transition-transform duration-500"
+                size={24}
+              />
             </button>
 
             {/* Left - Visuals */}
@@ -118,10 +124,11 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-500 ${currentImageIndex === index
-                        ? 'border-orange-500 scale-110 shadow-lg'
-                        : 'border-white/10 hover:border-white/30'
-                        }`}
+                      className={`relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all duration-500 ${
+                        currentImageIndex === index
+                          ? 'border-orange-500 scale-110 shadow-lg'
+                          : 'border-white/10 hover:border-white/30'
+                      }`}
                     >
                       <img
                         src={getImageUrl(img)}
@@ -158,8 +165,13 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                     </div>
                     <div className="h-8 w-[1px] bg-white/10" />
                     <div className="flex items-center gap-2">
-                      <FiStar className="text-orange-500 fill-current" size={16} />
-                      <span className="text-sm font-black text-white">{product.avgRating || '4.8'}</span>
+                      <FiStar
+                        className="text-orange-500 fill-current"
+                        size={16}
+                      />
+                      <span className="text-sm font-black text-white">
+                        {product.avgRating || '4.8'}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -171,14 +183,22 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                 {/* Specs Refinement */}
                 <div className="grid grid-cols-2 gap-6 py-8 border-y border-white/5">
                   <div>
-                    <span className="text-[10px] font-black text-white/20 uppercase tracking-widest block mb-2">Availability</span>
+                    <span className="text-[10px] font-black text-white/20 uppercase tracking-widest block mb-2">
+                      Availability
+                    </span>
                     <span className="text-xs font-black text-white uppercase tracking-widest">
-                      {product.stock > 0 ? `${product.stock} IN STOCK` : 'OUT OF STOCK'}
+                      {product.stock > 0
+                        ? `${product.stock} IN STOCK`
+                        : 'OUT OF STOCK'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-black text-white/20 uppercase tracking-widest block mb-2">Global Shipping</span>
-                    <span className="text-xs font-black text-white uppercase tracking-widest">EXPRESS DELIVERY</span>
+                    <span className="text-[10px] font-black text-white/20 uppercase tracking-widest block mb-2">
+                      Global Shipping
+                    </span>
+                    <span className="text-xs font-black text-white uppercase tracking-widest">
+                      EXPRESS DELIVERY
+                    </span>
                   </div>
                 </div>
 
@@ -188,10 +208,11 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                     <button
                       onClick={handleAddToCart}
                       disabled={addingToCart || !product.stock || added}
-                      className={`flex-1 group relative py-6 px-8 rounded-full font-black text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-500 ${added
-                        ? 'bg-green-500 text-white'
-                        : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                        }`}
+                      className={`flex-1 group relative py-6 px-8 rounded-full font-black text-[10px] uppercase tracking-[0.3em] overflow-hidden transition-all duration-500 ${
+                        added
+                          ? 'bg-green-500 text-white'
+                          : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                      }`}
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3">
                         {addingToCart ? (
@@ -199,17 +220,20 @@ const ProductQuickView = ({ product, isOpen, onClose }) => {
                         ) : added ? (
                           <>SPECIMEN ADDED</>
                         ) : (
-                          <>ACQUIRE NOW <FiShoppingCart size={18} /></>
+                          <>
+                            ACQUIRE NOW <FiShoppingCart size={18} />
+                          </>
                         )}
                       </span>
                     </button>
 
                     <button
                       onClick={handleWishlistToggle}
-                      className={`p-6 rounded-full border border-white/10 transition-all duration-500 ${inWishlist
-                        ? 'bg-red-500 border-red-500 text-white'
-                        : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10'
-                        }`}
+                      className={`p-6 rounded-full border border-white/10 transition-all duration-500 ${
+                        inWishlist
+                          ? 'bg-red-500 border-red-500 text-white'
+                          : 'bg-white/5 text-white/40 hover:text-white hover:bg-white/10'
+                      }`}
                     >
                       <FiHeart
                         size={24}

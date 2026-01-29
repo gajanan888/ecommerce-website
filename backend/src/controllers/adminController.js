@@ -270,10 +270,7 @@ exports.getUserById = async (req, res) => {
     }
 
     const userOrders = await Order.find({ userId: req.params.id });
-    const totalSpent = userOrders.reduce(
-      (sum, order) => sum + order.total,
-      0
-    );
+    const totalSpent = userOrders.reduce((sum, order) => sum + order.total, 0);
 
     res.json({
       success: true,

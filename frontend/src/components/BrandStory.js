@@ -9,10 +9,11 @@ export default function BrandStory() {
       <div
         className="absolute inset-0 -z-10 opacity-20 mix-blend-overlay"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2671&auto=format&fit=crop')",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundAttachment: "fixed"
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2671&auto=format&fit=crop')",
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
         }}
       />
 
@@ -30,12 +31,16 @@ export default function BrandStory() {
             Our Philosophy
           </h2>
           <h3 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-tight max-w-4xl mb-8">
-            Fashion is more than just clothing.<br />
-            <span className="text-gray-400 italic font-serif">It's a form of self-expression.</span>
+            Fashion is more than just clothing.
+            <br />
+            <span className="text-gray-400 italic font-serif">
+              It's a form of self-expression.
+            </span>
           </h3>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed mb-10">
-            We curate pieces that transcend seasons. Born from a love for timeless design and a commitment to sustainable quality,
-            EliteWear is for those who dress to tell their own story.
+            We curate pieces that transcend seasons. Born from a love for
+            timeless design and a commitment to sustainable quality, EliteWear
+            is for those who dress to tell their own story.
           </p>
 
           <Link

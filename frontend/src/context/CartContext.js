@@ -64,7 +64,7 @@ export const CartProvider = ({ children }) => {
           // Server: { productId: Object, quantity, size, ... }
           // Frontend: { id, name, price, image, quantity, size ... }
           const formattedCart = serverItems
-            .filter(item => item.productId && item.productId._id) // Filter out invalid/deleted products
+            .filter((item) => item.productId && item.productId._id) // Filter out invalid/deleted products
             .map((item) => ({
               id: item.productId._id,
               name: item.productId.name || 'Unknown Product',
@@ -75,7 +75,9 @@ export const CartProvider = ({ children }) => {
               size: item.size,
             }));
 
-          console.log(`🛒 CartContext - Fetched ${formattedCart.length} valid items from server`);
+          console.log(
+            `🛒 CartContext - Fetched ${formattedCart.length} valid items from server`
+          );
 
           setCart(formattedCart);
         } catch (error) {
@@ -148,7 +150,7 @@ export const CartProvider = ({ children }) => {
       // Let's see the cart structure from server.
       // Actually, for now, let's just assume we delete locally. But we need to sync!
       // The current backend implementation: router.delete('/remove/:itemId', protect, removeFromCart);
-      // We need the Cart Item's _id (the subdocument id). 
+      // We need the Cart Item's _id (the subdocument id).
       // When we fetched from server, we probably didn't store the subdoc ID in 'formattedCart'.
       // Correct approach: Update 'formattedCart' to include `_id` (cart item id).
 
@@ -168,13 +170,15 @@ export const CartProvider = ({ children }) => {
           // Let's refresh cart from server.
           const response = await cartAPI.getCart();
           const items = response.data.data?.items || [];
-          const itemToDelete = items.find(i => i.productId._id === productId && i.size === size);
+          const itemToDelete = items.find(
+            (i) => i.productId._id === productId && i.size === size
+          );
 
           if (itemToDelete) {
             await cartAPI.removeItem(itemToDelete._id);
           }
         } catch (error) {
-          console.error("Failed to remove from server cart", error);
+          console.error('Failed to remove from server cart', error);
         }
       }
     },
@@ -194,16 +198,23 @@ export const CartProvider = ({ children }) => {
 
       if (isAuthenticated) {
         try {
-          // Need cart item ID again. 
+          // Need cart item ID again.
           // Quick fix: Fetch cart to get IDs.
           const response = await cartAPI.getCart();
           const items = response.data.data?.items || [];
-          const itemToUpdate = items.find(i => i.productId._id === productId && i.size === size);
+          const itemToUpdate = items.find(
+            (i) => i.productId._id === productId && i.size === size
+          );
 
           if (itemToUpdate) {
-            await cartAPI.updateItem(itemToUpdate._id, itemToUpdate.quantity + 1);
+            await cartAPI.updateItem(
+              itemToUpdate._id,
+              itemToUpdate.quantity + 1
+            );
           }
-        } catch (e) { console.error(e) }
+        } catch (e) {
+          console.error(e);
+        }
       }
     },
     [isAuthenticated]
@@ -226,16 +237,23 @@ export const CartProvider = ({ children }) => {
         try {
           const response = await cartAPI.getCart();
           const items = response.data.data?.items || [];
-          const itemToUpdate = items.find(i => i.productId._id === productId && i.size === size);
+          const itemToUpdate = items.find(
+            (i) => i.productId._id === productId && i.size === size
+          );
 
           if (itemToUpdate) {
             if (itemToUpdate.quantity > 1) {
-              await cartAPI.updateItem(itemToUpdate._id, itemToUpdate.quantity - 1);
+              await cartAPI.updateItem(
+                itemToUpdate._id,
+                itemToUpdate.quantity - 1
+              );
             } else {
               await cartAPI.removeItem(itemToUpdate._id);
             }
           }
-        } catch (e) { console.error(e) }
+        } catch (e) {
+          console.error(e);
+        }
       }
     },
     [isAuthenticated]
@@ -247,15 +265,17 @@ export const CartProvider = ({ children }) => {
     if (isAuthenticated) {
       try {
         await cartAPI.clearCart();
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error(e);
+      }
     }
   }, [isAuthenticated]);
 
   // Merge guest cart into user cart (after login) - DEPRECATED here, handled in useEffect
-  const mergeGuestCart = useCallback(() => { }, []);
+  const mergeGuestCart = useCallback(() => {}, []);
 
   // Save cart to database - DEPRECATED, handled automatically
-  const saveCartToDatabase = useCallback(() => { }, []);
+  const saveCartToDatabase = useCallback(() => {}, []);
 
   // Calculate totals
   const totals = useMemo(() => {

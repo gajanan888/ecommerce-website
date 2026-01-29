@@ -352,19 +352,24 @@ const CheckoutPage = () => {
             <div key={item.step} className="flex items-center flex-1">
               <div className="flex flex-col items-center gap-3">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${item.active
-                    ? 'bg-white text-black ring-8 ring-white/5'
-                    : 'bg-white/5 text-white/20 border border-white/10'
-                    }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${
+                    item.active
+                      ? 'bg-white text-black ring-8 ring-white/5'
+                      : 'bg-white/5 text-white/20 border border-white/10'
+                  }`}
                 >
                   {item.step}
                 </div>
-                <span className={`text-[8px] font-black tracking-[0.2em] ${item.active ? 'text-white' : 'text-white/20'}`}>
+                <span
+                  className={`text-[8px] font-black tracking-[0.2em] ${item.active ? 'text-white' : 'text-white/20'}`}
+                >
                   {item.label}
                 </span>
               </div>
               {idx < arr.length - 1 && (
-                <div className={`flex-1 h-[1px] mb-8 mx-4 transition-colors duration-700 ${item.active ? 'bg-white/20' : 'bg-white/5'}`} />
+                <div
+                  className={`flex-1 h-[1px] mb-8 mx-4 transition-colors duration-700 ${item.active ? 'bg-white/20' : 'bg-white/5'}`}
+                />
               )}
             </div>
           ))}
@@ -383,26 +388,38 @@ const CheckoutPage = () => {
 
             <div className="space-y-6 pb-8 border-b border-white/10">
               <div className="flex justify-between items-center group">
-                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Protocol ID</span>
+                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">
+                  Protocol ID
+                </span>
                 <span className="font-black text-white text-xs tracking-widest bg-white/5 px-4 py-2 rounded-lg">
                   {orderId?.substring(0, 12).toUpperCase()}...
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Subtotal</span>
+                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">
+                  Subtotal
+                </span>
                 <span className="font-black text-white text-base tracking-tighter">
                   ₹{order.subtotal?.toFixed(0) || '0'}
                 </span>
               </div>
               {order.discount > 0 && (
                 <div className="flex justify-between items-center text-orange-500">
-                  <span className="text-[10px] font-black uppercase tracking-widest">Architect Discount ({order.discountPercentage}%)</span>
-                  <span className="font-black text-base tracking-tighter">-₹{order.discount?.toFixed(0) || '0'}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest">
+                    Architect Discount ({order.discountPercentage}%)
+                  </span>
+                  <span className="font-black text-base tracking-tighter">
+                    -₹{order.discount?.toFixed(0) || '0'}
+                  </span>
                 </div>
               )}
               <div className="flex justify-between items-center">
-                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Logistics</span>
-                <span className="font-black text-green-500 text-[10px] uppercase tracking-widest">Complimentary</span>
+                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">
+                  Logistics
+                </span>
+                <span className="font-black text-green-500 text-[10px] uppercase tracking-widest">
+                  Complimentary
+                </span>
               </div>
             </div>
 
@@ -427,7 +444,9 @@ const CheckoutPage = () => {
             <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Recipient</label>
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    Recipient
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -437,7 +456,9 @@ const CheckoutPage = () => {
                   />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Protocol Signal</label>
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    Protocol Signal
+                  </label>
                   <input
                     type="tel"
                     name="phone"
@@ -449,7 +470,9 @@ const CheckoutPage = () => {
               </div>
 
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Physical Coordinates</label>
+                <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                  Physical Coordinates
+                </label>
                 <input
                   type="text"
                   name="street"
@@ -461,20 +484,52 @@ const CheckoutPage = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">City</label>
-                  <input type="text" name="city" value={address.city} onChange={handleAddressChange} className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs" />
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    City
+                  </label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={address.city}
+                    onChange={handleAddressChange}
+                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs"
+                  />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Province</label>
-                  <input type="text" name="state" value={address.state} onChange={handleAddressChange} className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs" />
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    Province
+                  </label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={address.state}
+                    onChange={handleAddressChange}
+                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs"
+                  />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Index</label>
-                  <input type="text" name="zipCode" value={address.zipCode} onChange={handleAddressChange} className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs" />
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    Index
+                  </label>
+                  <input
+                    type="text"
+                    name="zipCode"
+                    value={address.zipCode}
+                    onChange={handleAddressChange}
+                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs"
+                  />
                 </div>
                 <div className="space-y-3">
-                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">Nation</label>
-                  <input type="text" name="country" value={address.country} onChange={handleAddressChange} className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs" />
+                  <label className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                    Nation
+                  </label>
+                  <input
+                    type="text"
+                    name="country"
+                    value={address.country}
+                    onChange={handleAddressChange}
+                    className="w-full px-6 py-4 bg-white/5 border border-white/5 rounded-2xl text-white font-bold text-xs"
+                  />
                 </div>
               </div>
             </form>
@@ -489,15 +544,26 @@ const CheckoutPage = () => {
 
             <div className="space-y-4">
               {[
-                { id: 'razorpay', name: 'Digital Ledger', desc: 'Secure UPI & Cards', icon: '⚡' },
-                { id: 'cod', name: 'Physical Settlement', desc: 'Settle upon arrival', icon: '💵' },
+                {
+                  id: 'razorpay',
+                  name: 'Digital Ledger',
+                  desc: 'Secure UPI & Cards',
+                  icon: '⚡',
+                },
+                {
+                  id: 'cod',
+                  name: 'Physical Settlement',
+                  desc: 'Settle upon arrival',
+                  icon: '💵',
+                },
               ].map((method) => (
                 <label
                   key={method.id}
-                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${paymentMethod === method.id
-                    ? 'border-white bg-white text-black'
-                    : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
-                    }`}
+                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${
+                    paymentMethod === method.id
+                      ? 'border-white bg-white text-black'
+                      : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
+                  }`}
                 >
                   <div className="flex items-center gap-6">
                     <input
@@ -510,8 +576,12 @@ const CheckoutPage = () => {
                     />
                     <div className="text-4xl">{method.icon}</div>
                     <div className="flex-1">
-                      <h3 className="font-black text-base uppercase tracking-widest">{method.name}</h3>
-                      <p className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${paymentMethod === method.id ? 'text-black/40' : 'text-white/20'}`}>
+                      <h3 className="font-black text-base uppercase tracking-widest">
+                        {method.name}
+                      </h3>
+                      <p
+                        className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${paymentMethod === method.id ? 'text-black/40' : 'text-white/20'}`}
+                      >
                         {method.desc}
                       </p>
                     </div>

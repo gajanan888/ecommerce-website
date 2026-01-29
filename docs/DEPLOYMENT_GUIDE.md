@@ -38,3 +38,61 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
     - `MONGODB_URI`: _Paste your MongoDB Atlas URL from Step 1_
     - `JWT_SECRET`: _SomeRandomSecretKey123_
     - `PORT`: `10000` (Render default)
+    - `NODE_ENV`: `production`
+    - `JEST_WORKER_ID`: `1` (Optional, helps memory)
+7.  Click **Deploy**.
+    - Once done, Render will give you a URL like: `https://elitewear-backend.onrender.com`.
+    - **Copy this URL**.
+
+---
+
+## 3. 🎨 Step 3: Deploy Frontend (Vercel)
+
+1.  Sign up on [Vercel](https://vercel.com/).
+2.  Click **Add New Project**.
+3.  Import your GitHub repository.
+4.  **Configure Project**:
+    - **Framework Preset**: Create React App
+    - **Root Directory**: Click `Edit` and select `frontend`.
+5.  **Environment Variables**:
+    - **Name**: `REACT_APP_API_URL`
+    - **Value**: `https://elitewear-backend.onrender.com` (Your Backend URL from Step 2, **WITHOUT** the trailing slash `/`)
+6.  Click **Deploy**.
+    - Vercel will give you your live website URL (e.g., `https://elitewear.vercel.app`).
+
+---
+
+## 4. 👑 Step 4: Making Yourself Admin in Production
+
+Since this is a _new_ database, your user accounts don't exist yet.
+
+1.  **Register** a new account on your live website (`https://elitewear.vercel.app/register`).
+2.  Now you need to promote this user to Admin. You have two options:
+
+    **Option A: Run Script Locally (Easiest)**
+    1.  On your local machine, open `backend/.env`.
+    2.  Temporarily change `MONGODB_URI` to your **Cloud Atlas URL** (from Step 1).
+    3.  Run the admin script:
+        ```bash
+        cd backend/scripts
+        node makeAdmin.js
+        ```
+    4.  Change your local `.env` back to `mongodb://localhost...` when done.
+
+    **Option B: Manually in MongoDB Atlas**
+    1.  Go to MongoDB Atlas -> **Browse Collections**.
+    2.  Find the `users` collection.
+    3.  Find your user document.
+    4.  Click the **Pencil icon** (Edit).
+    5.  Change `"role": "customer"` to `"role": "admin"`.
+    6.  Click **Update**.
+
+---
+
+## 5. ✅ Step 5: Accessing Admin Panel
+
+1.  Go to your deployed website: `https://elitewear.vercel.app`
+2.  **Login** with your account.
+3.  Navigate to: `https://elitewear.vercel.app/admin/dashboard`
+
+You are now live! 🚀

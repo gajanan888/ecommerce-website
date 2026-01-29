@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const PaymentCancelPage = () => {
   const { orderId } = useParams();
@@ -56,7 +56,7 @@ const PaymentCancelPage = () => {
         </button>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
           className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded transition mt-2"
         >
           Go Back Home
