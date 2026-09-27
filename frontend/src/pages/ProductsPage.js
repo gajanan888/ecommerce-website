@@ -46,6 +46,8 @@ export default function ProductsPage() {
   // Parse URL query params
   useEffect(() => {
     const params = new URLSearchParams(location.search);
+    const search = params.get('search');
+    setSearchTerm(search || '');
     if (params.has('gender')) {
       const gender = params.get('gender');
       setActiveFilter({ type: 'gender', value: gender });

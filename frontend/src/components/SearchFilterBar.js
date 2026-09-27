@@ -9,11 +9,11 @@ const SearchFilterBar = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 5000]);
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(5000);
   const [gender, setGender] = useState('All');
   const [size, setSize] = useState('All');
   const [rating, setRating] = useState('0');
@@ -55,15 +55,15 @@ const SearchFilterBar = ({
     setSearchTerm('');
     setSelectedCategory('All');
     setMinPrice(0);
-    setMaxPrice(1000);
-    setPriceRange([0, 1000]);
+    setMaxPrice(5000);
+    setPriceRange([0, 5000]);
     setGender('All');
     setSize('All');
     setRating('0');
     onSearch?.('');
     onFilterChange?.({
       category: null,
-      priceRange: [0, 1000],
+      priceRange: [0, 5000],
       gender: null,
       size: null,
       rating: 0,
