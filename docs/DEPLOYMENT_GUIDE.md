@@ -33,13 +33,20 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
 5.  **Settings**:
     - **Root Directory**: `backend` (Important! Your server is in this subfolder)
     - **Build Command**: `npm install`
-    - **Start Command**: `node src/index.js`
+    - **Start Command**: `npm start`
 6.  **Environment Variables** (Add these):
     - `MONGODB_URI`: _Paste your MongoDB Atlas URL from Step 1_
-    - `JWT_SECRET`: _SomeRandomSecretKey123_
     - `PORT`: `10000` (Render default)
     - `NODE_ENV`: `production`
-    - `JEST_WORKER_ID`: `1` (Optional, helps memory)
+    - `FRONTEND_URL`: _Your exact Vercel URL, including `https://`_
+    - `JWT_SECRET`, `ACCESS_TOKEN_SECRET`, `REFRESH_TOKEN_SECRET`: _strong unique secrets_
+    - `ACCESS_TOKEN_EXPIRY`: `1d`
+    - `REFRESH_TOKEN_EXPIRY`: `7d`
+    - `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`: _test or live Razorpay credentials_
+    - `CLOUD_NAME`, `CLOUD_KEY`, `CLOUD_SECRET`: _Cloudinary credentials_
+    - `EMAIL_SERVICE`: `gmail`
+    - `EMAIL_USER`: _Gmail address_
+    - `EMAIL_PASSWORD`: _Gmail App Password, without spaces_
 7.  Click **Deploy**.
     - Once done, Render will give you a URL like: `https://elitewear-backend.onrender.com`.
     - **Copy this URL**.
@@ -56,7 +63,7 @@ Since your local database (`mongodb://localhost...`) won't work on the cloud, yo
     - **Root Directory**: Click `Edit` and select `frontend`.
 5.  **Environment Variables**:
     - **Name**: `REACT_APP_API_URL`
-    - **Value**: `https://elitewear-backend.onrender.com` (Your Backend URL from Step 2, **WITHOUT** the trailing slash `/`)
+    - **Value**: `https://elitewear-backend.onrender.com/api` (Your Backend URL from Step 2 plus `/api`)
 6.  Click **Deploy**.
     - Vercel will give you your live website URL (e.g., `https://elitewear.vercel.app`).
 

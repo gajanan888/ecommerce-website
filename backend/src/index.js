@@ -1,9 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const validateProductionEnv = require('./config/validateEnv');
 
 // Load environment variables
 dotenv.config();
+validateProductionEnv();
 
 // Import configuration
 const corsConfig = require('./config/cors');
@@ -31,6 +33,9 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 // Initialize Express app
 const app = express();
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
 
 // ============================================
 // Middleware Setup

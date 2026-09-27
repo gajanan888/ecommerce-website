@@ -2,14 +2,11 @@ const cors = require('cors');
 
 const corsConfig = cors({
   origin: (origin, callback) => {
-    // Allow localhost on any port during development
-    if (
-      !origin ||
-      origin.includes('localhost') ||
-      origin.includes('127.0.0.1')
-    ) {
-      callback(null, true);
-    } else if (process.env.FRONTEND_URL === origin) {
+    const isDevelopmentOrigin =
+      process.env.NODE_ENV !== 'production' &&
+      (!origin || origin.includes('localhost') || origin.includes('127.0.0.1'));
+
+    if (isDevelopmentOrigin || process.env.FRONTEND_URL === origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
