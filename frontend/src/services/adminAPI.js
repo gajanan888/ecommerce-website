@@ -1,7 +1,10 @@
 import axios from 'axios';
 
-// Hardcoded to fix env variable issue
-const API_BASE_URL = 'http://localhost:5000/api';
+const configuredBaseUrl =
+  process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = configuredBaseUrl.endsWith('/api')
+  ? configuredBaseUrl
+  : `${configuredBaseUrl.replace(/\/$/, '')}/api`;
 
 console.log('🌐 Admin API Base URL:', API_BASE_URL);
 const adminClient = axios.create({
