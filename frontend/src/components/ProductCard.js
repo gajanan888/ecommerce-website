@@ -79,7 +79,7 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative group w-full h-[500px] perspective-2000 cursor-none"
+      className="relative group w-full aspect-[4/5] perspective-2000 cursor-none"
       onClick={() => onViewDetails(product._id)}
     >
       <div
@@ -103,16 +103,16 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
 
           {/* Floating High-End Labels */}
           <div
-            className="absolute top-6 left-6 flex flex-col gap-2"
+            className="absolute top-4 left-4 flex flex-col gap-2"
             style={{ transform: 'translateZ(40px)' }}
           >
             {product.isNewArrival && (
-              <span className="bg-white text-black text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
+              <span className="bg-white text-black text-[9px] font-black px-2.5 py-1 rounded-full tracking-widest uppercase">
                 NEW
               </span>
             )}
             {discount > 0 && (
-              <span className="bg-orange-500 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest uppercase">
+              <span className="bg-orange-500 text-white text-[9px] font-black px-2.5 py-1 rounded-full tracking-widest uppercase">
                 -{discount}%
               </span>
             )}
@@ -123,14 +123,14 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
             className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500"
             style={{ transform: 'translateZ(60px)' }}
           >
-            <div className="px-8 py-3 bg-white text-black font-black text-xs tracking-[0.3em] rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <div className="px-5 py-2.5 bg-white text-black font-black text-[10px] tracking-[0.2em] rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
               VIEW DETAILS
             </div>
           </div>
 
           {/* Bottom Content Layer */}
           <div
-            className="absolute bottom-0 left-0 w-full p-8"
+            className="absolute bottom-0 left-0 w-full p-4 sm:p-5"
             style={{ transform: 'translateZ(30px)' }}
           >
             <div className="flex justify-between items-end">
@@ -138,14 +138,14 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
                 <p className="text-[10px] font-black text-orange-500 uppercase tracking-[0.2em]">
                   {product.category}
                 </p>
-                <h3 className="text-white font-black text-2xl tracking-tighter leading-tight line-clamp-1">
+                <h3 className="text-white font-black text-lg sm:text-xl tracking-tighter leading-tight line-clamp-1">
                   {product.name}
                 </h3>
                 <div className="flex items-center gap-4">
                   <span className="text-white/40 text-sm font-bold line-through">
                     ₹{Number(product.price).toFixed(0)}
                   </span>
-                  <span className="text-white text-xl font-bold">
+                  <span className="text-white text-lg font-bold">
                     ₹{discountedPrice.toFixed(0)}
                   </span>
                 </div>
@@ -154,17 +154,18 @@ const ProductCard = ({ product, onAddToCart, onViewDetails }) => {
               <button
                 onClick={handleAddToCart}
                 disabled={addingToCart || product.stock === 0}
-                className={`p-4 rounded-full transition-all duration-500 ${addingToCart
-                  ? 'bg-white/10 text-white/20'
-                  : added
-                    ? 'bg-green-500 text-white'
-                    : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                  }`}
+                className={`p-3 rounded-full transition-all duration-500 ${
+                  addingToCart
+                    ? 'bg-white/10 text-white/20'
+                    : added
+                      ? 'bg-green-500 text-white'
+                      : 'bg-white text-black hover:bg-orange-500 hover:text-white'
+                }`}
               >
                 {added ? (
-                  <FiStar size={20} className="fill-current" />
+                  <FiStar size={17} className="fill-current" />
                 ) : (
-                  <FiShoppingCart size={20} />
+                  <FiShoppingCart size={17} />
                 )}
               </button>
             </div>

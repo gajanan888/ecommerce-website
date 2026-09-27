@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const Product = require('../models/Product');
 
 /**
  * @desc    Place an order from cart
@@ -42,7 +43,7 @@ exports.createOrder = async (req, res, next) => {
             productName: product.name,
             image: product.image,
             price: product.price, // Security: Always use DB price
-            quantity: item.quantity,
+            quantity: Number(item.quantity),
             size: item.size || 'M',
             tax: 0,
           });
@@ -56,6 +57,25 @@ exports.createOrder = async (req, res, next) => {
         status: 'error',
         message: 'Cart is empty. Add items before placing an order.',
       });
+    }
+
+    for (const item of finalItems) {
+      if (!item.quantity || item.quantity < 1) {
+        return res.status(400).json({
+          status: 'error',
+          message: 'Each product quantity must be at least 1.',
+        });
+      }
+
+      const product = await Product.findById(item.productId).select(
+        'stock name'
+      );
+      if (!product || product.stock < item.quantity) {
+        return res.status(409).json({
+          status: 'error',
+          message: `${product?.name || 'A product'} does not have enough stock.`,
+        });
+      }
     }
 
     // Calculate order totals

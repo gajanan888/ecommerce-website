@@ -151,9 +151,9 @@ export default function ProductDetail() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0A0A0A] pt-24 md:pt-32">
+    <main className="min-h-screen bg-[#0A0A0A] pt-20 md:pt-24">
       {/* Back Navigation */}
-      <div className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 py-2 md:py-2 border-b border-white/10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-2 border-b border-white/10">
         <button
           onClick={() => navigate('/products')}
           className="flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300"
@@ -166,14 +166,14 @@ export default function ProductDetail() {
       </div>
 
       {/* Product Container */}
-      <section className="max-w-6xl mx-auto px-2 sm:px-4 lg:px-6 py-4 md:py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-4 md:py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Left: Product Image */}
           <div className="flex items-center justify-center bg-white/5 rounded-3xl overflow-hidden border border-white/5 shadow-2xl">
             <img
               src={getImageUrl(product.image)}
               alt={product.name}
-              className="w-full h-full object-cover aspect-[3/4]"
+              className="w-full h-full object-cover aspect-[4/5]"
               onError={(e) => (e.target.src = FALLBACK_IMAGE)}
             />
           </div>
@@ -185,22 +185,22 @@ export default function ProductDetail() {
               {product.category}
             </p>
 
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 leading-tight tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3 leading-tight tracking-tighter">
               {product.name}
             </h1>
 
-            <p className="text-2xl md:text-3xl font-bold text-white mb-6">
+            <p className="text-2xl md:text-3xl font-bold text-white mb-4">
               ₹{product.price.toFixed(0)}
             </p>
 
-            <p className="text-base text-white/60 leading-relaxed mb-8 max-w-xl">
+            <p className="text-sm md:text-base text-white/60 leading-relaxed mb-5 max-w-xl">
               {product.description}
             </p>
 
             {/* Designer Architecture - Specs */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-12 border-y border-white/5 mb-12">
-              <div className="space-y-4">
-                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-6 border-y border-white/5 mb-6">
+              <div className="space-y-2">
+                <div className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
                   <span className="text-orange-500 font-black text-xs">01</span>
                 </div>
                 <div>
@@ -212,8 +212,8 @@ export default function ProductDetail() {
                   </p>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+              <div className="space-y-2">
+                <div className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
                   <span className="text-orange-500 font-black text-xs">02</span>
                 </div>
                 <div>
@@ -225,8 +225,8 @@ export default function ProductDetail() {
                   </p>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+              <div className="space-y-2">
+                <div className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
                   <span className="text-orange-500 font-black text-xs">03</span>
                 </div>
                 <div>
@@ -238,8 +238,8 @@ export default function ProductDetail() {
                   </p>
                 </div>
               </div>
-              <div className="space-y-4">
-                <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+              <div className="space-y-2">
+                <div className="w-8 h-8 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
                   <span className="text-orange-500 font-black text-xs">04</span>
                 </div>
                 <div>
@@ -287,10 +287,11 @@ export default function ProductDetail() {
                       setSelectedSize(size);
                       setSizeError(false);
                     }}
-                    className={`py-4 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${selectedSize === size
+                    className={`py-3 px-2 text-xs font-black tracking-widest transition-all duration-300 rounded-xl ${
+                      selectedSize === size
                         ? 'bg-white text-black'
                         : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'
-                      }`}
+                    }`}
                   >
                     {size}
                   </button>
@@ -329,10 +330,11 @@ export default function ProductDetail() {
               {/* Add to Cart - Primary */}
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-5 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${addedToCart
+                className={`flex-1 py-4 px-6 font-black tracking-[0.3em] text-[10px] uppercase transition-all duration-500 active:scale-95 rounded-full ${
+                  addedToCart
                     ? 'bg-green-500 text-white'
                     : 'bg-white text-black hover:bg-orange-500 hover:text-white'
-                  }`}
+                }`}
                 aria-label={`Add ${product?.name} to cart`}
               >
                 {addedToCart ? '✓ Added' : 'Add to Cart'}
@@ -357,10 +359,11 @@ export default function ProductDetail() {
                     ? 'Remove from wishlist'
                     : 'Add to wishlist'
                 }
-                className={`py-4 px-6 border-2 transition-colors duration-300 ${isInWishlist(product._id)
+                className={`py-4 px-6 border-2 transition-colors duration-300 ${
+                  isInWishlist(product._id)
                     ? 'bg-red-50 border-red-200 text-red-500'
                     : 'bg-white border-gray-300 text-gray-400 hover:border-black hover:text-black'
-                  }`}
+                }`}
                 aria-label={
                   isInWishlist(product._id)
                     ? 'Remove from wishlist'
@@ -377,7 +380,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Premium Trust Architecture */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-12 border-t border-white/5 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-white/5 mt-6">
               {[
                 { label: 'AUTHENTICITY', detail: 'VERIFIED GRADE' },
                 { label: 'RETURNS', detail: '30 DAY WINDOW' },
@@ -385,7 +388,7 @@ export default function ProductDetail() {
               ].map((badge, i) => (
                 <div
                   key={i}
-                  className="bg-white/5 border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-500 group"
+                  className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-all duration-500 group"
                 >
                   <p className="text-[10px] font-black tracking-[0.3em] text-orange-500 mb-2 group-hover:translate-x-1 transition-transform">
                     {badge.label}

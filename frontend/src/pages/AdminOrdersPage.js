@@ -58,12 +58,24 @@ export default function AdminOrdersPage() {
               }}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All Order Status</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="shipped">Shipped</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="" className="bg-white text-gray-900">
+                All Order Status
+              </option>
+              <option value="pending" className="bg-white text-gray-900">
+                Pending
+              </option>
+              <option value="confirmed" className="bg-white text-gray-900">
+                Confirmed
+              </option>
+              <option value="shipped" className="bg-white text-gray-900">
+                Shipped
+              </option>
+              <option value="delivered" className="bg-white text-gray-900">
+                Delivered
+              </option>
+              <option value="cancelled" className="bg-white text-gray-900">
+                Cancelled
+              </option>
             </select>
             <select
               value={paymentStatusFilter}
@@ -73,11 +85,21 @@ export default function AdminOrdersPage() {
               }}
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="">All Payment Status</option>
-              <option value="pending">Pending</option>
-              <option value="completed">Completed</option>
-              <option value="failed">Failed</option>
-              <option value="refunded">Refunded</option>
+              <option value="" className="bg-white text-gray-900">
+                All Payment Status
+              </option>
+              <option value="pending" className="bg-white text-gray-900">
+                Pending
+              </option>
+              <option value="completed" className="bg-white text-gray-900">
+                Completed
+              </option>
+              <option value="failed" className="bg-white text-gray-900">
+                Failed
+              </option>
+              <option value="refunded" className="bg-white text-gray-900">
+                Refunded
+              </option>
             </select>
           </div>
 
@@ -234,8 +256,9 @@ function StatusBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
-        }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        colors[status] || 'bg-gray-100 text-gray-800'
+      }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -252,8 +275,9 @@ function PaymentBadge({ status }) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-xs font-medium ${colors[status] || 'bg-gray-100 text-gray-800'
-        }`}
+      className={`px-3 py-1 rounded-full text-xs font-medium ${
+        colors[status] || 'bg-gray-100 text-gray-800'
+      }`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>
@@ -461,13 +485,23 @@ function OrderDetailModal({
                 value={newStatus}
                 onChange={(e) => setNewStatus(e.target.value)}
                 disabled={isLoading}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="pending" className="bg-white text-gray-900">
+                  Pending
+                </option>
+                <option value="confirmed" className="bg-white text-gray-900">
+                  Confirmed
+                </option>
+                <option value="shipped" className="bg-white text-gray-900">
+                  Shipped
+                </option>
+                <option value="delivered" className="bg-white text-gray-900">
+                  Delivered
+                </option>
+                <option value="cancelled" className="bg-white text-gray-900">
+                  Cancelled
+                </option>
               </select>
               <button
                 onClick={handleStatusUpdate}
@@ -489,12 +523,20 @@ function OrderDetailModal({
                 value={newPaymentStatus}
                 onChange={(e) => setNewPaymentStatus(e.target.value)}
                 disabled={isLoading}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 bg-white text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="pending">Pending</option>
-                <option value="completed">Completed</option>
-                <option value="failed">Failed</option>
-                <option value="refunded">Refunded</option>
+                <option value="pending" className="bg-white text-gray-900">
+                  Pending
+                </option>
+                <option value="completed" className="bg-white text-gray-900">
+                  Completed
+                </option>
+                <option value="failed" className="bg-white text-gray-900">
+                  Failed
+                </option>
+                <option value="refunded" className="bg-white text-gray-900">
+                  Refunded
+                </option>
               </select>
               <button
                 onClick={handlePaymentStatusUpdate}

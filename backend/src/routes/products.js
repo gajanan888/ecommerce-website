@@ -10,6 +10,7 @@ const {
 } = require('../controllers/productController');
 
 const upload = require('../middleware/upload');
+const { protect, authorize } = require('../middleware/auth');
 
 // Public routes
 router.get('/', getAllProducts);
@@ -17,8 +18,20 @@ router.get('/featured', getFeaturedProducts);
 router.get('/:id', getProductById);
 
 // Admin routes (add auth middleware later)
-router.post('/', upload.single('image'), createProduct);
-router.put('/:id', upload.single('image'), updateProduct);
-router.delete('/:id', deleteProduct);
+router.post(
+  '/',
+  protect,
+  authorize('admin'),
+  upload.single('image'),
+  createProduct
+);
+router.put(
+  '/:id',
+  protect,
+  authorize('admin'),
+  upload.single('image'),
+  updateProduct
+);
+router.delete('/:id', protect, authorize('admin'), deleteProduct);
 
 module.exports = router;

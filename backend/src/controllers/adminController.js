@@ -11,8 +11,34 @@ exports.getDashboardStats = async (req, res) => {
     const totalProducts = await Product.countDocuments();
 
     const totalRevenue = await Order.aggregate([
-      { $match: { paymentStatus: 'completed' } },
+      { $match: { paymentStatus: { $in: ['completed', 'Paid'] } } },
       { $group: { _id: null, total: { $sum: '$total' } } },
+    ]);
+
+    const lowStockProducts = await Product.find({ stock: { $lte: 5 } })
+      .select('name stock')
+      .sort({ stock: 1 })
+      .limit(10);
+
+    const revenueByDay = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: { $in: ['completed', 'Paid'] },
+          createdAt: {
+            $gte: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          revenue: { $sum: '$total' },
+          orders: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
     ]);
 
     const pendingOrders = await Order.countDocuments({ status: 'pending' });
@@ -29,6 +55,8 @@ exports.getDashboardStats = async (req, res) => {
         pendingOrders,
         shippedOrders,
         completedOrders,
+        lowStockProducts,
+        revenueByDay,
       },
     });
   } catch (error) {

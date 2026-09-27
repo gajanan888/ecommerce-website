@@ -5,18 +5,16 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('accessToken'));
+  const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState(null);
 
   const register = useCallback(async (data) => {
     setLoading(true);
     try {
       const response = await authAPI.signup(data);
-      const { accessToken, refreshToken, user } = response.data.data;
-      setToken(accessToken);
+      const { user } = response.data.data;
+      setToken('cookie');
       setUser(user);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
       return response.data.data;
     } catch (error) {
@@ -30,11 +28,9 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await authAPI.login(data);
-      const { accessToken, refreshToken, user } = response.data.data;
-      setToken(accessToken);
+      const { user } = response.data.data;
+      setToken('cookie');
       setUser(user);
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
 
       // Merge guest cart with user cart after login
@@ -60,37 +56,33 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = useCallback(() => {
+    authAPI.logout().catch(() => {});
     setUser(null);
     setToken(null);
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
   }, []);
 
   useEffect(() => {
     const loadCurrentUser = async () => {
-      if (!token) {
-        setUser(null);
-        localStorage.removeItem('user');
-        return;
-      }
-
       try {
         setLoading(true);
         const response = await authAPI.getMe();
         const userData = response.data.data.user;
+        setToken('cookie');
         setUser(userData);
         localStorage.setItem('user', JSON.stringify(userData));
       } catch (error) {
-        // Failed to fetch current user
-        logout();
+        // An anonymous session is expected to receive 401 from /auth/me.
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem('user');
       } finally {
         setLoading(false);
       }
     };
 
     loadCurrentUser();
-  }, [token, logout]);
+  }, [logout]);
 
   const value = {
     user,

@@ -8,7 +8,8 @@ const { uploadToCloudinary } = require('../utils/cloudinary');
  */
 exports.getAllProducts = async (req, res, next) => {
   try {
-    const { category, search, sort } = req.query;
+    const { category, search, sort, gender, size, minPrice, maxPrice, rating } =
+      req.query;
     console.log('📦 GetAllProducts - Request Received', req.query);
 
     // Build filter object
@@ -23,6 +24,15 @@ exports.getAllProducts = async (req, res, next) => {
         { name: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
       ];
+    }
+
+    if (gender) filter.gender = gender;
+    if (size) filter.sizes = size;
+    if (rating) filter.rating = { $gte: Number(rating) };
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
     // Query database

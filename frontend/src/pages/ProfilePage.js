@@ -18,11 +18,15 @@ import {
   FiDollarSign,
   FiChevronRight,
   FiShield,
+  FiEye,
+  FiEyeOff,
 } from 'react-icons/fi';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useTitle } from '../hooks/useTitle';
 import { userAPI } from '../services/api';
+import { orderAPI } from '../services/api';
+import ProductReviews from '../components/ProductReviews';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ProfilePage = () => {
@@ -34,6 +38,10 @@ const ProfilePage = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [message, setMessage] = useState('');
   const [avatarPreview, setAvatarPreview] = useState(null);
+  const [deliveredProducts, setDeliveredProducts] = useState([]);
+  const [deliveredProductsLoading, setDeliveredProductsLoading] =
+    useState(false);
+  const [deliveredProductsError, setDeliveredProductsError] = useState('');
 
   // Form States
   const [formData, setFormData] = useState({
@@ -47,6 +55,15 @@ const ProfilePage = () => {
     newPassword: '',
     confirmPassword: '',
   });
+  const [visiblePasswords, setVisiblePasswords] = useState({
+    currentPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
+
+  const togglePasswordVisibility = (field) => {
+    setVisiblePasswords((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
 
   const [addresses, setAddresses] = useState([
     {
@@ -91,6 +108,43 @@ const ProfilePage = () => {
       phone: user.phone || '',
     });
   }, [user, authLoading, navigate]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadDeliveredProducts = async () => {
+      try {
+        setDeliveredProductsLoading(true);
+        setDeliveredProductsError('');
+        const response = await orderAPI.getMyOrders();
+        const orders = response.data.data || [];
+        const productsById = new Map();
+
+        orders
+          .filter((order) => order.status === 'delivered')
+          .flatMap((order) => order.items || [])
+          .forEach((item) => {
+            const product = item.productId;
+            const productId = product?._id || product;
+            if (productId && !productsById.has(productId.toString())) {
+              productsById.set(productId.toString(), {
+                id: productId,
+                name: product?.name || item.productName || 'Delivered product',
+                image: product?.image || item.image,
+              });
+            }
+          });
+
+        setDeliveredProducts(Array.from(productsById.values()));
+      } catch (error) {
+        setDeliveredProductsError('Unable to load delivered products.');
+      } finally {
+        setDeliveredProductsLoading(false);
+      }
+    };
+
+    loadDeliveredProducts();
+  }, [user]);
 
   if (!user || authLoading) {
     return (
@@ -237,10 +291,11 @@ const ProfilePage = () => {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className={`fixed top-24 right-8 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md border border-white/10 ${message.includes('❌')
+              className={`fixed top-24 right-8 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 backdrop-blur-md border border-white/10 ${
+                message.includes('❌')
                   ? 'bg-red-500/90 text-white'
                   : 'bg-[#0A0A0A]/90 text-white shadow-orange-500/10'
-                }`}
+              }`}
             >
               {message.includes('❌') ? (
                 <FiX size={18} />
@@ -288,10 +343,11 @@ const ProfilePage = () => {
                 {user.email}
               </p>
               <div
-                className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${user.role === 'admin'
+                className={`inline-flex items-center px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                  user.role === 'admin'
                     ? 'bg-orange-500 text-white'
                     : 'bg-white/10 text-white/60'
-                  }`}
+                }`}
               >
                 {user.role === 'admin' ? 'Admin Access' : 'Member'}
               </div>
@@ -303,10 +359,11 @@ const ProfilePage = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center justify-between px-6 py-4 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeTab === tab.id
+                  className={`w-full flex items-center justify-between px-6 py-4 rounded-3xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                    activeTab === tab.id
                       ? 'bg-white text-black shadow-lg shadow-white/10 translate-x-1'
                       : 'text-white/40 hover:bg-white/5 hover:text-white'
-                    }`}
+                  }`}
                 >
                   <div className="flex items-center gap-4">
                     <tab.icon
@@ -520,6 +577,63 @@ const ProfilePage = () => {
                       </div>
                     </div>
 
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="text-2xl font-black uppercase tracking-tighter text-white">
+                          Delivered Products · Review
+                        </h3>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mt-1">
+                          Share feedback after successful delivery
+                        </p>
+                      </div>
+
+                      {deliveredProductsLoading && (
+                        <p className="text-sm text-white/40">
+                          Loading delivered products...
+                        </p>
+                      )}
+                      {deliveredProductsError && (
+                        <p className="text-sm text-red-400">
+                          {deliveredProductsError}
+                        </p>
+                      )}
+                      {!deliveredProductsLoading &&
+                        !deliveredProductsError &&
+                        deliveredProducts.length === 0 && (
+                          <div className="p-6 rounded-2xl border border-white/10 bg-white/5 text-sm text-white/40">
+                            Reviews become available here after an order is
+                            delivered.
+                          </div>
+                        )}
+                      <div className="space-y-6">
+                        {deliveredProducts.map((product) => (
+                          <div
+                            key={product.id.toString()}
+                            className="rounded-3xl border border-white/10 bg-white/5 p-6"
+                          >
+                            <div className="flex items-center gap-4 mb-5">
+                              {product.image && (
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-16 h-16 rounded-xl object-cover"
+                                />
+                              )}
+                              <div>
+                                <h4 className="text-lg font-black text-white">
+                                  {product.name}
+                                </h4>
+                                <p className="text-[10px] uppercase tracking-widest text-green-400">
+                                  Delivered · Eligible for review
+                                </p>
+                              </div>
+                            </div>
+                            <ProductReviews productId={product.id} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
                     <div className="p-12 bg-white/5 rounded-[2rem] border border-dashed border-white/10 text-white text-center hover:border-white/20 transition-all">
                       <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
                         <FiShoppingBag size={32} className="text-white/40" />
@@ -722,12 +836,34 @@ const ProfilePage = () => {
                         <div className="relative">
                           <FiLock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20" />
                           <input
-                            type="password"
+                            type={
+                              visiblePasswords.currentPassword
+                                ? 'text'
+                                : 'password'
+                            }
                             name="currentPassword"
                             value={passwordData.currentPassword}
                             onChange={handlePasswordChange}
-                            className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
+                            className="w-full pl-14 pr-14 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
                           />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              togglePasswordVisibility('currentPassword')
+                            }
+                            className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                            aria-label={
+                              visiblePasswords.currentPassword
+                                ? 'Hide current password'
+                                : 'Show current password'
+                            }
+                          >
+                            {visiblePasswords.currentPassword ? (
+                              <FiEyeOff />
+                            ) : (
+                              <FiEye />
+                            )}
+                          </button>
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -737,24 +873,66 @@ const ProfilePage = () => {
                         <div className="relative">
                           <FiLock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20" />
                           <input
-                            type="password"
+                            type={
+                              visiblePasswords.newPassword ? 'text' : 'password'
+                            }
                             name="newPassword"
                             value={passwordData.newPassword}
                             onChange={handlePasswordChange}
-                            className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
+                            className="w-full pl-14 pr-14 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
                             placeholder="New Password"
                           />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              togglePasswordVisibility('newPassword')
+                            }
+                            className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                            aria-label={
+                              visiblePasswords.newPassword
+                                ? 'Hide new password'
+                                : 'Show new password'
+                            }
+                          >
+                            {visiblePasswords.newPassword ? (
+                              <FiEyeOff />
+                            ) : (
+                              <FiEye />
+                            )}
+                          </button>
                         </div>
                         <div className="relative mt-2">
                           <FiLock className="absolute left-6 top-1/2 -translate-y-1/2 text-white/20" />
                           <input
-                            type="password"
+                            type={
+                              visiblePasswords.confirmPassword
+                                ? 'text'
+                                : 'password'
+                            }
                             name="confirmPassword"
                             value={passwordData.confirmPassword}
                             onChange={handlePasswordChange}
-                            className="w-full pl-14 pr-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
+                            className="w-full pl-14 pr-14 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-bold placeholder-white/20 focus:outline-none focus:border-orange-500 focus:bg-white/10 transition-all"
                             placeholder="Confirm Password"
                           />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              togglePasswordVisibility('confirmPassword')
+                            }
+                            className="absolute right-5 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                            aria-label={
+                              visiblePasswords.confirmPassword
+                                ? 'Hide confirm password'
+                                : 'Show confirm password'
+                            }
+                          >
+                            {visiblePasswords.confirmPassword ? (
+                              <FiEyeOff />
+                            ) : (
+                              <FiEye />
+                            )}
+                          </button>
                         </div>
                       </div>
 

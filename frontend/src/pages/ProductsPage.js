@@ -17,7 +17,7 @@ export default function ProductsPage() {
   const [activeFilter, setActiveFilter] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [, setError] = useState(null);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   /* const [, setIsFilterOpen] = useState(false); */
@@ -114,6 +114,18 @@ export default function ProductsPage() {
         results = results.filter(
           (p) => p.isNewArrival === true || p.tags?.includes(activeFilter.value)
         );
+      }
+
+      if (activeFilter.gender) {
+        results = results.filter(
+          (p) => p.gender?.toLowerCase() === activeFilter.gender.toLowerCase()
+        );
+      }
+      if (activeFilter.size) {
+        results = results.filter((p) => p.sizes?.includes(activeFilter.size));
+      }
+      if (activeFilter.rating) {
+        results = results.filter((p) => (p.rating || 0) >= activeFilter.rating);
       }
 
       // Sidebar Category Filter
@@ -225,12 +237,24 @@ export default function ProductsPage() {
               <div className="flex justify-center items-center h-64">
                 <div className="w-12 h-12 border-4 border-gray-200 border-t-gray-900 rounded-full animate-spin"></div>
               </div>
+            ) : error ? (
+              <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-10 text-center">
+                <p className="text-red-400 font-bold uppercase tracking-widest text-xs mb-5">
+                  {error}
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-6 py-3 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest"
+                >
+                  Try Again
+                </button>
+              </div>
             ) : sortedAndFilteredProducts.length > 0 ? (
               <motion.div
                 layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
               >
                 <AnimatePresence>
                   {sortedAndFilteredProducts.map((product) => (

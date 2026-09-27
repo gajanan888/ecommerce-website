@@ -3,11 +3,11 @@ import { authAPI } from '../services/api';
 
 const initialState = {
   user: null,
-  accessToken: localStorage.getItem('accessToken'),
-  refreshToken: localStorage.getItem('refreshToken'),
+  accessToken: null,
+  refreshToken: null,
   loading: false,
   error: null,
-  isAuthenticated: !!localStorage.getItem('accessToken'),
+  isAuthenticated: false,
 };
 
 export const registerUser = createAsyncThunk(
@@ -54,11 +54,7 @@ export const refreshTokens = createAsyncThunk(
   'auth/refreshTokens',
   async (_, { rejectWithValue }) => {
     try {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (!refreshToken) {
-        throw new Error('Missing refresh token');
-      }
-      const response = await authAPI.refreshToken(refreshToken);
+      const response = await authAPI.refreshToken();
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
@@ -78,8 +74,6 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.isAuthenticated = false;
       state.error = null;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
     },
     setAuthUser: (state, action) => {
       state.user = action.payload;
@@ -94,11 +88,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
         state.isAuthenticated = true;
-        localStorage.setItem('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -111,11 +101,7 @@ const authSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
         state.isAuthenticated = true;
-        localStorage.setItem('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -136,17 +122,11 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
       })
       .addCase(refreshTokens.fulfilled, (state, action) => {
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
         state.isAuthenticated = true;
-        localStorage.setItem('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       .addCase(refreshTokens.rejected, (state, action) => {
         state.error = action.payload;
         state.isAuthenticated = false;
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
       });
   },
 });

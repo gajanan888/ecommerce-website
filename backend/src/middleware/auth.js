@@ -16,6 +16,8 @@ const protect = (req, res, next) => {
     token = req.headers.authorization.slice(7); // Remove 'Bearer ' prefix
   }
 
+  token = token || req.cookies?.accessToken;
+
   // Check if token exists
   if (!token) {
     return res.status(401).json({

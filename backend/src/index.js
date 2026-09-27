@@ -1,5 +1,6 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 
 // Load environment variables
 dotenv.config();
@@ -22,6 +23,7 @@ const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
 const paymentRoutes = require('./routes/payments');
+const reviewRoutes = require('./routes/reviews');
 
 // Import middleware
 const requestLogger = require('./middleware/logger');
@@ -37,6 +39,7 @@ app.use(corsConfig);
 app.options('*', corsConfig);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(cookieParser());
 app.use(requestLogger);
 
 // Security Middleware
@@ -106,6 +109,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // ============================================
 // Error Handling

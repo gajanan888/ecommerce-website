@@ -1,5 +1,23 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { sendPasswordResetEmail } = require('../utils/email');
+
+const cookieOptions = (maxAge) => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge,
+});
+
+const setAuthCookies = (res, accessToken, refreshToken) => {
+  res.cookie('accessToken', accessToken, cookieOptions(24 * 60 * 60 * 1000));
+  res.cookie(
+    'refreshToken',
+    refreshToken,
+    cookieOptions(7 * 24 * 60 * 60 * 1000)
+  );
+};
 
 /**
  * Generate Access Token
@@ -52,6 +70,7 @@ exports.signup = async (req, res, next) => {
     // Generate tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
+    setAuthCookies(res, accessToken, refreshToken);
 
     // Send response
     res.status(201).json({
@@ -67,8 +86,6 @@ exports.signup = async (req, res, next) => {
           isActive: user.isActive,
           createdAt: user.createdAt,
         },
-        accessToken,
-        refreshToken,
       },
     });
   } catch (error) {
@@ -124,6 +141,7 @@ exports.login = async (req, res, next) => {
     // Generate tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
+    setAuthCookies(res, accessToken, refreshToken);
 
     // Send response
     res.status(200).json({
@@ -136,10 +154,66 @@ exports.login = async (req, res, next) => {
           email: user.email,
           role: user.role,
         },
-        accessToken,
-        refreshToken,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email.toLowerCase() });
+    if (user) {
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      user.passwordResetToken = crypto
+        .createHash('sha256')
+        .update(rawToken)
+        .digest('hex');
+      user.passwordResetExpires = Date.now() + 15 * 60 * 1000;
+      await user.save({ validateBeforeSave: false });
+
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+      await sendPasswordResetEmail(
+        user.email,
+        `${frontendUrl}/reset-password/${rawToken}`
+      );
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'If that email exists, a reset link has been sent.',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(req.params.token)
+      .digest('hex');
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Reset link is invalid or expired.',
+      });
+    }
+
+    user.password = req.body.password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Password reset successfully.' });
   } catch (error) {
     next(error);
   }
@@ -152,7 +226,7 @@ exports.login = async (req, res, next) => {
  */
 exports.refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies?.refreshToken || req.body.refreshToken;
 
     if (!refreshToken) {
       return res.status(401).json({
@@ -179,14 +253,12 @@ exports.refreshToken = async (req, res, next) => {
     // Generate new tokens
     const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken(user);
+    setAuthCookies(res, newAccessToken, newRefreshToken);
 
     res.status(200).json({
       status: 'success',
       message: 'Token refreshed successfully',
-      data: {
-        accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
-      },
+      data: {},
     });
   } catch (error) {
     res.status(401).json({
@@ -257,16 +329,23 @@ exports.updatePassword = async (req, res, next) => {
     // Generate new tokens
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
+    setAuthCookies(res, accessToken, refreshToken);
 
     res.status(200).json({
       status: 'success',
       message: 'Password updated successfully',
-      data: {
-        accessToken,
-        refreshToken,
-      },
+      data: {},
     });
   } catch (error) {
     next(error);
   }
+};
+
+exports.logout = (req, res) => {
+  const options = cookieOptions(0);
+  res.clearCookie('accessToken', options);
+  res.clearCookie('refreshToken', options);
+  res
+    .status(200)
+    .json({ status: 'success', message: 'Logged out successfully' });
 };

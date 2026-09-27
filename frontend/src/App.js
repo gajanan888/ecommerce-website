@@ -19,6 +19,9 @@ const ProductsPage = React.lazy(() => import('./pages/ProductsPage'));
 const ProductDetail = React.lazy(() => import('./pages/ProductDetail'));
 const CartPage = React.lazy(() => import('./pages/CartPage'));
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
+const ForgotPasswordPage = React.lazy(
+  () => import('./pages/ForgotPasswordPage')
+);
 const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
 const ProfilePage = React.lazy(() => import('./pages/ProfilePage'));
 const OrderHistoryPage = React.lazy(() => import('./pages/OrderHistoryPage'));
@@ -78,6 +81,7 @@ function AppContent() {
           }
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/profile"

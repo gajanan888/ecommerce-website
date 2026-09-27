@@ -51,18 +51,42 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+    enum: [
+      'pending',
+      'confirmed',
+      'processing',
+      'shipped',
+      'delivered',
+      'cancelled',
+    ],
     default: 'pending',
   },
   paymentStatus: {
     type: String,
-    enum: ['unpaid', 'pending', 'completed', 'failed', 'refunded'],
+    enum: ['unpaid', 'pending', 'Paid', 'completed', 'failed', 'refunded'],
     default: 'unpaid',
+  },
+  stockDeducted: {
+    type: Boolean,
+    default: false,
   },
   paymentMethod: {
     type: String,
-    enum: ['card', 'paypal', 'stripe', 'googlepay', 'applepay', 'bank', 'cod'],
+    enum: [
+      'card',
+      'paypal',
+      'stripe',
+      'razorpay',
+      'googlepay',
+      'applepay',
+      'bank',
+      'cod',
+    ],
     required: false, // Not required on creation
+  },
+  paymentDetails: {
+    razorpayOrderId: String,
+    razorpayPaymentId: String,
   },
   shippingAddress: {
     name: String,

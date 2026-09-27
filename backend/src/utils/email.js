@@ -90,8 +90,18 @@ const sendShippingUpdate = async (userEmail, orderData) => {
   }
 };
 
+const sendPasswordResetEmail = async (userEmail, resetUrl) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: userEmail,
+    subject: 'Reset your password',
+    html: `<p>We received a password reset request.</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 15 minutes.</p>`,
+  });
+};
+
 module.exports = {
   sendOrderConfirmation,
   sendWelcomeEmail,
   sendShippingUpdate,
+  sendPasswordResetEmail,
 };

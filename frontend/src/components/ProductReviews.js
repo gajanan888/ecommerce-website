@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const ProductReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
@@ -10,16 +10,19 @@ const ProductReviews = ({ productId }) => {
     comment: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   const fetchReviews = useCallback(async () => {
     setLoading(true);
+    setError('');
     try {
-      const response = await axios.get(
-        `/api/reviews/product/${productId}?page=1&limit=10`
+      const response = await api.get(
+        `/reviews/product/${productId}?page=1&limit=10`
       );
       setReviews(response.data.data.reviews || []);
     } catch (error) {
       console.error('Failed to fetch reviews:', error);
+      setError('Reviews could not be loaded right now.');
     } finally {
       setLoading(false);
     }
@@ -32,18 +35,16 @@ const ProductReviews = ({ productId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        '/api/reviews',
-        { productId, ...newReview },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post('/reviews', { productId, ...newReview });
       setNewReview({ rating: 5, title: '', comment: '' });
       setSubmitted(true);
       fetchReviews();
       setTimeout(() => setSubmitted(false), 3000);
     } catch (error) {
       console.error('Failed to submit review:', error);
+      setError(
+        error.response?.data?.message || 'Review could not be submitted.'
+      );
     }
   };
 
@@ -56,6 +57,8 @@ const ProductReviews = ({ productId }) => {
       <div>
         <h3 className="mb-4 text-lg font-bold">Customer Reviews</h3>
 
+        {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
+
         {submitted && (
           <div className="p-4 mb-4 text-orange-800 bg-orange-100 rounded">
             Review submitted successfully!
@@ -66,7 +69,10 @@ const ProductReviews = ({ productId }) => {
           onSubmit={handleSubmit}
           className="p-4 mb-8 rounded-lg bg-gray-50"
         >
-          <h4 className="mb-4 font-bold">Write a Review</h4>
+          <h4 className="mb-1 font-bold">Write a Review</h4>
+          <p className="mb-4 text-sm text-gray-500">
+            Reviews are available after this product has been delivered to you.
+          </p>
 
           <div className="mb-4">
             <label className="block mb-2 font-semibold">Rating</label>

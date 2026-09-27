@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
 const Review = require('../models/Review');
+const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { successResponse, errorResponse } = require('../utils/response');
 
@@ -49,10 +50,24 @@ router.post('/', protect, async (req, res) => {
       return errorResponse(res, 404, 'Product not found');
     }
 
+    const deliveredOrder = await Order.exists({
+      userId: req.userId,
+      status: 'delivered',
+      'items.productId': productId,
+    });
+
+    if (!deliveredOrder) {
+      return errorResponse(
+        res,
+        403,
+        'You can review this product after your order has been delivered.'
+      );
+    }
+
     // Check if user already reviewed this product
     const existingReview = await Review.findOne({
       product: productId,
-      user: req.user.id,
+      user: req.userId,
     });
 
     if (existingReview) {
@@ -61,7 +76,7 @@ router.post('/', protect, async (req, res) => {
 
     const review = await Review.create({
       product: productId,
-      user: req.user.id,
+      user: req.userId,
       rating,
       title,
       comment,
@@ -92,7 +107,7 @@ router.put('/:reviewId', protect, async (req, res) => {
       return errorResponse(res, 404, 'Review not found');
     }
 
-    if (review.user.toString() !== req.user.id) {
+    if (review.user.toString() !== req.userId) {
       return errorResponse(res, 403, 'Not authorized to update this review');
     }
 
@@ -131,7 +146,7 @@ router.delete('/:reviewId', protect, async (req, res) => {
       return errorResponse(res, 404, 'Review not found');
     }
 
-    if (review.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    if (review.user.toString() !== req.userId && req.userRole !== 'admin') {
       return errorResponse(res, 403, 'Not authorized to delete this review');
     }
 

@@ -17,6 +17,7 @@ const CheckoutPage = () => {
   const { user } = useAuth();
   const { showSuccess, showError } = useToast();
   const [order, setOrder] = useState(null);
+  const [orderError, setOrderError] = useState('');
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [paymentType] = useState('upi');
@@ -91,6 +92,9 @@ const CheckoutPage = () => {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching order:', error);
+      setOrderError(
+        error.response?.data?.message || 'Unable to load this order.'
+      );
       setLoading(false);
     }
   }, [orderId]);
@@ -128,11 +132,8 @@ const CheckoutPage = () => {
         paymentType,
       });
 
-      const {
-        razorpayOrderId: rzpOrderId,
-        razorpayKey,
-        paymentId,
-      } = initiateResponse.data;
+      const { razorpayOrderId: rzpOrderId, razorpayKey } =
+        initiateResponse.data;
       setRazorpayOrderId(rzpOrderId);
 
       if (razorpayKey && razorpayKey.includes('mock')) {
@@ -145,11 +146,12 @@ const CheckoutPage = () => {
               razorpayOrderId: rzpOrderId,
               razorpayPaymentId: `pay_mock_${Date.now()}`,
               razorpaySignature: 'mock_signature',
-              paymentId,
+              orderId,
             });
 
             if (verifyResponse.data.success) {
               showSuccess('Payment successful! (Simulation)');
+              setProcessing(false);
               setTimeout(() => navigate(`/order-success/${orderId}`), 1500);
             }
           } catch (error) {
@@ -178,16 +180,18 @@ const CheckoutPage = () => {
                   razorpayOrderId: response.razorpay_order_id,
                   razorpayPaymentId: response.razorpay_payment_id,
                   razorpaySignature: response.razorpay_signature,
-                  paymentId,
+                  orderId,
                 }
               );
 
               if (verifyResponse.data.success) {
                 showSuccess('Payment successful!');
+                setProcessing(false);
                 setTimeout(() => navigate(`/order-success/${orderId}`), 1500);
               }
             } catch (error) {
               showError('Payment verification failed!');
+              setProcessing(false);
             }
           },
           prefill: {
@@ -307,7 +311,7 @@ const CheckoutPage = () => {
       <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-slate-50 to-white">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-slate-900 mb-4">
-            Order Not Found
+            {orderError || 'Order Not Found'}
           </h2>
           <button
             onClick={() => navigate('/')}
@@ -347,10 +351,11 @@ const CheckoutPage = () => {
             <div key={item.step} className="flex items-center flex-1">
               <div className="flex flex-col items-center gap-3">
                 <div
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${item.active
-                    ? 'bg-white text-black ring-8 ring-white/5'
-                    : 'bg-white/5 text-white/20 border border-white/10'
-                    }`}
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-black text-[10px] transition-all duration-700 ${
+                    item.active
+                      ? 'bg-white text-black ring-8 ring-white/5'
+                      : 'bg-white/5 text-white/20 border border-white/10'
+                  }`}
                 >
                   {item.step}
                 </div>
@@ -553,10 +558,11 @@ const CheckoutPage = () => {
               ].map((method) => (
                 <label
                   key={method.id}
-                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${paymentMethod === method.id
-                    ? 'border-white bg-white text-black'
-                    : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
-                    }`}
+                  className={`block border-2 p-8 rounded-[2rem] cursor-pointer transition-all duration-500 ${
+                    paymentMethod === method.id
+                      ? 'border-white bg-white text-black'
+                      : 'border-white/5 bg-white/5 text-white/40 hover:border-white/20'
+                  }`}
                 >
                   <div className="flex items-center gap-6">
                     <input

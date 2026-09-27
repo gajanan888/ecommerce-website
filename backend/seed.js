@@ -7,7 +7,9 @@ const seedDatabase = async () => {
   try {
     // Connect to MongoDB
     const mongoURI =
-      process.env.MONGO_URI || 'mongodb://localhost:27017/ecommerce';
+      process.env.MONGODB_URI ||
+      process.env.MONGO_URI ||
+      'mongodb://localhost:27017/ecommerce';
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

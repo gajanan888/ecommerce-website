@@ -11,6 +11,7 @@ if (!apiBase.endsWith('/api')) {
 const API = axios.create({
   baseURL: apiBase,
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -19,10 +20,6 @@ const API = axios.create({
 // Add JWT token to requests
 API.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
     return config;
   },
   (error) => {
@@ -36,13 +33,13 @@ API.interceptors.response.use(
   (error) => {
     // Handle 401 - Token expired or invalid
     // Don't redirect if it's a login failure (let the component handle it)
-    if (
-      error.response?.status === 401 &&
-      !error.config.url.includes('/auth/login') &&
-      !error.config.url.includes('/auth/signup')
-    ) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    const authBootstrapRequest = [
+      '/auth/login',
+      '/auth/signup',
+      '/auth/me',
+      '/auth/logout',
+    ].some((path) => error.config?.url?.includes(path));
+    if (error.response?.status === 401 && !authBootstrapRequest) {
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
@@ -60,6 +57,10 @@ export const authAPI = {
   getMe: () => API.get('/auth/me'),
   refreshToken: (refreshToken) =>
     API.post('/auth/refresh-token', { refreshToken }),
+  forgotPassword: (data) => API.post('/auth/forgot-password', data),
+  resetPassword: (token, data) =>
+    API.put(`/auth/reset-password/${token}`, data),
+  logout: () => API.post('/auth/logout'),
 };
 
 // ============================================
@@ -86,9 +87,14 @@ export const cartAPI = {
   clearCart: () => API.delete('/cart/clear'),
 };
 
-// ============================================
-// Order Endpoints
-// ============================================
+export const ordersAPI = {
+  create: (data) => API.post('/orders', data),
+};
+
+export const paymentAPI = {
+  initiateRazorpay: (data) => API.post('/payments/razorpay/initiate', data),
+  verifyRazorpay: (data) => API.post('/payments/razorpay/verify', data),
+};
 
 export const orderAPI = {
   createOrder: (data) => API.post('/orders', data),

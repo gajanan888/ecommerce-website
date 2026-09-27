@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
 const {
   signup,
@@ -6,6 +7,9 @@ const {
   refreshToken,
   getMe,
   updatePassword,
+  forgotPassword,
+  resetPassword,
+  logout,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 const validate = require('../middleware/validate');
@@ -14,6 +18,17 @@ const {
   loginSchema,
   updatePasswordSchema,
 } = require('../validators/auth.schema');
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 'error',
+    message: 'Too many login attempts. Please try again later.',
+  },
+});
 
 /**
  * Public Routes
@@ -27,12 +42,15 @@ router.post('/signup', validate(signupSchema), signup);
 // @route   POST /api/auth/login
 // @desc    Login user
 // @access  Public
-router.post('/login', validate(loginSchema), login);
+router.post('/login', loginLimiter, validate(loginSchema), login);
 
 // @route   POST /api/auth/refresh-token
 // @desc    Refresh access token using refresh token
 // @access  Public
 router.post('/refresh-token', refreshToken);
+router.post('/forgot-password', forgotPassword);
+router.put('/reset-password/:token', resetPassword);
+router.post('/logout', logout);
 
 /**
  * Protected Routes

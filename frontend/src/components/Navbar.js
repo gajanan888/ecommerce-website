@@ -210,6 +210,7 @@ export default function Navbar() {
                   )}
                   <Link
                     to="/profile"
+                    onClick={() => navigate('/profile')}
                     className={`flex items-center gap-2 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${
                       isTransparentHome
                         ? 'text-white hover:bg-white/10'
@@ -293,7 +294,7 @@ export default function Navbar() {
                       key={link.name}
                       to={link.path}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-base font-semibold text-gray-800 hover:bg-orange-50 hover:text-orange-600 rounded-xl transition-colors"
+                      className="block px-4 py-3 text-base font-semibold text-white hover:bg-white/10 hover:text-orange-400 rounded-xl transition-colors"
                     >
                       {link.name}
                     </Link>

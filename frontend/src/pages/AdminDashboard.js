@@ -177,6 +177,66 @@ export default function AdminDashboard() {
             />
           </div>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="bg-[#0A0A0A]/80 border border-white/10 rounded-[2rem] p-8">
+            <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-6">
+              Revenue · Last 7 Days
+            </h2>
+            <div className="flex items-end gap-3 h-40">
+              {(stats?.revenueByDay || []).map((day) => {
+                const maxRevenue = Math.max(
+                  ...(stats?.revenueByDay || []).map((item) => item.revenue),
+                  1
+                );
+                return (
+                  <div
+                    key={day._id}
+                    className="flex-1 h-full flex flex-col justify-end gap-2"
+                  >
+                    <div
+                      className="bg-orange-500 rounded-t-lg min-h-[4px]"
+                      style={{
+                        height: `${Math.max((day.revenue / maxRevenue) * 100, 3)}%`,
+                      }}
+                      title={`₹${day.revenue}`}
+                    />
+                    <span className="text-[9px] text-white/40 text-center">
+                      {day._id.slice(5)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="bg-[#0A0A0A]/80 border border-white/10 rounded-[2rem] p-8">
+            <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-6">
+              Low Stock Alerts
+            </h2>
+            {stats?.lowStockProducts?.length ? (
+              <div className="space-y-3">
+                {stats.lowStockProducts.map((product) => (
+                  <div
+                    key={product._id}
+                    className="flex items-center justify-between border-b border-white/5 pb-3"
+                  >
+                    <span className="text-sm text-white/80">
+                      {product.name}
+                    </span>
+                    <span className="text-xs font-black text-orange-500 uppercase">
+                      {product.stock} left
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-white/40">
+                All products have healthy stock.
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );

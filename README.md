@@ -17,6 +17,7 @@ A fully functional, feature-rich E-Commerce application built with the **MERN St
 
 ### 👤 User Features (Customer)
 
+- **Responsive UI**: Mobile-friendly shopping interfaces built with reusable React components that adapt across phone, tablet, and desktop screens.
 - **Authentication**: Secure Login & Registration with JWT.
 - **Product Browsing**: Filter by category, price, search capabilities.
 - **Shopping Cart**: Real-time cart management.
@@ -41,6 +42,7 @@ A fully functional, feature-rich E-Commerce application built with the **MERN St
 
 - **React.js**: UI Library
 - **Tailwind CSS**: Styling & Design System
+- **Reusable Components**: Shared navigation, product, filter, cart, and layout components for a consistent responsive experience.
 - **Context API + Redux**: State Management
 - **React Router**: Navigation
 - **Axios**: API Integration

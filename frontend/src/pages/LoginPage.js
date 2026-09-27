@@ -225,12 +225,12 @@ const LoginPage = () => {
                   <label className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
                     Password
                   </label>
-                  <button
-                    type="button"
+                  <Link
+                    to="/forgot-password"
                     className="text-[10px] font-black text-orange-500 uppercase tracking-widest hover:text-white transition-colors"
                   >
                     Forgot?
-                  </button>
+                  </Link>
                 </div>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
@@ -277,40 +277,6 @@ const LoginPage = () => {
               </span>
             </button>
           </form>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-white/5" />
-            </div>
-            <div className="relative flex justify-center text-[8px] font-black uppercase tracking-widest">
-              <span className="bg-[#0A0A0A] px-4 text-white/20">
-                Alternative Identity
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                alt="Google"
-                className="w-4 h-4"
-              />
-              <span className="text-[10px] font-black uppercase tracking-widest">
-                Google
-              </span>
-            </button>
-            <button className="flex items-center justify-center gap-2 py-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all bg-white/5 text-white">
-              <img
-                src="https://www.svgrepo.com/show/448234/apple.svg"
-                alt="Apple"
-                className="w-4 h-4 invert"
-              />
-              <span className="text-[10px] font-black uppercase tracking-widest">
-                Apple
-              </span>
-            </button>
-          </div>
 
           <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
             No account?{' '}

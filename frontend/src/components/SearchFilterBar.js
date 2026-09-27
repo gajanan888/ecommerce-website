@@ -14,6 +14,9 @@ const SearchFilterBar = ({
   const [showFilters, setShowFilters] = useState(false);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
+  const [gender, setGender] = useState('All');
+  const [size, setSize] = useState('All');
+  const [rating, setRating] = useState('0');
 
   const handleSearch = (e) => {
     const value = e.target.value;
@@ -26,6 +29,9 @@ const SearchFilterBar = ({
     onFilterChange?.({
       category: category === 'All' ? null : category,
       priceRange,
+      gender: gender === 'All' ? null : gender,
+      size: size === 'All' ? null : size,
+      rating: Number(rating),
     });
   };
 
@@ -34,6 +40,9 @@ const SearchFilterBar = ({
     onFilterChange?.({
       category: selectedCategory === 'All' ? null : selectedCategory,
       priceRange: [minPrice, maxPrice],
+      gender: gender === 'All' ? null : gender,
+      size: size === 'All' ? null : size,
+      rating: Number(rating),
     });
   };
 
@@ -48,10 +57,16 @@ const SearchFilterBar = ({
     setMinPrice(0);
     setMaxPrice(1000);
     setPriceRange([0, 1000]);
+    setGender('All');
+    setSize('All');
+    setRating('0');
     onSearch?.('');
     onFilterChange?.({
       category: null,
       priceRange: [0, 1000],
+      gender: null,
+      size: null,
+      rating: 0,
     });
     onSortChange?.('newest');
     setSortBy('newest');
@@ -168,6 +183,56 @@ const SearchFilterBar = ({
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Additional Product Filters */}
+        <div className="grid grid-cols-2 gap-3 pt-8 border-t border-white/5">
+          <select
+            value={gender}
+            onChange={(e) => {
+              setGender(e.target.value);
+              onFilterChange?.({
+                gender: e.target.value === 'All' ? null : e.target.value,
+              });
+            }}
+            className="px-3 py-3 bg-white/5 border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60"
+          >
+            <option value="All">All Genders</option>
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Unisex">Unisex</option>
+            <option value="Children">Children</option>
+          </select>
+          <select
+            value={size}
+            onChange={(e) => {
+              setSize(e.target.value);
+              onFilterChange?.({
+                size: e.target.value === 'All' ? null : e.target.value,
+              });
+            }}
+            className="px-3 py-3 bg-white/5 border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60"
+          >
+            <option value="All">All Sizes</option>
+            {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            value={rating}
+            onChange={(e) => {
+              setRating(e.target.value);
+              onFilterChange?.({ rating: Number(e.target.value) });
+            }}
+            className="col-span-2 px-3 py-3 bg-white/5 border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white/60"
+          >
+            <option value="0">Any Rating</option>
+            <option value="4">4+ Stars</option>
+            <option value="3">3+ Stars</option>
+            <option value="2">2+ Stars</option>
+          </select>
         </div>
 
         {/* Sort Options */}
