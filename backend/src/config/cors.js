@@ -5,8 +5,13 @@ const corsConfig = cors({
     const isDevelopmentOrigin =
       process.env.NODE_ENV !== 'production' &&
       (!origin || origin.includes('localhost') || origin.includes('127.0.0.1'));
+    const isServerToServerRequest = !origin;
 
-    if (isDevelopmentOrigin || process.env.FRONTEND_URL === origin) {
+    if (
+      isServerToServerRequest ||
+      isDevelopmentOrigin ||
+      process.env.FRONTEND_URL === origin
+    ) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
